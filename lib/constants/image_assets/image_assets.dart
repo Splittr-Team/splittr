@@ -8,8 +8,8 @@ final class ImageAssets {
   static const signupBottomBlobImage =
       'assets/images/signup_bottom_blob_image.png';
   static const signupTopBlobImage = 'assets/images/signup_top_blob_image.png';
-  static const splittrLogoDark = 'assets/images/splittr_logo_dark.png';
-  static const splittrLogoLight = 'assets/images/splittr_logo_light.png';
   static const arrowDownRight = 'assets/images/arrow_down_right.png';
   static const food = 'assets/images/food.png';
+  static const splittrLogoDark = 'assets/images/splittr_logo_dark.svg';
+  static const splittrLogoLight = 'assets/images/splittr_logo_light.svg';
 }
