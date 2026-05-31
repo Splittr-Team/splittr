@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sky_utils/sky_utils.dart';
 import 'package:splittr/core/route_handler/route_id.dart';
 import 'package:splittr/features/auth_landing/presentation/ui/auth_landing_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_page.dart';
@@ -10,7 +11,6 @@ import 'package:splittr/features/quick_settle/presentation/ui/quick_settle_page.
 import 'package:splittr/features/quick_split/presentation/ui/quick_split_page.dart';
 import 'package:splittr/features/signup/presentation/ui/signup_page.dart';
 import 'package:splittr/features/splash/presentation/ui/splash_page.dart';
-import 'package:splittr/utils/extensions/enum_extensions.dart';
 
 export 'route_id.dart';
 
@@ -18,7 +18,7 @@ final class RouteHandler {
   const RouteHandler._();
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    final routeId = RouteId.values.fromString(settings.name);
+    final routeId = RouteId.values.byNameOrNull(settings.name);
 
     if (routeId == null) {
       return MaterialPageRoute(

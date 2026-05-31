@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_design_system/sky_design_system.dart' show AppSnackBar;
 import 'package:splittr/core/base/base_page/base_page.dart';
 import 'package:splittr/core/designs/designs.dart';
 import 'package:splittr/core/global/presentation/blocs/global_bloc.dart';
@@ -42,7 +43,7 @@ class OtpVerificationPage extends BasePage<OtpVerificationBloc> {
   }
 
   void _showSnackBar(BuildContext context) {
-    unawaited(showSnackBar(context, 'Otp Verified'));
+    AppSnackBar.show(context, message: 'Otp Verified');
   }
 
   void _onUserAuthenticateSuccessful({
