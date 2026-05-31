@@ -56,3 +56,4 @@ firebase_options*.dart
 .fvm/
 /.fvmrc
 /.vscode/settings.json
+/.antigravitycli/
