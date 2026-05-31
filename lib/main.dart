@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sky_design_system/sky_design_system.dart' show AppTheme;
 import 'package:splittr/constants/env/env.dart';
 import 'package:splittr/core/app_config/i_app_config.dart';
-import 'package:splittr/core/designs/theme/app_theme.dart';
 import 'package:splittr/core/global/presentation/ui/global_blocs_widget.dart';
 import 'package:splittr/core/route_handler/route_handler.dart';
 import 'package:splittr/core/route_handler/route_observer.dart';
@@ -31,7 +31,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: RouteId.splash.name,
         onGenerateRoute: RouteHandler.generateRoute,
-        theme: AppTheme.theme,
+        themeMode: ThemeMode.light,
+        theme: AppTheme.light(),
+        darkTheme: AppTheme.dark(),
         navigatorObservers: [CustomNavigatorObserver()],
       ),
     );
