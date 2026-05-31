@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
@@ -17,6 +18,7 @@ final class GlobalBloc extends BaseBloc<GlobalEvent, GlobalState> {
   void handleEvents() {
     on<_Started>(_onStarted);
     on<_UserUpdated>(_onUserUpdated);
+    on<_ThemeChanged>(_onThemeChanged);
   }
 
   void _onStarted(_, Emitter<GlobalState> emit) {}
@@ -24,6 +26,14 @@ final class GlobalBloc extends BaseBloc<GlobalEvent, GlobalState> {
   void _onUserUpdated(_UserUpdated event, Emitter<GlobalState> emit) {
     emit(
       GlobalState.updatedUser(store: state.store.copyWith(user: event.user)),
+    );
+  }
+
+  void _onThemeChanged(_ThemeChanged event, Emitter<GlobalState> emit) {
+    emit(
+      GlobalState.themeUpdated(
+        store: state.store.copyWith(themeMode: event.themeMode),
+      ),
     );
   }
 
@@ -37,5 +47,9 @@ final class GlobalBloc extends BaseBloc<GlobalEvent, GlobalState> {
 
   void userUpdated(User user) {
     add(GlobalEvent.userUpdated(user: user));
+  }
+
+  void themeChanged(ThemeMode themeMode) {
+    add(GlobalEvent.themeChanged(themeMode: themeMode));
   }
 }

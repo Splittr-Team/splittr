@@ -7,4 +7,8 @@ class GlobalEvent extends BaseEvent with _$GlobalEvent {
   const factory GlobalEvent.started() = _Started;
 
   const factory GlobalEvent.userUpdated({required User user}) = _UserUpdated;
+
+  const factory GlobalEvent.themeChanged({
+    required ThemeMode themeMode,
+  }) = _ThemeChanged;
 }

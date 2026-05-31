@@ -14,6 +14,10 @@ sealed class GlobalState extends BaseState with _$GlobalState {
     required GlobalStateStore store,
   }) = ChangeLoaderState;
 
+  const factory GlobalState.themeUpdated({
+    required GlobalStateStore store,
+  }) = ThemeUpdated;
+
   const factory GlobalState.onFailure({
     required GlobalStateStore store,
     required Failure failure,
@@ -33,11 +37,18 @@ sealed class GlobalState extends BaseState with _$GlobalState {
 
 @freezed
 class GlobalStateStore with _$GlobalStateStore {
-  const GlobalStateStore({this.loading = false, this.user});
+  const GlobalStateStore({
+    this.loading = false,
+    this.user,
+    this.themeMode = ThemeMode.dark,
+  });
 
   @override
   final bool loading;
 
   @override
   final User? user;
+
+  @override
+  final ThemeMode themeMode;
 }
