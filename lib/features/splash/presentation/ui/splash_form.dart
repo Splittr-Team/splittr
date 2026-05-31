@@ -6,7 +6,7 @@ class _SplashForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SvgPicture.asset(
+      child: AppImage(
         Theme.of(context).brightness == Brightness.dark
             ? ImageAssets.splittrLogoDark
             : ImageAssets.splittrLogoLight,

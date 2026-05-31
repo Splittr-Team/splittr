@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:sky_design_system/sky_design_system.dart' show AppImage;
 import 'package:splittr/constants/constants.dart';
 import 'package:splittr/core/base/base_page/base_page.dart';
 import 'package:splittr/core/global/presentation/blocs/global_bloc.dart';

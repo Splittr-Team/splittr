@@ -24,8 +24,6 @@ dependencies:
 
   flutter_bloc: ^9.1.1
 
-  flutter_svg: ^2.3.0
-
   fpdart: ^1.1.1
 
   freezed_annotation: ^3.1.0
@@ -45,7 +43,7 @@ dependencies:
 
   sky_architecture: ^1.0.2
   sky_bloc: ^1.1.2
-  sky_design_system: ^1.0.2
+  sky_design_system: ^1.1.0
   sky_utils: ^1.0.2
 
   uuid: ^4.4.2
