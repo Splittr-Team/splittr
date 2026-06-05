@@ -83,7 +83,7 @@ final class QuickSplitBloc extends BaseBloc<QuickSplitEvent, QuickSplitState> {
     _QuickSettleClicked event,
     Emitter<QuickSplitState> emit,
   ) {
-    setLoading(emit: emit, loading: true);
+    changeLoadingState(emit: emit, loading: true);
     for (final peopleRecord in state.store.peopleRecords) {
       final amount = double.tryParse(peopleRecord.amount);
       if (amount == null || amount < 0) {
@@ -149,7 +149,4 @@ final class QuickSplitBloc extends BaseBloc<QuickSplitEvent, QuickSplitState> {
   void started({Map<String, dynamic>? args}) {
     add(const QuickSplitEvent.started());
   }
-
-  @override
-  bool get isLoading => state.store.loading;
 }

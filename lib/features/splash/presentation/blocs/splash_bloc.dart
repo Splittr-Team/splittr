@@ -1,14 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
-import 'package:splittr/core/auth/domain/repositories/i_auth_repository.dart';
-import 'package:splittr/core/user/domain/domain/repositories/i_user_repository.dart';
-import 'package:splittr/core/user/domain/models/user.dart';
 
 part 'splash_bloc.freezed.dart';
 part 'splash_event.dart';
@@ -16,10 +12,9 @@ part 'splash_state.dart';
 
 @injectable
 final class SplashBloc extends BaseBloc<SplashEvent, SplashState> {
-  SplashBloc(this._authRepository, this._userRepository)
-    : super(const SplashState.initial(store: SplashStateStore()));
-  final IAuthRepository _authRepository;
-  final IUserRepository _userRepository;
+  SplashBloc() : super(const SplashState.initial(store: SplashStateStore()));
+
+  final Completer<bool> _userAuthCompleter = Completer<bool>();
 
   @override
   void handleEvents() {
@@ -27,31 +22,18 @@ final class SplashBloc extends BaseBloc<SplashEvent, SplashState> {
   }
 
   Future<void> _onStarted(_, Emitter<SplashState> emit) async {
-    final (_, userOrFailure) = await (_showSplash(), _checkAuth()).wait;
+    emit(SplashState.onCheckAuthStatus(store: state.store));
 
-    userOrFailure.fold(
-      (_) => emit(SplashState.userUnauthorized(store: state.store)),
-      (user) =>
-          emit(SplashState.userAuthorized(store: state.store, user: user)),
-    );
-  }
+    final (_, userAuthenticted) = await (
+      Future<void>.delayed(const Duration(seconds: 3)),
+      _userAuthCompleter.future,
+    ).wait;
 
-  Future<void> _showSplash() async {
-    await Future<void>.delayed(const Duration(seconds: 3));
-  }
-
-  Future<Either<Failure, User>> _checkAuth() async {
-    if (_authRepository.isUserSignedIn) {
-      final userOrFailure = await _userRepository.getUser();
-
-      return userOrFailure.fold((_) {
-        unawaited(_authRepository.logout());
-
-        return userOrFailure;
-      }, right);
+    if (userAuthenticted) {
+      emit(SplashState.onUserAuthorize(store: state.store));
+    } else {
+      emit(SplashState.onUserUnauthorize(store: state.store));
     }
-
-    return left(const ServerFailure(message: 'Not Signed In'));
   }
 
   @override
@@ -59,6 +41,11 @@ final class SplashBloc extends BaseBloc<SplashEvent, SplashState> {
     add(const SplashEvent.started());
   }
 
-  @override
-  bool get isLoading => state.store.loading;
+  void userAuthorized() {
+    _userAuthCompleter.complete(true);
+  }
+
+  void userUnauthorized() {
+    _userAuthCompleter.complete(false);
+  }
 }

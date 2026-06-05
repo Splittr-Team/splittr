@@ -29,7 +29,4 @@ final class PersonalTransactionBloc
   void started({Map<String, dynamic>? args}) {
     add(const PersonalTransactionEvent.started());
   }
-
-  @override
-  bool get isLoading => state.store.loading;
 }

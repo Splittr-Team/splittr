@@ -27,7 +27,4 @@ final class GroupDashboardBloc
   void started({Map<String, dynamic>? args}) {
     add(const GroupDashboardEvent.started());
   }
-
-  @override
-  bool get isLoading => state.store.loading;
 }

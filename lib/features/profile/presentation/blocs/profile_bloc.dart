@@ -23,7 +23,4 @@ final class ProfileBloc extends BaseBloc<ProfileEvent, ProfileState> {
   void started({Map<String, dynamic>? args}) {
     add(const ProfileEvent.started());
   }
-
-  @override
-  bool get isLoading => state.store.loading;
 }

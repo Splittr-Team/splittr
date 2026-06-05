@@ -25,12 +25,16 @@ targets:
           - lib/features/quick_split/presentation/blocs/quick_split_bloc.dart
           - lib/features/signup/presentation/blocs/signup_bloc.dart
           - lib/features/splash/presentation/blocs/splash_bloc.dart
+          - lib/features/*/domain/entities/*.dart
+          - lib/features/*/presentation/blocs/*_bloc.dart
+          - lib/features/*/presentation/blocs/*/*_bloc.dart
 
 
       json_serializable:
         options:
           explicit_to_json: true
         generate_for:
+          - lib/features/*/data/models/*.dart
           - lib/core/user/data/dtos/user_dto.dart
           - lib/features/personal_transaction/data/dtos/personal_transaction_dto.dart
 
@@ -55,3 +59,8 @@ targets:
           - lib/features/quick_split/presentation/blocs/quick_split_bloc.dart
           - lib/features/signup/presentation/blocs/signup_bloc.dart
           - lib/features/splash/presentation/blocs/splash_bloc.dart
+          - lib/features/*/presentation/blocs/*_bloc.dart
+          - lib/features/*/presentation/blocs/*/*_bloc.dart
+          - lib/features/*/data/datasources/*_impl.dart
+          - lib/features/*/data/repositories/*_impl.dart
+          - lib/features/*/domain/usecases/*.dart

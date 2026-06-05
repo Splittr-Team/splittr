@@ -46,7 +46,7 @@ final class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
       return;
     }
 
-    setLoading(emit: emit, loading: true);
+    changeLoadingState(emit: emit, loading: true);
 
     await _authRepository.sendOtp(
       phoneNumber: phoneNumber,
@@ -103,7 +103,4 @@ final class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
   void verificationFailed(String errorMessage) {
     add(LoginEvent.verificationFailed(errorMessage: errorMessage));
   }
-
-  @override
-  bool get isLoading => state.store.loading;
 }

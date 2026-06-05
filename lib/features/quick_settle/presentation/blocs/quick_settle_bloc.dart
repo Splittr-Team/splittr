@@ -163,9 +163,6 @@ final class QuickSettleBloc
     add(QuickSettleEvent.started(peopleRecord: peopleRecords));
   }
 
-  @override
-  bool get isLoading => state.store.loading;
-
   void toggleListView() {
     add(const QuickSettleEvent.toggleListView());
   }

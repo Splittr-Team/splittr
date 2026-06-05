@@ -23,7 +23,4 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
   void started({Map<String, dynamic>? args}) {
     add(const GroupsEvent.started());
   }
-
-  @override
-  bool get isLoading => state.store.loading;
 }

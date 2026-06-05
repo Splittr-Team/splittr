@@ -37,13 +37,13 @@ dependencies:
   json_annotation: ^4.9.0
 
   lottie: ^3.1.2
-  pin_code_fields: 8.0.1
 
   recase: 4.1.0
 
-  sky_architecture: ^1.0.2
-  sky_bloc: ^1.2.3
-  sky_design_system: ^1.1.0
+  sky_architecture: ^1.2.0
+  sky_bloc: ^2.0.3
+  sky_design_system:
+    path: ../sky_core/packages/sky_design_system
   sky_utils: ^1.0.2
 
   uuid: ^4.4.2
