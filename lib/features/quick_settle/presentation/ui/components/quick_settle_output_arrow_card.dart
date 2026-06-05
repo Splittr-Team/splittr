@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:splittr/core/designs/color/app_colors.dart';
 
 class QuickSettleOutputArrowCard extends StatelessWidget {
   const QuickSettleOutputArrowCard({
@@ -18,7 +17,7 @@ class QuickSettleOutputArrowCard extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.greyColor,
+        // color: AppColors.greyColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(

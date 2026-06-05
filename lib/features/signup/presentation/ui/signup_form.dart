@@ -8,20 +8,20 @@ class _SignupForm extends StatelessWidget {
     return Stack(
       children: [
         // Blue background
-        ClipRRect(
-          borderRadius: const BorderRadius.vertical(
+        const ClipRRect(
+          borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(32),
           ),
           child: FractionallySizedBox(
             heightFactor: 0.55,
             alignment: Alignment.topCenter,
-            child: Container(color: AppColors.blueBgColor),
+            // child: Container(color: AppColors.blueBgColor),
           ),
         ),
         // Centered white card
         Center(
           child: Card(
-            color: AppColors.whiteColor,
+            // color: AppColors.whiteColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
                 20,
@@ -41,7 +41,7 @@ class _SignupForm extends StatelessWidget {
                   const SizedBox(height: 50),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: PrimaryTextField(
+                    child: AppTextField(
                       labelText: 'Email',
                       hintText: 'Enter Email',
                       keyboardType: TextInputType.emailAddress,
@@ -50,7 +50,7 @@ class _SignupForm extends StatelessWidget {
                   const SizedBox(height: 8),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: PrimaryTextField(
+                    child: AppTextField(
                       labelText: 'Password',
                       hintText: 'Enter Password',
                       obscureText: true,
@@ -59,7 +59,7 @@ class _SignupForm extends StatelessWidget {
                   const SizedBox(height: 8),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: PrimaryTextField(
+                    child: AppTextField(
                       labelText: 'Confirm password',
                       hintText: 'Confirm Password',
                       obscureText: true,
@@ -68,7 +68,7 @@ class _SignupForm extends StatelessWidget {
                   const SizedBox(height: 40),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: AppTransparentButton(text: 'SignUp', onTap: () {}),
+                    child: AppButton.outlined(text: 'SignUp', onPressed: () {}),
                   ),
                   const SizedBox(height: 16),
                   RichText(

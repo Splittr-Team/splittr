@@ -11,34 +11,25 @@ class _AuthLandingForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Lottie.asset(AnimationKeys.billLottie),
-          AppFillButton(
+          AppButton.outlined(
             text: 'Quick Split',
-            onTap: () {
+            onPressed: () {
               unawaited(RouteHandler.push(context, RouteId.quickSplit));
             },
-            fillColor: AppColors.blackColor,
-            borderColor: AppColors.blackColor,
-            textColor: AppColors.whiteColor,
           ),
           const SizedBox(height: 10),
-          AppFillButton(
+          AppButton.primary(
             text: 'Login',
-            onTap: () {
+            onPressed: () {
               unawaited(RouteHandler.push(context, RouteId.login));
             },
-            fillColor: AppColors.denimColor,
-            borderColor: AppColors.whiteColor,
-            textColor: AppColors.whiteColor,
           ),
           const SizedBox(height: 10),
-          AppFillButton(
+          AppButton.secondary(
             text: 'SignUp',
-            onTap: () {
+            onPressed: () {
               unawaited(RouteHandler.push(context, RouteId.signup));
             },
-            fillColor: AppColors.whiteColor,
-            borderColor: AppColors.whiteColor,
-            textColor: AppColors.denimColor,
           ),
           const SizedBox(height: 60),
         ],

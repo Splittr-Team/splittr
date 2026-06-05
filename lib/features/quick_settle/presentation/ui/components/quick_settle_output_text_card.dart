@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:splittr/core/designs/color/app_colors.dart';
 
 class QuickSettleOutputTextCard extends StatelessWidget {
   const QuickSettleOutputTextCard({
@@ -8,6 +7,7 @@ class QuickSettleOutputTextCard extends StatelessWidget {
     required this.amount,
     super.key,
   });
+
   final String sender;
   final String receiver;
   final String amount;
@@ -18,13 +18,16 @@ class QuickSettleOutputTextCard extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.greyColor,
+        // color: AppColors.greyColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
         child: RichText(
           text: TextSpan(
-            style: const TextStyle(fontSize: 16, color: AppColors.blackColor),
+            style: const TextStyle(
+              fontSize: 16,
+              // color: AppColors.blackColor
+            ),
             children: [
               TextSpan(
                 text: sender,

@@ -5,7 +5,6 @@ import 'package:splittr/features/auth_landing/presentation/ui/auth_landing_page.
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_page.dart';
 import 'package:splittr/features/group_dashboard/presentation/ui/group_dashboard_page.dart';
 import 'package:splittr/features/login/presentation/ui/login_page.dart';
-import 'package:splittr/features/otp_verification/presentation/ui/otp_verification_page.dart';
 import 'package:splittr/features/profile/presentation/ui/profile_page.dart';
 import 'package:splittr/features/quick_settle/presentation/ui/quick_settle_page.dart';
 import 'package:splittr/features/quick_split/presentation/ui/quick_split_page.dart';
@@ -41,7 +40,6 @@ final class RouteHandler {
         RouteId.groupDashboard => GroupDashboardPage(args: args),
         RouteId.quickSettle => QuickSettlePage(args: args),
         RouteId.quickSplit => QuickSplitPage(args: args),
-        RouteId.otpVerification => OtpVerificationPage(args: args),
         RouteId.authLanding => AuthLandingPage(args: args),
       },
     );

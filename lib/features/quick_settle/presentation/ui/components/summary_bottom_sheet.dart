@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:splittr/core/designs/color/app_colors.dart';
 
 class SummaryBottomSheet extends StatelessWidget {
   const SummaryBottomSheet({required this.summaryMap, super.key});
@@ -9,7 +8,7 @@ class SummaryBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.blueBgColor,
+        // color: AppColors.blueBgColor,
         borderRadius: BorderRadius.circular(20),
       ),
       padding: const EdgeInsets.all(16),
@@ -23,7 +22,7 @@ class SummaryBottomSheet extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.whiteColor,
+                // color: AppColors.whiteColor,
               ),
             ),
           ),
@@ -36,7 +35,7 @@ class SummaryBottomSheet extends StatelessWidget {
                   final givers = List<Map<String, double>>.from(entry.value);
 
                   return Card(
-                    color: AppColors.greyColor,
+                    // color: AppColors.greyColor,
                     margin: const EdgeInsets.symmetric(
                       vertical: 8,
                       horizontal: 16,

@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart' show AppSnackBar;
 import 'package:splittr/constants/constants.dart';
-import 'package:splittr/core/designs/color/app_colors.dart';
-import 'package:splittr/core/designs/components/background_wrapper.dart';
 import 'package:splittr/core/route_handler/route_handler.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/quick_split/presentation/blocs/quick_split_bloc.dart';
@@ -27,16 +25,16 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
   Widget buildPage(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.blueBgColor,
+        // backgroundColor: AppColors.blueBgColor,
         centerTitle: true,
         title: const Text(
           'Quick Split',
-          style: TextStyle(color: AppColors.whiteColor),
+          // style: TextStyle(color: AppColors.whiteColor),
         ),
         leading: Container(
           margin: const EdgeInsets.only(left: 15, top: 10),
           decoration: BoxDecoration(
-            color: AppColors.lightGrey,
+            // color: AppColors.lightGrey,
             borderRadius: BorderRadius.circular(5),
           ),
           child: IconButton(
@@ -44,7 +42,7 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            color: AppColors.whiteColor,
+            // color: AppColors.whiteColor,
           ),
         ),
       ),

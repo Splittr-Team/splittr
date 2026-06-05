@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:splittr/core/designs/color/app_colors.dart';
-import 'package:splittr/core/designs/text_field/primary_text_field.dart';
+import 'package:sky_design_system/sky_design_system.dart' hide AppColors;
 
 class QuickSplitInputCard extends StatelessWidget {
   const QuickSplitInputCard({
@@ -9,6 +8,7 @@ class QuickSplitInputCard extends StatelessWidget {
     required this.onAmountChanged,
     super.key,
   });
+
   final VoidCallback onDelete;
   final ValueChanged<String> onPersonNameChanged;
   final ValueChanged<String> onAmountChanged;
@@ -19,7 +19,7 @@ class QuickSplitInputCard extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.greyColor,
+        // color: AppColors.greyColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -34,7 +34,7 @@ class QuickSplitInputCard extends StatelessWidget {
                   'Name',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
-                PrimaryTextField(onChanged: onPersonNameChanged),
+                AppTextField(onChanged: onPersonNameChanged),
               ],
             ),
           ),
@@ -48,7 +48,7 @@ class QuickSplitInputCard extends StatelessWidget {
                   'Amount', // Replace with your label text
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
-                PrimaryTextField(
+                AppTextField(
                   onChanged: onAmountChanged,
                   keyboardType: TextInputType.number,
                 ),

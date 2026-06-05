@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:sky_bloc/sky_bloc.dart';
-import 'package:splittr/core/designs/button/app_transparent_button.dart';
-import 'package:splittr/core/designs/color/app_colors.dart';
-import 'package:splittr/core/designs/designs.dart';
+import 'package:sky_design_system/sky_design_system.dart' hide AppColors;
 import 'package:splittr/core/route_handler/route_handler.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/signup/presentation/blocs/signup_bloc.dart';

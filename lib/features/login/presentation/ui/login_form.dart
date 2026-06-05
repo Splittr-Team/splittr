@@ -8,20 +8,20 @@ class _LoginForm extends StatelessWidget {
     return Stack(
       children: [
         // Blue background
-        ClipRRect(
-          borderRadius: const BorderRadius.vertical(
+        const ClipRRect(
+          borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(32),
           ),
           child: FractionallySizedBox(
             heightFactor: 0.55,
             alignment: Alignment.topCenter,
-            child: Container(color: AppColors.blueBgColor),
+            // child: Container(color: AppColors.blueBgColor),
           ),
         ),
         // Centered white card
         Center(
           child: Card(
-            color: AppColors.whiteColor,
+            // color: AppColors.whiteColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
                 20,
@@ -41,7 +41,7 @@ class _LoginForm extends StatelessWidget {
                   const SizedBox(height: 50),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: PrimaryTextField(
+                    child: AppTextField(
                       labelText: 'Email',
                       hintText: 'Enter Email',
                       onChanged: getBloc<LoginBloc>(context).phoneNumberChanged,
@@ -51,7 +51,7 @@ class _LoginForm extends StatelessWidget {
                   const SizedBox(height: 8),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: PrimaryTextField(
+                    child: AppTextField(
                       labelText: 'Password',
                       hintText: 'Enter Password',
                       onChanged: getBloc<LoginBloc>(context).phoneNumberChanged,
@@ -61,9 +61,9 @@ class _LoginForm extends StatelessWidget {
                   const SizedBox(height: 40),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: AppTransparentButton(
+                    child: AppButton.outlined(
                       text: 'Login',
-                      onTap: getBloc<LoginBloc>(context).sendOtpClicked,
+                      onPressed: getBloc<LoginBloc>(context).sendOtpClicked,
                     ),
                   ),
                   const SizedBox(height: 16),

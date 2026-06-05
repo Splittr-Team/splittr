@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sky_bloc/sky_bloc.dart';
-import 'package:splittr/core/designs/color/app_colors.dart';
-import 'package:splittr/core/designs/components/background_wrapper.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/quick_settle/presentation/blocs/quick_settle_bloc.dart';
 import 'package:splittr/features/quick_settle/presentation/ui/components/quick_settle_output_arrow_card.dart';
@@ -26,16 +24,16 @@ class QuickSettlePage extends BasePage<QuickSettleBloc, QuickSettleState> {
   Widget buildPage(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.blueBgColor,
+        // backgroundColor: AppColors.blueBgColor,
         centerTitle: true,
         title: const Text(
           'Quick Settle',
-          style: TextStyle(color: AppColors.whiteColor),
+          // style: TextStyle(color: AppColors.whiteColor),
         ),
         leading: Container(
           margin: const EdgeInsets.only(left: 15, top: 10),
           decoration: BoxDecoration(
-            color: AppColors.lightGrey,
+            // color: AppColors.lightGrey,
             borderRadius: BorderRadius.circular(5),
           ),
           child: IconButton(
@@ -43,7 +41,7 @@ class QuickSettlePage extends BasePage<QuickSettleBloc, QuickSettleState> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            color: AppColors.whiteColor,
+            // color: AppColors.whiteColor,
           ),
         ),
       ),
