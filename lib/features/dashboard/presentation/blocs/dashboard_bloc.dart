@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -16,12 +18,28 @@ final class DashboardBloc extends BaseBloc<DashboardEvent, DashboardState> {
   @override
   void handleEvents() {
     on<_Started>(_onStarted);
+    on<_IndexChanged>(_onIndexChanged);
   }
 
   void _onStarted(_Started event, Emitter<DashboardState> emit) {}
 
+  FutureOr<void> _onIndexChanged(
+    _IndexChanged event,
+    Emitter<DashboardState> emit,
+  ) {
+    emit(
+      DashboardState.onIndexChanged(
+        store: state.store.copyWith(selectedIndex: event.index),
+      ),
+    );
+  }
+
   @override
   void started({Map<String, dynamic>? args}) {
     add(const DashboardEvent.started());
+  }
+
+  void indexChanged(int index) {
+    add(DashboardEvent.indexChanged(index: index));
   }
 }

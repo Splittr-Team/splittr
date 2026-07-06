@@ -10,7 +10,12 @@ part 'groups_state.dart';
 
 @injectable
 final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
-  GroupsBloc() : super(const GroupsState.initial(store: GroupsStateStore()));
+  GroupsBloc()
+    : super(
+        const GroupsState.initial(
+          store: GroupsStateStore(),
+        ),
+      );
 
   @override
   void handleEvents() {
@@ -20,7 +25,9 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
   void _onStarted(_Started event, Emitter<GroupsState> emit) {}
 
   @override
-  void started({Map<String, dynamic>? args}) {
+  void started({
+    Map<String, dynamic>? args,
+  }) {
     add(const GroupsEvent.started());
   }
 }

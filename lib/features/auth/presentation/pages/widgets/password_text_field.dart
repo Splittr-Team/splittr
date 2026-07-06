@@ -34,7 +34,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           onChanged: widget.onChanged,
           suffixIcon: ExcludeFocus(
             child: AppIconButton(
-              icon: obscureText ? Icons.visibility : Icons.visibility_off,
+              icon: obscureText ? Icons.visibility_off : Icons.visibility,
               onPressed: () {
                 _obscureText.value = !obscureText;
               },

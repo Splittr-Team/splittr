@@ -231,6 +231,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Login as guest'**
   String get guestLogin;
+
+  /// No description provided for @dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboard;
+
+  /// No description provided for @groups.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get groups;
+
+  /// No description provided for @activities.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities'**
+  String get activities;
 }
 
 class _AppLocalizationsDelegate

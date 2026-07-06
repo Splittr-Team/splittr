@@ -5,10 +5,18 @@ class _DashboardForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Dashboard Page ',
-      ),
+    return BlocSelector<DashboardBloc, DashboardState, int>(
+      selector: (state) => state.store.selectedIndex,
+      builder: (context, selectedIndex) {
+        return IndexedStack(
+          index: selectedIndex,
+          children: const [
+            DashboardTab(),
+            GroupsTab(),
+            ActivitiesTab(),
+          ],
+        );
+      },
     );
   }
 }

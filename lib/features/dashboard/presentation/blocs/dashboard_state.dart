@@ -16,6 +16,10 @@ sealed class DashboardState extends BaseState with _$DashboardState {
     required Failure failure,
   }) = OnFailure;
 
+  const factory DashboardState.onIndexChanged({
+    required DashboardStateStore store,
+  }) = OnIndexChanged;
+
   @override
   BaseState getFailureState({required Failure failure}) =>
       DashboardState.onFailure(
@@ -30,8 +34,13 @@ sealed class DashboardState extends BaseState with _$DashboardState {
 
 @freezed
 class DashboardStateStore with _$DashboardStateStore {
-  const DashboardStateStore({this.loading = false});
+  const DashboardStateStore({
+    this.loading = false,
+    this.selectedIndex = 0,
+  });
 
   @override
   final bool loading;
+  @override
+  final int selectedIndex;
 }

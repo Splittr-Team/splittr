@@ -22,5 +22,8 @@
   "alreadyHaveAccount": "Already have an account?",
   "signIn": "Sign In",
   "signUpSuccess": "Sign Up Successful",
-  "guestLogin":"Login as guest"
+  "guestLogin": "Login as guest",
+  "dashboard": "Dashboard",
+  "groups": "Groups",
+  "activities": "Activities"
 }

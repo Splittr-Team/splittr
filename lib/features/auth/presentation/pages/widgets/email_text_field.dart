@@ -11,6 +11,7 @@ class EmailTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppTextField(
+      keyboardType: .emailAddress,
       labelText: context.strings.email,
       hintText: context.strings.emailHintText,
       onChanged: onChanged,

@@ -16,6 +16,7 @@ class FirebaseAuthInterceptor extends BaseAuthInterceptor {
   Future<String?> getAccessToken() async {
     final user = _firebaseAuth.currentUser;
     if (user == null) return null;
+    print('user.getIdToken() ${await user.getIdToken()}');
     return user.getIdToken();
   }
 

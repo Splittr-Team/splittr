@@ -37,6 +37,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primaryContainer,
                   ),
+
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.end,

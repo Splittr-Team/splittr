@@ -18,7 +18,7 @@ abstract class NetworkModule {
     enableLogging: appConfig.env == Env.dev,
     headers: {
       _vercelBypassHeaderKey: appConfig.vercelBypassKey,
-    }
+    },
   );
 
   @Named('retryDio')

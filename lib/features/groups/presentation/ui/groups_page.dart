@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:sky_bloc/sky_bloc.dart';
+import 'package:splittr/di/injection.dart';
+import 'package:splittr/features/groups/presentation/blocs/groups_bloc.dart';
 
-class GroupsPage extends StatelessWidget {
-  const GroupsPage({super.key});
+part 'groups_form.dart';
+
+class GroupsPage extends BasePage<GroupsBloc, GroupsState> {
+  const GroupsPage({
+    this.args,
+    super.key,
+  });
+  final Map<String, dynamic>? args;
 
   @override
-  Widget build(BuildContext context) {
+  GroupsBloc createBloc() => getIt<GroupsBloc>()..started(args: args);
+
+  @override
+  Widget buildPage(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Text(
-          'Groups Page',
-        ),
-      ),
+      body: _GroupsForm(),
     );
   }
 }

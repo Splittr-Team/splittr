@@ -4,8 +4,9 @@ part of 'groups_bloc.dart';
 sealed class GroupsState extends BaseState with _$GroupsState {
   const GroupsState._();
 
-  const factory GroupsState.initial({required GroupsStateStore store}) =
-      Initial;
+  const factory GroupsState.initial({
+    required GroupsStateStore store,
+  }) = Initial;
 
   const factory GroupsState.changeLoaderState({
     required GroupsStateStore store,
@@ -30,7 +31,9 @@ sealed class GroupsState extends BaseState with _$GroupsState {
 
 @freezed
 class GroupsStateStore with _$GroupsStateStore {
-  const GroupsStateStore({this.loading = false});
+  const GroupsStateStore({
+    this.loading = false,
+  });
 
   @override
   final bool loading;
