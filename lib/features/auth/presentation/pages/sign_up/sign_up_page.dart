@@ -46,8 +46,10 @@ class SignUpPage extends BasePage<SignUpBloc, SignUpState> {
   @override
   void handleStateChange(BuildContext context, SignUpState state) {
     return switch (state) {
-      OnSignUpSuccess _ =>
-        AppSnackBar.show(context, message: context.strings.signUpSuccess),
+      OnSignUpSuccess _ => AppSnackBar.show(
+        context,
+        message: context.strings.signUpSuccess,
+      ),
       OnFailure _ => AppSnackBar.show(context, message: state.failure.message),
       _ => () {},
     };

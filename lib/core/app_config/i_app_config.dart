@@ -7,7 +7,6 @@ import 'package:splittr/core/firebase/firebase_options_prod.dart'
     as firebase_options_prod;
 
 part 'dev_app_config.dart';
-
 part 'prod_app_config.dart';
 
 late final IAppConfig appConfig;
@@ -15,11 +14,13 @@ late final IAppConfig appConfig;
 abstract interface class IAppConfig {
   factory IAppConfig.init(Env env) {
     MultiEnv.init(env);
+
     return switch (env) {
       Env.dev => const DevAppConfig._(),
       Env.prod => const ProdAppConfig._(),
     };
   }
+
   Env get env;
 
   FirebaseOptions get firebaseOptions;
