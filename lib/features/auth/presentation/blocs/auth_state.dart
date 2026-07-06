@@ -10,6 +10,7 @@ sealed class AuthState extends BaseState with _$AuthState {
 
   const factory AuthState.authenticated({
     required AuthStateStore store,
+    required User user,
   }) = Authenticated;
 
   const factory AuthState.guest({

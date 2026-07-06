@@ -30,6 +30,11 @@ targets:
           - lib/features/*/presentation/blocs/*/*_bloc.dart
 
 
+      source_gen|combining_builder:
+        options:
+          ignore_for_file:
+            - type=lint
+
       json_serializable:
         options:
           explicit_to_json: true

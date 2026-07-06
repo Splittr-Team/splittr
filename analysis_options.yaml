@@ -4,8 +4,5 @@ include:
 
 analyzer:
   exclude:
-    - "**/*.g.dart"
-    - "**/*.freezed.dart"
-    - "**/*.config.dart"
     - "**/firebase_options*.dart"
     - "mason/**.dart"

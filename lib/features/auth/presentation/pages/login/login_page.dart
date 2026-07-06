@@ -1,11 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
-import 'package:splittr/core/route_handler/route_handler.dart';
+import 'package:sky_router/sky_router.dart';
+import 'package:splittr/core/router/route_paths.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart'
     hide OnFailure;
@@ -47,16 +46,11 @@ class LoginPage extends BasePage<LoginBloc, LoginState> {
   @override
   void handleStateChange(BuildContext context, LoginState state) {
     return switch (state) {
-      OnLoginSuccess _ => _navigateToDashboard(context),
       OnFailure(:final failure) => AppSnackBar.show(
         context,
         message: failure.message,
       ),
       _ => () {},
     };
-  }
-
-  void _navigateToDashboard(BuildContext context) {
-    unawaited(RouteHandler.pushAndRemoveUntil(context, RouteId.dashboard));
   }
 }

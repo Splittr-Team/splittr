@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
@@ -10,7 +12,7 @@ import 'package:splittr/features/auth/domain/repositories/auth_repository.dart';
 
 @LazySingleton(as: AuthRepository)
 final class AuthRepositoryImpl implements AuthRepository {
-  const AuthRepositoryImpl(
+  AuthRepositoryImpl(
     this._authRemoteDataSource,
     this._authLocalDataSource,
     this._apiCallHandler,
@@ -20,18 +22,31 @@ final class AuthRepositoryImpl implements AuthRepository {
   final AuthLocalDataSource _authLocalDataSource;
   final ApiCallHandler _apiCallHandler;
 
+  final StreamController<Option<User>> _sessionStreamController =
+      StreamController<Option<User>>.broadcast();
+
+  @override
+  Stream<Option<User>> get authStateChanges => _sessionStreamController.stream;
+
   @override
   FutureEitherFailure<User> loginWithEmail({
     required String email,
     required String password,
   }) async {
+    try {
+      await _authLocalDataSource.clearSession();
+    } on Exception catch (_) {}
+
     final result = await _apiCallHandler.handle(
       () => _authRemoteDataSource.loginWithEmail(
         email: email,
         password: password,
       ),
     );
-    return result.map((userModel) => userModel.toDomain());
+    return result.map((userModel) => userModel.toDomain())..fold(
+      (_) {},
+      (user) => _sessionStreamController.add(Some(user)),
+    );
   }
 
   @override
@@ -40,6 +55,10 @@ final class AuthRepositoryImpl implements AuthRepository {
     required String password,
     required String name,
   }) async {
+    try {
+      await _authLocalDataSource.clearSession();
+    } on Exception catch (_) {}
+
     final result = await _apiCallHandler.handle(
       () => _authRemoteDataSource.signUpWithEmail(
         email: email,
@@ -47,7 +66,10 @@ final class AuthRepositoryImpl implements AuthRepository {
         name: name,
       ),
     );
-    return result.map((userModel) => userModel.toDomain());
+    return result.map((userModel) => userModel.toDomain())..fold(
+      (_) {},
+      (user) => _sessionStreamController.add(Some(user)),
+    );
   }
 
   @override
@@ -55,7 +77,9 @@ final class AuthRepositoryImpl implements AuthRepository {
     try {
       final isGuest = await _authLocalDataSource.isGuestUser();
       if (isGuest) {
-        return const Right(User(id: 'guest', name: 'Guest'));
+        const guestUser = User(id: 'guest', name: 'Guest');
+        _sessionStreamController.add(const Some(guestUser));
+        return const Right(guestUser);
       }
     } on Exception catch (e) {
       return Left(e.toFailure());
@@ -65,14 +89,22 @@ final class AuthRepositoryImpl implements AuthRepository {
       _authRemoteDataSource.checkAuthStatus,
     );
 
-    return result.map((userModel) => userModel.toDomain());
+    return result.map((userModel) => userModel.toDomain())..fold(
+      (failure) => _sessionStreamController.add(const None()),
+      (user) => _sessionStreamController.add(Some(user)),
+    );
   }
 
   @override
   FutureEitherFailure<Unit> logout() async {
     try {
-      await _authLocalDataSource.clearSession();
-      await _authRemoteDataSource.logout();
+      await (
+        _authLocalDataSource.clearSession(),
+        _authRemoteDataSource.logout(),
+      ).wait;
+
+      _sessionStreamController.add(const None());
+
       return const Right(unit);
     } on Exception catch (e) {
       return Left(e.toFailure());
@@ -83,16 +115,9 @@ final class AuthRepositoryImpl implements AuthRepository {
   FutureEitherFailure<Unit> saveGuestSession() async {
     try {
       await _authLocalDataSource.saveGuestSession();
-      return const Right(unit);
-    } on Exception catch (e) {
-      return Left(e.toFailure());
-    }
-  }
-
-  @override
-  FutureEitherFailure<Unit> clearSession() async {
-    try {
-      await _authLocalDataSource.clearSession();
+      _sessionStreamController.add(
+        const Some(User(id: 'guest', name: 'Guest')),
+      );
       return const Right(unit);
     } on Exception catch (e) {
       return Left(e.toFailure());

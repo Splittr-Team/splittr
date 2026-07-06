@@ -82,7 +82,7 @@ class _DoNotHaveAccountSectionState extends State<_DoNotHaveAccountSection> {
   void initState() {
     super.initState();
     _signUpTapRecognizer = TapGestureRecognizer()
-      ..onTap = () => RouteHandler.push(context, RouteId.signUp);
+      ..onTap = () => RouteHandler.push<void>(context, RoutePaths.signUp);
   }
 
   @override

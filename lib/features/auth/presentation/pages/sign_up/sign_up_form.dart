@@ -95,7 +95,7 @@ class _AlreadyHaveAccountSectionState
   void initState() {
     super.initState();
     _signInTapRecognizer = TapGestureRecognizer()
-      ..onTap = () => RouteHandler.pop(context);
+      ..onTap = () => RouteHandler.pop<void>(context);
   }
 
   @override

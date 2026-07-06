@@ -70,11 +70,13 @@ android {
             dimension "app"
             resValue "string", "app_name", "Splittr Dev"
             applicationIdSuffix ".dev"
+            manifestPlaceholders = [deeplinkHost: "dev.splittr.skycore.dev"]
         }
         prod {
             dimension "app"
             resValue "string", "app_name", "Splittr"
             applicationIdSuffix ""
+            manifestPlaceholders = [deeplinkHost: "splittr.skycore.dev"]
         }
     }
 }

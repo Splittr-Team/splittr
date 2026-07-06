@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
-import 'package:splittr/core/route_handler/route_handler.dart';
+import 'package:sky_router/sky_router.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/sign_up/sign_up_bloc.dart';
 import 'package:splittr/features/auth/presentation/pages/widgets/apple_sign_in_button.dart';
@@ -48,15 +46,10 @@ class SignUpPage extends BasePage<SignUpBloc, SignUpState> {
   @override
   void handleStateChange(BuildContext context, SignUpState state) {
     return switch (state) {
-      OnSignUpSuccess _ => _navigateToDashboard(context),
+      OnSignUpSuccess _ =>
+        AppSnackBar.show(context, message: context.strings.signUpSuccess),
       OnFailure _ => AppSnackBar.show(context, message: state.failure.message),
       _ => () {},
     };
-  }
-
-  void _navigateToDashboard(BuildContext context) {
-    AppSnackBar.show(context, message: context.strings.signUpSuccess);
-
-    unawaited(RouteHandler.pushAndRemoveUntil(context, RouteId.dashboard));
   }
 }

@@ -3,6 +3,8 @@ import 'package:splittr/features/auth/domain/entities/user.dart';
 import 'package:splittr/utils/typedefs/typedefs.dart';
 
 abstract interface class AuthRepository {
+  Stream<Option<User>> get authStateChanges;
+
   FutureEitherFailure<User> loginWithEmail({
     required String email,
     required String password,
@@ -19,8 +21,6 @@ abstract interface class AuthRepository {
   FutureEitherFailure<Unit> logout();
 
   FutureEitherFailure<Unit> saveGuestSession();
-
-  FutureEitherFailure<Unit> clearSession();
 
   Future<bool> isGuestUser();
 }

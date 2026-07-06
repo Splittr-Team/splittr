@@ -7,21 +7,6 @@ part 'split_history_hive_model.g.dart';
   typeId: 0,
 ) // IMPORTANT: If you add more models later, increment this ID
 class SplitHistoryHiveModel extends HiveObject {
-  @HiveField(0)
-  final String id;
-
-  @HiveField(1)
-  final String title;
-
-  @HiveField(2)
-  final double totalAmount;
-
-  @HiveField(3)
-  final Map<String, double> individualShares;
-
-  @HiveField(4)
-  final DateTime createdAt;
-
   SplitHistoryHiveModel({
     required this.id,
     required this.title,
@@ -39,6 +24,21 @@ class SplitHistoryHiveModel extends HiveObject {
       createdAt: entity.createdAt,
     );
   }
+
+  @HiveField(0)
+  final String id;
+
+  @HiveField(1)
+  final String title;
+
+  @HiveField(2)
+  final double totalAmount;
+
+  @HiveField(3)
+  final Map<String, double> individualShares;
+
+  @HiveField(4)
+  final DateTime createdAt;
 
   SplitHistory toEntity() {
     return SplitHistory(
