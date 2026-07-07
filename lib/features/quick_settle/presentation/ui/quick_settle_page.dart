@@ -57,9 +57,9 @@ class QuickSettlePage extends BasePage<QuickSettleBloc, QuickSettleState> {
     return switch (state) {
       SaveSuccess _ => _onSaveSuccess(context),
       OnFailure(:final failure) => AppSnackBar.show(
-          context,
-          message: failure.message,
-        ),
+        context,
+        message: failure.message,
+      ),
       _ => () {},
     };
   }

@@ -87,56 +87,53 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                   child: CircularProgressIndicator(),
                 ),
               OnFailure(:final failure) => Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline_rounded,
-                          size: 64,
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline_rounded,
+                        size: 64,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Failed to load history',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        failure.message,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.error,
                         ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Failed to load history',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          failure.message,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 24),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            getBloc<QuickSplitBloc>(context).add(
-                              const QuickSplitEvent.loadHistory(),
-                            );
-                          },
-                          icon: const Icon(Icons.refresh_rounded),
-                          label: const Text('Retry'),
-                        ),
-                        const SizedBox(height: 8),
-                        TextButton(
-                          onPressed: () {
-                            getBloc<QuickSplitBloc>(context).clearData();
-                          },
-                          child: const Text('Back to Form'),
-                        ),
-                      ],
-                    ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          getBloc<QuickSplitBloc>(context).add(
+                            const QuickSplitEvent.loadHistory(),
+                          );
+                        },
+                        icon: const Icon(Icons.refresh_rounded),
+                        label: const Text('Retry'),
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () {
+                          getBloc<QuickSplitBloc>(context).clearData();
+                        },
+                        child: const Text('Back to Form'),
+                      ),
+                    ],
                   ),
                 ),
+              ),
               Loaded(:final history) => SplitHistoryList(history: history),
               _ => const _QuickSplitForm(),
             },
@@ -149,20 +146,21 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
   @override
   void handleStateChange(BuildContext context, QuickSplitState state) {
     return switch (state) {
-      InvalidAmount(:final invalidAmount) => invalidAmount.isEmpty
-          ? AppSnackBar.show(context, message: 'Empty amount are not allowed')
-          : AppSnackBar.show(
-              context,
-              message: '$invalidAmount is an invalid amount',
-            ),
+      InvalidAmount(:final invalidAmount) =>
+        invalidAmount.isEmpty
+            ? AppSnackBar.show(context, message: 'Empty amount are not allowed')
+            : AppSnackBar.show(
+                context,
+                message: '$invalidAmount is an invalid amount',
+              ),
       EmptyName() => AppSnackBar.show(
-          context,
-          message: 'Empty names are not allowed',
-        ),
+        context,
+        message: 'Empty names are not allowed',
+      ),
       QuickSettle _ => _navigateToQuickSettlePage(
-          context: context,
-          state: state,
-        ),
+        context: context,
+        state: state,
+      ),
       _ => () {},
     };
   }

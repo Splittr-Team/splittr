@@ -29,6 +29,9 @@ const List<String> _guestRoutes = [
   RoutePaths.splitHistory,
 ];
 
+/// Root navigator key for the application.
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+
 /// Creates and configures the application's [GoRouter] instance.
 ///
 /// The [authBloc] is used for both:
@@ -40,6 +43,7 @@ GoRouter createAppRouter({
   required AppLogger logger,
 }) {
   return GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: RoutePaths.splash,
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
     observers: [

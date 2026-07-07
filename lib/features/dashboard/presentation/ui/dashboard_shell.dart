@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sky_design_system/sky_design_system.dart'
-    show AppNavigationBar;
+import 'package:sky_design_system/sky_design_system.dart' show AppNavigationBar;
 import 'package:sky_router/sky_router.dart';
 import 'package:splittr/core/router/route_paths.dart';
 
