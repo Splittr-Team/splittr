@@ -85,4 +85,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activities => 'Activities';
+
+  @override
+  String get logout => 'Logout';
 }

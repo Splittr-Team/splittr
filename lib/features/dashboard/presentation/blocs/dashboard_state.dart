@@ -30,9 +30,7 @@ sealed class DashboardState extends BaseState with _$DashboardState {
 
 @freezed
 class DashboardStateStore with _$DashboardStateStore {
-  const DashboardStateStore({
-    this.loading = false,
-  });
+  const DashboardStateStore({this.loading = false});
 
   @override
   final bool loading;

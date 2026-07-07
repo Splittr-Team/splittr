@@ -25,5 +25,6 @@
   "guestLogin": "Login as guest",
   "dashboard": "Dashboard",
   "groups": "Groups",
-  "activities": "Activities"
+  "activities": "Activities",
+  "logout": "Logout"
 }

@@ -19,6 +19,7 @@ final class DashboardBloc extends BaseBloc<DashboardEvent, DashboardState> {
   }
 
   void _onStarted(_Started event, Emitter<DashboardState> emit) {}
+
   @override
   void started({Map<String, dynamic>? args}) {
     add(const DashboardEvent.started());

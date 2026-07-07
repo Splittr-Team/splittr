@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sky_bloc/sky_bloc.dart';
+import 'package:sky_design_system/sky_design_system.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:splittr/features/dashboard/presentation/blocs/dashboard_bloc.dart';
+import 'package:splittr/utils/bloc_utils/bloc_utils.dart';
+import 'package:splittr/utils/extensions/extensions.dart';
 
 part 'dashboard_form.dart';
 
@@ -19,40 +21,38 @@ class DashboardPage extends BasePage<DashboardBloc, DashboardState> {
   Widget buildPage(BuildContext context) {
     return Scaffold(
       body: const _DashboardForm(),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Splittr',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onPrimaryContainer,
-                      fontWeight: FontWeight.bold,
+      drawer: AppNavigationDrawer(
+        selectedIndex: 0,
+        onDestinationSelected: (value) {},
+        children: [
+          ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: context.colorScheme.primaryContainer,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    AppText.headlineMedium(
+                      context.strings.appName,
+                      color: context.colorScheme.onPrimaryContainer,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout_rounded),
-              title: const Text('Logout'),
-              onTap: () {
-                Navigator.pop(context);
-                context.read<AuthBloc>().loggedOut();
-              },
-            ),
-          ],
-        ),
+              AppListTile(
+                leadingIcon: Icons.logout_rounded,
+                title: context.strings.login,
+                onTap: () {
+                  getBloc<AuthBloc>(context).loggedOut();
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
