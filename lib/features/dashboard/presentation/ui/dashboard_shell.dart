@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:sky_design_system/sky_design_system.dart' show AppNavigationBar;
+import 'package:sky_design_system/sky_design_system.dart'
+    show
+        AppListTile,
+        AppNavigationBar,
+        AppNavigationDrawer,
+        AppText,
+        AppTopBar,
+        SkyDesignSystemContextExtension;
 import 'package:sky_router/sky_router.dart';
 import 'package:splittr/core/router/route_paths.dart';
+import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
+import 'package:splittr/utils/bloc_utils/bloc_utils.dart';
 import 'package:splittr/utils/extensions/l10n_extensions.dart';
 
 class DashboardShell extends StatelessWidget {
@@ -18,6 +27,36 @@ class DashboardShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
+      appBar: const AppTopBar(title: 'Dashboard'),
+      drawer: AppNavigationDrawer(
+        selectedIndex: 0,
+        onDestinationSelected: (value) {},
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: context.colorScheme.primaryContainer,
+            ),
+            child: Column(
+              mainAxisSize: .min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                AppText.headlineMedium(
+                  context.strings.appName,
+                  color: context.colorScheme.onPrimaryContainer,
+                ),
+              ],
+            ),
+          ),
+          AppListTile(
+            leadingIcon: Icons.logout_rounded,
+            title: context.strings.logout,
+            onTap: () {
+              getBloc<AuthBloc>(context).loggedOut();
+            },
+          ),
+        ],
+      ),
       bottomNavigationBar: AppNavigationBar(
         selectedIndex: _getSelectedIndex(),
         onDestinationSelected: (index) =>
