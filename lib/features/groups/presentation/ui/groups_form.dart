@@ -8,14 +8,16 @@ class _GroupsForm extends StatelessWidget {
     return BlocBuilder<GroupsBloc, GroupsState>(
       builder: (context, state) {
         return switch (state) {
-          Initial() || Loading() => const Center(
+          Initial() || ChangeLoaderState() => const Center(
             child: CircularProgressIndicator(),
           ),
-          Error(:final message) => Center(
+
+          OnFailure(:final failure) => Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Text(
-                message,
+                // Assuming your custom Failure class has a .message property
+                failure.message,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                   fontWeight: FontWeight.bold,
@@ -24,6 +26,7 @@ class _GroupsForm extends StatelessWidget {
               ),
             ),
           ),
+
           Loaded(:final groups) =>
             groups.isEmpty
                 ? const Center(

@@ -6,7 +6,8 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/features/groups/domain/entities/groups.dart';
-import 'package:splittr/features/groups/domain/repositories/groups_repository.dart';
+import 'package:splittr/features/groups/domain/usecases/get_groups_usecase.dart';
+import 'package:splittr/features/groups/domain/usecases/watch_groups_usecase.dart';
 
 part 'groups_bloc.freezed.dart';
 part 'groups_event.dart';
@@ -14,14 +15,17 @@ part 'groups_state.dart';
 
 @injectable
 final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
-  GroupsBloc(this._repository)
-      : super(
-          const GroupsState.initial(
-            store: GroupsStateStore(),
-          ),
-        );
+  GroupsBloc(
+    this._getGroupsUseCase,
+    this._watchGroupsUseCase,
+  ) : super(
+        const GroupsState.initial(
+          store: GroupsStateStore(),
+        ),
+      );
 
-  final GroupsRepository _repository;
+  final GetGroupsUseCase _getGroupsUseCase;
+  final WatchGroupsUseCase _watchGroupsUseCase;
 
   @override
   void handleEvents() {
@@ -33,17 +37,21 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
     Emitter<GroupsState> emit,
   ) async {
     // 1. Emit the loading state
-    emit(GroupsState.loading(store: state.store.copyWith(loading: true)));
+    emit(
+      GroupsState.changeLoaderState(store: state.store.copyWith(loading: true)),
+    );
 
-    // 2. Trigger the API fetch
-    final result = await _repository.fetchGroups();
+    // 2. Trigger the API fetch via UseCase
+    // Assuming 'noParams' is defined in your sky_architecture package.
+    // If not, replace with 'const NoParams()'.
+    final result = await _getGroupsUseCase.call(noParams);
 
     final hasError = result.fold(
       (failure) {
         emit(
-          GroupsState.error(
+          GroupsState.onFailure(
             store: state.store.copyWith(loading: false),
-            message: failure.message,
+            failure: failure,
           ),
         );
         return true;
@@ -54,16 +62,12 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
     // If API call fails, stop and show the error state.
     if (hasError) return;
 
-    // 3. Immediately use emit.forEach on repository stream to handle success/live data.
-    await emit.forEach<List<Groups>>(
-      _repository.watchGroups,
+    // 3. Listen to the stream using the Watch UseCase
+    await emit.forEach<List<Group>>(
+      _watchGroupsUseCase.call(),
       onData: (groups) => GroupsState.loaded(
         store: state.store.copyWith(loading: false),
         groups: groups,
-      ),
-      onError: (error, stackTrace) => GroupsState.error(
-        store: state.store.copyWith(loading: false),
-        message: error.toString(),
       ),
     );
   }

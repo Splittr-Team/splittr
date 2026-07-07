@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
-import 'package:splittr/features/groups/data/datasources/groups_datasource.dart';
+import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
 import 'package:splittr/features/groups/data/mappers/groups.dart';
 import 'package:splittr/features/groups/domain/entities/groups.dart';
 import 'package:splittr/features/groups/domain/repositories/groups_repository.dart';
@@ -16,23 +16,23 @@ final class GroupsRepositoryImpl implements GroupsRepository {
   final ApiCallHandler _apiCallHandler;
 
   // 1. Initialize the BehaviorSubject with an empty list
-  final BehaviorSubject<List<Groups>> _groupsSubject = BehaviorSubject.seeded(
+  final BehaviorSubject<List<Group>> _groupsSubject = BehaviorSubject.seeded(
     [],
   );
 
   // 2. Expose the stream for your Bloc to listen to
   @override
-  Stream<List<Groups>> get watchGroups => _groupsSubject.stream;
+  Stream<List<Group>> get watchGroups => _groupsSubject.stream;
 
   @override
-  FutureEitherFailure<Groups> createGroup({
-    required String description,
+  FutureEitherFailure<Group> createGroup({
     required String name,
+    required String description,
   }) async {
     final result = await _apiCallHandler.handle(
       () => _groupsDataSource.createGroup(
-        description: description,
         name: name,
+        description: description,
       ),
     );
 
@@ -48,9 +48,9 @@ final class GroupsRepositoryImpl implements GroupsRepository {
   }
 
   @override
-  FutureEitherFailure<List<Groups>> fetchGroups() async {
+  FutureEitherFailure<List<Group>> getGroups() async {
     final result = await _apiCallHandler.handle(
-      _groupsDataSource.fetchGroups,
+      _groupsDataSource.getGroups,
     );
 
     return result.map((modelList) {

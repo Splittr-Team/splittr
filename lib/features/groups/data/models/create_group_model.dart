@@ -5,12 +5,12 @@ part 'create_group_model.g.dart';
 @JsonSerializable(createFactory: false)
 class CreateGroupModel {
   const CreateGroupModel({
-    required this.description,
     required this.name,
+    required this.description,
   });
 
-  final String description;
   final String name;
+  final String description;
 
   Map<String, dynamic> toJson() => _$CreateGroupModelToJson(this);
 }

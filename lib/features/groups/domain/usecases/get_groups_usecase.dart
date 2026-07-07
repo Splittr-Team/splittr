@@ -1,0 +1,17 @@
+import 'package:fpdart/fpdart.dart' hide Group;
+import 'package:injectable/injectable.dart';
+import 'package:sky_architecture/sky_architecture.dart';
+import 'package:splittr/features/groups/domain/entities/groups.dart';
+import 'package:splittr/features/groups/domain/repositories/groups_repository.dart';
+
+@lazySingleton
+final class GetGroupsUseCase implements UseCase<List<Group>, NoParams> {
+  const GetGroupsUseCase(this._groupsRepository);
+
+  final GroupsRepository _groupsRepository;
+
+  @override
+  Future<Either<Failure, List<Group>>> call(NoParams params) {
+    return _groupsRepository.getGroups();
+  }
+}
