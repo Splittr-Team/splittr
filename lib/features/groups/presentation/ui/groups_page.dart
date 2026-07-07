@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/groups/presentation/blocs/groups_bloc.dart';
@@ -17,8 +18,12 @@ class GroupsPage extends BasePage<GroupsBloc, GroupsState> {
 
   @override
   Widget buildPage(BuildContext context) {
-    return const Scaffold(
-      body: _GroupsForm(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Groups'),
+        centerTitle: true,
+      ),
+      body: const _GroupsForm(),
     );
   }
 }

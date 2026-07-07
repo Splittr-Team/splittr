@@ -13,7 +13,7 @@ abstract class GroupsApiClient {
   factory GroupsApiClient(Dio dio) = _GroupsApiClient;
 
   @GET('/')
-  Future<GroupsModel> getGroups();
+  Future<List<GroupsModel>> getGroups();
 
   @POST('/')
   Future<GroupsModel> createGroup(@Body() CreateGroupModel request);

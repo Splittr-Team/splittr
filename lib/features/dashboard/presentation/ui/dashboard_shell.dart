@@ -33,9 +33,9 @@ class DashboardShell extends StatelessWidget {
             label: 'Groups',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.notifications_active_outlined),
+            selectedIcon: Icon(Icons.notifications_active),
+            label: 'Activities',
           ),
         ],
       ),

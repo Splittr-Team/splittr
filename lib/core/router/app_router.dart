@@ -7,7 +7,6 @@ import 'package:splittr/features/auth/presentation/pages/login/login_page.dart';
 import 'package:splittr/features/auth/presentation/pages/sign_up/sign_up_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_shell.dart';
-import 'package:splittr/features/group_dashboard/presentation/ui/group_dashboard_page.dart';
 import 'package:splittr/features/groups/presentation/ui/groups_page.dart';
 import 'package:splittr/features/profile/presentation/ui/profile_page.dart';
 import 'package:splittr/features/quick_settle/presentation/ui/quick_settle_page.dart';
@@ -161,14 +160,6 @@ final List<RouteBase> _routes = [
         ),
       ),
     ],
-  ),
-  GoRoute(
-    path: RoutePaths.groupDashboard,
-    builder: (context, state) {
-      final groupId = state.pathParameters['groupId'];
-      final args = (state.extra as Map<String, dynamic>?) ?? {};
-      return GroupDashboardPage(args: {'groupId': groupId, ...args});
-    },
   ),
   GoRoute(
     path: RoutePaths.quickSettle,

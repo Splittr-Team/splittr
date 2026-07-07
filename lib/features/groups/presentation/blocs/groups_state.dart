@@ -8,25 +8,30 @@ sealed class GroupsState extends BaseState with _$GroupsState {
     required GroupsStateStore store,
   }) = Initial;
 
-  const factory GroupsState.changeLoaderState({
+  const factory GroupsState.loading({
     required GroupsStateStore store,
-  }) = ChangeLoaderState;
+  }) = Loading;
 
-  const factory GroupsState.onFailure({
+  const factory GroupsState.loaded({
     required GroupsStateStore store,
-    required Failure failure,
-  }) = OnFailure;
+    required List<Groups> groups,
+  }) = Loaded;
+
+  const factory GroupsState.error({
+    required GroupsStateStore store,
+    required String message,
+  }) = Error;
 
   @override
   BaseState getFailureState({required Failure failure}) =>
-      GroupsState.onFailure(
+      GroupsState.error(
         store: store.copyWith(loading: false),
-        failure: failure,
+        message: failure.message,
       );
 
   @override
   BaseState getLoadingState({required bool loading}) =>
-      GroupsState.changeLoaderState(store: store.copyWith(loading: loading));
+      GroupsState.loading(store: store.copyWith(loading: loading));
 }
 
 @freezed
