@@ -4,9 +4,9 @@ import 'package:splittr/features/groups/domain/entities/group.dart';
 extension GroupModelX on GroupModel {
   Group toDomain() => Group(
     id: id,
-    name: name ?? 'Unnamed Group',
-    description: description ?? '',
-    inviteCode: inviteCode ?? '',
-    createdBy: createdBy ?? 'Unknown',
+    name: name,
+    description: description,
+    inviteCode: inviteCode,
+    createdBy: createdBy,
   );
 }
