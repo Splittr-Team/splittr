@@ -21,6 +21,7 @@ class DashboardPage extends BasePage<DashboardBloc, DashboardState> {
   Widget buildPage(BuildContext context) {
     return Scaffold(
       body: const _DashboardForm(),
+      appBar: AppBar(),
       drawer: AppNavigationDrawer(
         selectedIndex: 0,
         onDestinationSelected: (value) {},
@@ -33,6 +34,7 @@ class DashboardPage extends BasePage<DashboardBloc, DashboardState> {
                   color: context.colorScheme.primaryContainer,
                 ),
                 child: Column(
+                  mainAxisSize: .min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

@@ -27,8 +27,8 @@ class _GroupsForm extends StatelessWidget {
             ),
           ),
 
-          Loaded(:final groups) =>
-            groups.isEmpty
+          OnGroupsUpdate() =>
+            state.store.groups.isEmpty
                 ? const Center(
                     child: Padding(
                       padding: EdgeInsets.all(24),
@@ -40,9 +40,9 @@ class _GroupsForm extends StatelessWidget {
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.all(8),
-                    itemCount: groups.length,
+                    itemCount: state.store.groups.length,
                     itemBuilder: (context, index) {
-                      final group = groups[index];
+                      final group = state.store.groups[index];
                       return Card(
                         child: ListTile(
                           title: Text(group.name ?? ''),

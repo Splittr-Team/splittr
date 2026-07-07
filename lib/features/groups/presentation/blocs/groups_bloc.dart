@@ -20,62 +20,81 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
     this._watchGroupsUseCase,
   ) : super(
         const GroupsState.initial(
-          store: GroupsStateStore(),
+          store: GroupsStateStore(groups: []),
         ),
-      );
+      ) {
+    _listenToRepositoryStream();
+  }
 
   final GetGroupsUseCase _getGroupsUseCase;
   final WatchGroupsUseCase _watchGroupsUseCase;
 
+  StreamSubscription<EitherFailure<List<Group>>>? _groupsSubscription;
+
   @override
   void handleEvents() {
     on<_Started>(_onStarted);
+    on<_GroupsUpdated>(_onGroupsUpdated);
+    on<_GroupsFailed>(_onGroupsFailed);
+  }
+
+  void _listenToRepositoryStream() {
+    _groupsSubscription = _watchGroupsUseCase.call(noParams).listen(
+      (result) {
+        result.fold(
+          (failure) {
+            add(GroupsEvent.groupsFailed(failure: failure));
+          },
+          (groups) {
+            add(GroupsEvent.groupsUpdated(groups: groups));
+          },
+        );
+      },
+    );
   }
 
   FutureOr<void> _onStarted(
     _Started event,
     Emitter<GroupsState> emit,
   ) async {
-    // 1. Emit the loading state
-    emit(
-      GroupsState.changeLoaderState(store: state.store.copyWith(loading: true)),
-    );
+    changeLoadingState(emit: emit, loading: true);
 
-    // 2. Trigger the API fetch via UseCase
-    // Assuming 'noParams' is defined in your sky_architecture package.
-    // If not, replace with 'const NoParams()'.
     final result = await _getGroupsUseCase.call(noParams);
 
-    final hasError = result.fold(
-      (failure) {
-        emit(
-          GroupsState.onFailure(
-            store: state.store.copyWith(loading: false),
-            failure: failure,
-          ),
-        );
-        return true;
+    result.fold(
+      (failure) => handleFailure(emit: emit, failure: failure),
+      (_) {
+        changeLoadingState(emit: emit, loading: false);
       },
-      (_) => false,
     );
+  }
 
-    // If API call fails, stop and show the error state.
-    if (hasError) return;
-
-    // 3. Listen to the stream using the Watch UseCase
-    await emit.forEach<List<Group>>(
-      _watchGroupsUseCase.call(),
-      onData: (groups) => GroupsState.loaded(
+  void _onGroupsUpdated(
+    _GroupsUpdated event,
+    Emitter<GroupsState> emit,
+  ) {
+    emit(
+      GroupsState.onGroupsUpdate(
         store: state.store.copyWith(loading: false),
-        groups: groups,
       ),
     );
   }
 
+  void _onGroupsFailed(
+    _GroupsFailed event,
+    Emitter<GroupsState> emit,
+  ) {
+    handleFailure(emit: emit, failure: event.failure);
+  }
+
   @override
-  void started({
-    Map<String, dynamic>? args,
-  }) {
+  void started({Map<String, dynamic>? args}) {
     add(const GroupsEvent.started());
+  }
+
+  @override
+  Future<void> close() async {
+    await _groupsSubscription?.cancel();
+    return super.close();
   }
 }

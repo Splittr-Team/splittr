@@ -8,10 +8,9 @@ sealed class GroupsState extends BaseState with _$GroupsState {
     required GroupsStateStore store,
   }) = Initial;
 
-  const factory GroupsState.loaded({
+  const factory GroupsState.onGroupsUpdate({
     required GroupsStateStore store,
-    required List<Group> groups,
-  }) = Loaded;
+  }) = OnGroupsUpdate;
 
   const factory GroupsState.onFailure({
     required GroupsStateStore store,
@@ -37,9 +36,13 @@ sealed class GroupsState extends BaseState with _$GroupsState {
 @freezed
 class GroupsStateStore with _$GroupsStateStore {
   const GroupsStateStore({
+    required this.groups,
     this.loading = false,
   });
 
   @override
   final bool loading;
+
+  @override
+  final List<Group> groups;
 }
