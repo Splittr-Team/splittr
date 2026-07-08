@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
+import 'package:splittr/features/groups/domain/usecases/create_group_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/get_groups_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/watch_groups_usecase.dart';
 
@@ -18,6 +19,7 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
   GroupsBloc(
     this._getGroupsUseCase,
     this._watchGroupsUseCase,
+    this._createGroupsUseCase,
   ) : super(
         const GroupsState.initial(
           store: GroupsStateStore(groups: []),
@@ -28,6 +30,7 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
 
   final GetGroupsUseCase _getGroupsUseCase;
   final WatchGroupsUseCase _watchGroupsUseCase;
+  final CreateGroupsUseCase _createGroupsUseCase;
 
   StreamSubscription<EitherFailure<List<Group>>>? _groupsSubscription;
 
@@ -36,6 +39,9 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
     on<_Started>(_onStarted);
     on<_GroupsUpdated>(_onGroupsUpdated);
     on<_GroupsFailed>(_onGroupsFailed);
+    on<_GroupNameChanged>(_onGroupNameChanged);
+    on<_GroupDescriptionChanged>(_onGroupDescriptionChanged);
+    on<_CreateGroupClicked>(_onCreateGroupClicked);
   }
 
   void _listenToRepositoryStream() {
@@ -69,6 +75,31 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
     );
   }
 
+  void _onGroupNameChanged(
+    _GroupNameChanged event,
+    Emitter<GroupsState> emit,
+  ) {
+    emit(
+      GroupsState.onGroupNameChanged(
+        store: state.store.copyWith(loading: false, groupName: event.groupName),
+      ),
+    );
+  }
+
+  void _onGroupDescriptionChanged(
+    _GroupDescriptionChanged event,
+    Emitter<GroupsState> emit,
+  ) {
+    emit(
+      GroupsState.onGroupDescriptionChanged(
+        store: state.store.copyWith(
+          loading: false,
+          groupDescription: event.groupDescription,
+        ),
+      ),
+    );
+  }
+
   void _onGroupsUpdated(
     _GroupsUpdated event,
     Emitter<GroupsState> emit,
@@ -77,6 +108,33 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
       GroupsState.onGroupsUpdate(
         store: state.store.copyWith(loading: false, groups: event.groups),
       ),
+    );
+  }
+
+  Future<void> _onCreateGroupClicked(
+    _CreateGroupClicked event,
+    Emitter<GroupsState> emit,
+  ) async {
+    changeLoadingState(emit: emit, loading: true);
+    final result = await _createGroupsUseCase.call(
+      CreateGroupParams(
+        name: state.store.groupName ?? '',
+        description: state.store.groupDescription ?? '',
+      ),
+    );
+    result.fold(
+      (failure) {
+        handleFailure(emit: emit, failure: failure);
+        changeLoadingState(emit: emit, loading: false);
+      },
+      (currGroup) {
+        final groupList = [...state.store.groups, currGroup];
+        emit(
+          GroupsState.onGroupsUpdate(
+            store: state.store.copyWith(loading: false, groups: groupList),
+          ),
+        );
+      },
     );
   }
 
@@ -96,5 +154,19 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
   Future<void> close() async {
     await _groupsSubscription?.cancel();
     return super.close();
+  }
+
+  void groupNameChanged({required String groupName}) {
+    add(GroupsEvent.groupNameChanged(groupName: groupName));
+  }
+
+  void groupDescriptionChanged({required String groupDescription}) {
+    add(
+      GroupsEvent.groupDescriptionChanged(groupDescription: groupDescription),
+    );
+  }
+
+  void createGroupClicked() {
+    add(const GroupsEvent.createGroupClicked());
   }
 }

@@ -84,6 +84,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get groups => 'Groups';
 
   @override
+  String get groupName => 'Group Name';
+
+  @override
+  String get groupDescription => 'Group Description';
+
+  @override
+  String get createGroup => 'Create Group';
+
+  @override
   String get activities => 'Activities';
 
   @override

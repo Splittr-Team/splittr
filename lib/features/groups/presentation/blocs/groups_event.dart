@@ -6,9 +6,19 @@ class GroupsEvent extends BaseEvent with _$GroupsEvent {
 
   const factory GroupsEvent.started() = _Started;
 
+  const factory GroupsEvent.groupNameChanged({
+    required String groupName,
+  }) = _GroupNameChanged;
+
+  const factory GroupsEvent.groupDescriptionChanged({
+    required String groupDescription,
+  }) = _GroupDescriptionChanged;
+
   const factory GroupsEvent.groupsFailed({required Failure failure}) =
       _GroupsFailed;
 
   const factory GroupsEvent.groupsUpdated({required List<Group> groups}) =
       _GroupsUpdated;
+
+  const factory GroupsEvent.createGroupClicked() = _CreateGroupClicked;
 }

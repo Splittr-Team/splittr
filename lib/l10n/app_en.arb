@@ -25,6 +25,9 @@
   "guestLogin": "Login as guest",
   "dashboard": "Dashboard",
   "groups": "Groups",
+  "groupName": "Group Name",
+  "groupDescription": "Group Description",
+  "createGroup": "Create Group",
   "activities": "Activities",
   "logout": "Logout"
 }

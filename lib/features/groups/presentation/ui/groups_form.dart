@@ -51,6 +51,8 @@ class _GroupsForm extends StatelessWidget {
                       );
                     },
                   ),
+
+          _ => const Center(),
         };
       },
     );

@@ -8,6 +8,14 @@ sealed class GroupsState extends BaseState with _$GroupsState {
     required GroupsStateStore store,
   }) = Initial;
 
+  const factory GroupsState.onGroupNameChanged({
+    required GroupsStateStore store,
+  }) = OnGroupNameChanged;
+
+  const factory GroupsState.onGroupDescriptionChanged({
+    required GroupsStateStore store,
+  }) = OnGroupDescriptionChanged;
+
   const factory GroupsState.onGroupsUpdate({
     required GroupsStateStore store,
   }) = OnGroupsUpdate;
@@ -38,6 +46,8 @@ class GroupsStateStore with _$GroupsStateStore {
   const GroupsStateStore({
     required this.groups,
     this.loading = false,
+    this.groupName,
+    this.groupDescription,
   });
 
   @override
@@ -45,4 +55,10 @@ class GroupsStateStore with _$GroupsStateStore {
 
   @override
   final List<Group> groups;
+
+  @override
+  final String? groupName;
+
+  @override
+  final String? groupDescription;
 }

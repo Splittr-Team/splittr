@@ -244,6 +244,24 @@ abstract class AppLocalizations {
   /// **'Groups'**
   String get groups;
 
+  /// No description provided for @groupName.
+  ///
+  /// In en, this message translates to:
+  /// **'Group Name'**
+  String get groupName;
+
+  /// No description provided for @groupDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Group Description'**
+  String get groupDescription;
+
+  /// No description provided for @createGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Group'**
+  String get createGroup;
+
   /// No description provided for @activities.
   ///
   /// In en, this message translates to:
