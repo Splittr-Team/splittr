@@ -61,3 +61,9 @@ firebase_options*.dart
 # Environment configurations
 .env.dev
 .env.prod
+
+# Superpowers agents & tracking
+.superpowers/
+/docs/superpowers/
+
+

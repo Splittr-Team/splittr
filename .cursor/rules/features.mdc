@@ -1,0 +1,12 @@
+---
+description: Triggered when editing or creating features under lib/features/
+globs: lib/features/**/*.dart
+---
+# Feature Architecture Rules
+
+When creating or modifying features:
+1. You MUST read the feature architecture scaffolding instructions:
+   [feature_architecture.md](file:///C:/Users/Saurabh/AndroidStudioProjects/splittr/docs/ai_rules/feature_architecture.md)
+
+2. When using `sky_*` packages, resolve their `SKILL.md` rules from `.dart_tool/package_config.json` or fallback to GitHub remote URLs:
+   `https://raw.githubusercontent.com/Saurrabhh/sky_core/main/packages/<package_name>/SKILL.md`
