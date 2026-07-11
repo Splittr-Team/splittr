@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sky_architecture/sky_architecture.dart';
+import 'package:sky_architecture/sky_architecture.dart' hide State;
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:splittr/utils/extensions/l10n_extensions.dart';
 

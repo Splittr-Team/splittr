@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sky_architecture/sky_architecture.dart';
+import 'package:sky_architecture/sky_architecture.dart' hide State;
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:sky_router/sky_router.dart';
@@ -15,7 +14,6 @@ import 'package:splittr/features/auth/presentation/pages/widgets/google_sign_in_
 import 'package:splittr/features/auth/presentation/pages/widgets/name_text_field.dart';
 import 'package:splittr/features/auth/presentation/pages/widgets/or_divider.dart';
 import 'package:splittr/features/auth/presentation/pages/widgets/password_text_field.dart';
-import 'package:splittr/utils/bloc_utils/bloc_utils.dart';
 import 'package:splittr/utils/extensions/l10n_extensions.dart';
 
 part 'sign_up_form.dart';

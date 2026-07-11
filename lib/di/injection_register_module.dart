@@ -16,23 +16,24 @@ abstract class RegisterModule {
 
   @lazySingleton
   AppLogger get appLogger {
-    final logging = AppLoggerRegistry.instance..register(ConsoleLogger());
+    final appLogger = AppLoggerRegistry.instance;
 
     if (appConfig.env == Env.dev) {
       final talker = TalkerFlutter.init(
-        settings: TalkerSettings(
-          useConsoleLogs: false,
-        ),
+        settings: TalkerSettings(useConsoleLogs: false),
       );
-      logging.register(TalkerAppLogger(talker));
+
+      appLogger
+        ..register(TalkerAppLogger(talker))
+        ..register(ConsoleLogger());
     }
 
-    return logging;
+    return appLogger;
   }
 
   @lazySingleton
   GoRouter get goRouter => createAppRouter(
     authBloc: getIt<AuthBloc>(),
-    logger: appLogger,
+    logger: getIt<AppLogger>(),
   );
 }

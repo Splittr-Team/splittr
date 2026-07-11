@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_devtools/sky_devtools.dart';
 import 'package:sky_network/sky_network.dart';

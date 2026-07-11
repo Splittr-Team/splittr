@@ -4,56 +4,29 @@ part of 'auth_bloc.dart';
 sealed class AuthState extends BaseState with _$AuthState {
   const AuthState._();
 
-  const factory AuthState.initial({
-    required AuthStateStore store,
-  }) = Initial;
+  const factory AuthState.loading() = Loading;
 
-  const factory AuthState.authenticated({
-    required AuthStateStore store,
+  const factory AuthState.onUserAuthenticated({
     required User user,
-  }) = Authenticated;
+  }) = OnUserAuthenticated;
 
-  const factory AuthState.guest({
-    required AuthStateStore store,
-  }) = Guest;
+  const factory AuthState.onUserUnauthenticated() = OnUserUnauthenticated;
 
-  const factory AuthState.onUserUnauthenticated({
-    required AuthStateStore store,
-  }) = OnUserUnauthenticated;
+  const factory AuthState.guest() = Guest;
 
-  const factory AuthState.onLogout({
-    required AuthStateStore store,
-  }) = OnLogout;
-
-  const factory AuthState.onLoadingStateChange({
-    required AuthStateStore store,
-  }) = OnLoadingStateChange;
+  const factory AuthState.onLogout() = OnLogout;
 
   const factory AuthState.onFailure({
-    required AuthStateStore store,
     required Failure failure,
   }) = OnFailure;
 
   @override
   BaseState getLoadingState({required bool loading}) {
-    return AuthState.onLoadingStateChange(
-      store: store.copyWith(loading: loading),
-    );
+    return const AuthState.loading();
   }
 
   @override
   BaseState getFailureState({required Failure failure}) {
-    return AuthState.onFailure(
-      store: store.copyWith(loading: false),
-      failure: failure,
-    );
+    return AuthState.onFailure(failure: failure);
   }
-}
-
-@freezed
-class AuthStateStore with _$AuthStateStore {
-  const AuthStateStore({this.loading = false});
-
-  @override
-  final bool loading;
 }

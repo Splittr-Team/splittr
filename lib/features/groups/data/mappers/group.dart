@@ -10,3 +10,7 @@ extension GroupModelX on GroupModel {
     createdBy: createdBy,
   );
 }
+
+extension GroupModelListX on List<GroupModel> {
+  List<Group> toDomain() => map((e) => e.toDomain()).toList();
+}

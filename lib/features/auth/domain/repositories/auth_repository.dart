@@ -1,9 +1,8 @@
-import 'package:fpdart/fpdart.dart';
+import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
-import 'package:splittr/utils/typedefs/typedefs.dart';
 
 abstract interface class AuthRepository {
-  Stream<Option<User>> get authStateChanges;
+  Stream<Option<User>> get watchAuthState;
 
   FutureEitherFailure<User> loginWithEmail({
     required String email,
@@ -23,4 +22,6 @@ abstract interface class AuthRepository {
   FutureEitherFailure<Unit> saveGuestSession();
 
   Future<bool> isGuestUser();
+
+  Future<void> dispose();
 }

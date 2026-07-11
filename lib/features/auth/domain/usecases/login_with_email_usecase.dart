@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
@@ -20,7 +19,7 @@ final class LoginWithEmailUseCase
   }
 }
 
-class LoginWithEmailParams {
+class LoginWithEmailParams extends Equatable {
   const LoginWithEmailParams({
     required this.email,
     required this.password,
@@ -28,4 +27,7 @@ class LoginWithEmailParams {
 
   final String email;
   final String password;
+
+  @override
+  List<Object?> get props => [email, password];
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
@@ -22,11 +21,11 @@ final class AuthRepositoryImpl implements AuthRepository {
   final AuthLocalDataSource _authLocalDataSource;
   final ApiCallHandler _apiCallHandler;
 
-  final StreamController<Option<User>> _sessionStreamController =
+  final StreamController<Option<User>> _authStateStreamController =
       StreamController<Option<User>>.broadcast();
 
   @override
-  Stream<Option<User>> get authStateChanges => _sessionStreamController.stream;
+  Stream<Option<User>> get watchAuthState => _authStateStreamController.stream;
 
   @override
   FutureEitherFailure<User> loginWithEmail({
@@ -45,7 +44,7 @@ final class AuthRepositoryImpl implements AuthRepository {
     );
     return result.map((userModel) => userModel.toDomain())..fold(
       (_) {},
-      (user) => _sessionStreamController.add(Some(user)),
+      (user) => _authStateStreamController.add(Some(user)),
     );
   }
 
@@ -68,7 +67,7 @@ final class AuthRepositoryImpl implements AuthRepository {
     );
     return result.map((userModel) => userModel.toDomain())..fold(
       (_) {},
-      (user) => _sessionStreamController.add(Some(user)),
+      (user) => _authStateStreamController.add(Some(user)),
     );
   }
 
@@ -78,7 +77,7 @@ final class AuthRepositoryImpl implements AuthRepository {
       final isGuest = await _authLocalDataSource.isGuestUser();
       if (isGuest) {
         const guestUser = User(id: 'guest', name: 'Guest');
-        _sessionStreamController.add(const Some(guestUser));
+        _authStateStreamController.add(const Some(guestUser));
         return const Right(guestUser);
       }
     } on Exception catch (e) {
@@ -90,8 +89,8 @@ final class AuthRepositoryImpl implements AuthRepository {
     );
 
     return result.map((userModel) => userModel.toDomain())..fold(
-      (failure) => _sessionStreamController.add(const None()),
-      (user) => _sessionStreamController.add(Some(user)),
+      (failure) => _authStateStreamController.add(const None()),
+      (user) => _authStateStreamController.add(Some(user)),
     );
   }
 
@@ -103,7 +102,7 @@ final class AuthRepositoryImpl implements AuthRepository {
         _authRemoteDataSource.logout(),
       ).wait;
 
-      _sessionStreamController.add(const None());
+      _authStateStreamController.add(const None());
 
       return const Right(unit);
     } on Exception catch (e) {
@@ -115,7 +114,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   FutureEitherFailure<Unit> saveGuestSession() async {
     try {
       await _authLocalDataSource.saveGuestSession();
-      _sessionStreamController.add(
+      _authStateStreamController.add(
         const Some(User(id: 'guest', name: 'Guest')),
       );
       return const Right(unit);
@@ -131,5 +130,11 @@ final class AuthRepositoryImpl implements AuthRepository {
     } on Exception catch (_) {
       return false;
     }
+  }
+
+  @disposeMethod
+  @override
+  Future<void> dispose() async {
+    await _authStateStreamController.close();
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/personal_transaction/presentation/blocs/personal_transaction_bloc.dart';
 

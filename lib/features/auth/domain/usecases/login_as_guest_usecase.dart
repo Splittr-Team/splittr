@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/auth/domain/repositories/auth_repository.dart';

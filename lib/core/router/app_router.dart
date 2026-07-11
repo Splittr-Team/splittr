@@ -67,13 +67,13 @@ String? _redirect(AuthBloc authBloc, GoRouterState state) {
 
   // During initial state (splash screen is resolving), do not redirect.
   // Let the SplashPage handle its animation and auth check flow.
-  if (authState is Initial) return null;
+  if (authState case Loading _) return null;
 
   final isOnPublicRoute = _publicRoutes.contains(currentLocation);
   final isOnSplash = currentLocation == RoutePaths.splash;
 
   // User is authenticated.
-  if (authState is Authenticated) {
+  if (authState case OnUserAuthenticated _) {
     // If on a public route (splash/login/signUp), redirect to dashboard.
     if (isOnPublicRoute) return RoutePaths.dashboard;
     return null;

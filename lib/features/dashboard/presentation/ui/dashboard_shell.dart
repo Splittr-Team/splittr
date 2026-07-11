@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart'
     show
         AppListTile,
@@ -10,7 +11,6 @@ import 'package:sky_design_system/sky_design_system.dart'
 import 'package:sky_router/sky_router.dart';
 import 'package:splittr/core/router/route_paths.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
-import 'package:splittr/utils/bloc_utils/bloc_utils.dart';
 import 'package:splittr/utils/extensions/l10n_extensions.dart';
 
 class DashboardShell extends StatelessWidget {
@@ -27,7 +27,13 @@ class DashboardShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      appBar: const AppTopBar(title: 'Dashboard'),
+      appBar: AppTopBar(
+        title: switch (currentLocation) {
+          RoutePaths.groups => ' My Groups',
+          RoutePaths.profile => 'Profile',
+          _ => 'Dashboard',
+        },
+      ),
       drawer: AppNavigationDrawer(
         selectedIndex: 0,
         onDestinationSelected: (value) {},
@@ -51,9 +57,7 @@ class DashboardShell extends StatelessWidget {
           AppListTile(
             leadingIcon: Icons.logout_rounded,
             title: context.strings.logout,
-            onTap: () {
-              getBloc<AuthBloc>(context).loggedOut();
-            },
+            onTap: () => getBloc<AuthBloc>(context).loggedOut(),
           ),
         ],
       ),

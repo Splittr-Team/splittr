@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
@@ -21,7 +20,7 @@ final class SignUpWithEmailUseCase
   }
 }
 
-class SignUpWithEmailParams {
+class SignUpWithEmailParams extends Equatable {
   const SignUpWithEmailParams({
     required this.name,
     required this.email,
@@ -31,4 +30,7 @@ class SignUpWithEmailParams {
   final String name;
   final String email;
   final String password;
+
+  @override
+  List<Object?> get props => [name, email, password];
 }

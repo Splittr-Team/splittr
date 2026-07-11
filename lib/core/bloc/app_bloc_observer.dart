@@ -1,4 +1,4 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_telemetry/sky_telemetry.dart';
 
 /// A custom [BlocObserver] that pipes all BLoC lifecycle events, transitions,

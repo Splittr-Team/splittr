@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "2.13.1"
   bloc:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: bloc
       sha256: e03b235924e4f509c27b5d6b2f949200e0a91149a9818b4f65eeb56662b75413
@@ -242,7 +242,7 @@ packages:
     source: hosted
     version: "3.1.8"
   dio:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: dio
       sha256: ea2bad3c89a27635ce2d85cce4d6b199da49a5a48ec77b03e45b65a3b90922b0
@@ -367,7 +367,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_bloc:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_bloc
       sha256: cf51747952201a455a1c840f8171d273be009b932c75093020f9af64f2123e38
@@ -406,7 +406,7 @@ packages:
     source: sdk
     version: "0.0.0"
   fpdart:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: fpdart
       sha256: f8e9d0989ba293946673e382c59ac513e30cb6746a9452df195f29e3357a73d4
@@ -854,7 +854,7 @@ packages:
     source: hosted
     version: "6.5.0"
   pretty_dio_logger:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: pretty_dio_logger
       sha256: "36f2101299786d567869493e2f5731de61ce130faa14679473b26905a92b6407"
@@ -985,18 +985,18 @@ packages:
     dependency: "direct main"
     description:
       name: sky_architecture
-      sha256: "96aeb470813f4a45798de71559e0e5e2ca770e3852518352e8ff62945ae17b3b"
+      sha256: "7f958a96a00f51de3eac230753ed8fc4e2e7d6c3625386f3a8aac82dfeb74b8d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.0"
+    version: "1.7.0"
   sky_bloc:
     dependency: "direct main"
     description:
       name: sky_bloc
-      sha256: "6a874d71110d489c361d24711e40410fe90e7a7a021ba2799aa98a27be3ebc66"
+      sha256: d70cd9ad6ce1ee11d8bba81560bbd1df3fe656a423615df59c024dd8d55f3c52
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.11"
+    version: "2.2.0"
   sky_design_system:
     dependency: "direct main"
     description:
@@ -1030,10 +1030,10 @@ packages:
     dependency: "direct main"
     description:
       name: sky_network
-      sha256: a8a5c037a52fe07ac610537370fb7f789df4395a0981b2cfd9c041c5912b6f3a
+      sha256: "322e366b1a259da213290174dafb5f0cc48db2c8c60514bb867b239f64eed1dd"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.8"
+    version: "1.1.10"
   sky_router:
     dependency: "direct main"
     description:

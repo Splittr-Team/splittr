@@ -1,7 +1,8 @@
-import 'package:fpdart/fpdart.dart' hide Group;
+import 'dart:async';
+
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:sky_architecture/sky_architecture.dart';
+import 'package:sky_architecture/sky_architecture.dart' hide Group;
 import 'package:sky_network/sky_network.dart';
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
 import 'package:splittr/features/groups/data/mappers/group.dart';
@@ -10,20 +11,29 @@ import 'package:splittr/features/groups/domain/repositories/groups_repository.da
 
 @LazySingleton(as: GroupsRepository)
 final class GroupsRepositoryImpl implements GroupsRepository {
-  // Removed 'const' to allow BehaviorSubject initialization
   GroupsRepositoryImpl(this._apiCallHandler, this._groupsDataSource);
 
-  final GroupsDataSource _groupsDataSource;
   final ApiCallHandler _apiCallHandler;
+  final GroupsDataSource _groupsDataSource;
 
-  // 1. Initialize the BehaviorSubject with an empty list
   final BehaviorSubject<EitherFailure<List<Group>>> _groupsSubject =
-      BehaviorSubject.seeded(
-        const Right([]),
-      );
+      BehaviorSubject.seeded(const Right([]));
 
   @override
-  Stream<EitherFailure<List<Group>>> get watchGroups => _groupsSubject.stream;
+  ValueStream<EitherFailure<List<Group>>> get watchGroups =>
+      _groupsSubject.stream;
+
+  @override
+  FutureEitherFailure<List<Group>> getGroups() async {
+    final result = await _apiCallHandler.handle(
+      _groupsDataSource.getGroups,
+    );
+
+    final groupsOrFailure = result.map((groups) => groups.toDomain());
+    _groupsSubject.add(groupsOrFailure);
+
+    return groupsOrFailure;
+  }
 
   @override
   FutureEitherFailure<Group> createGroup({
@@ -37,38 +47,10 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       ),
     );
 
-    return result.fold(
-      (failure) {
-        return Left(failure);
-      },
-      (groupModel) {
-        final group = groupModel.toDomain();
-        final currentList = _groupsSubject.value.getOrElse((_) => []);
-        _groupsSubject.add(Right([...currentList, group]));
-        return Right(group);
-      },
-    );
-  }
-
-  @override
-  FutureEitherFailure<List<Group>> getGroups() async {
-    final result = await _apiCallHandler.handle(
-      _groupsDataSource.getGroups,
-    );
-
-    return result.fold(
-      (failure) {
-        _groupsSubject.add(Left(failure));
-        return Left(failure);
-      },
-      (groupsModel) {
-        final groupsList = groupsModel
-            .map((model) => model.toDomain())
-            .toList();
-        _groupsSubject.add(Right(groupsList));
-        return Right(groupsList);
-      },
-    );
+    return result.map((groupModel) {
+      unawaited(getGroups());
+      return groupModel.toDomain();
+    });
   }
 
   @override

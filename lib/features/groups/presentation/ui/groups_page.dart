@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:splittr/di/injection.dart';
@@ -23,10 +22,6 @@ class GroupsPage extends BasePage<GroupsBloc, GroupsState> {
   @override
   Widget buildPage(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Groups'),
-        centerTitle: true,
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showCreateGroupSheet(context),
         child: const AppIcon.md(Icons.add),

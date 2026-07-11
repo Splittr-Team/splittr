@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:sky_network/sky_network.dart';
 import 'package:splittr/features/auth/data/models/create_user_request_model.dart';
 import 'package:splittr/features/auth/data/models/user_model.dart';
 

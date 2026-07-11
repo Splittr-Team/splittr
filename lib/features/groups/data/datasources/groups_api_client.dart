@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:sky_network/sky_network.dart';
 import 'package:splittr/features/groups/data/models/create_group_model.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 
