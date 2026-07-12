@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/auth/data/datasources/auth_api_client.dart';
 import 'package:splittr/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:splittr/features/auth/data/models/create_user_request_model.dart';
+import 'package:splittr/features/auth/data/models/create_user_payload.dart';
 import 'package:splittr/features/auth/data/models/user_model.dart';
 import 'package:splittr/utils/extensions/firebase_extensions.dart';
 
@@ -44,7 +44,7 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       return await _authApiClient.createUser(
-        CreateUserRequestModel(name: name, email: email),
+        CreateUserPayload(name: name, email: email),
       );
     } on FirebaseException catch (e) {
       throw e.toServerException();

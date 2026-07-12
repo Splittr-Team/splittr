@@ -20,6 +20,4 @@ class GroupModel {
   final String? description;
   final String? inviteCode;
   final String? createdBy;
-
-  Map<String, dynamic> toJson() => _$GroupModelToJson(this);
 }

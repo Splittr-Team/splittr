@@ -85,34 +85,34 @@ packages:
     dependency: transitive
     description:
       name: build
-      sha256: a156715e7cd728130c592f30552575908aae5b100005fbc1f0fb16b3c03a3d10
+      sha256: "45d14a0fb23e018d8287c32fc98d726ce466b231928ed9b9200f29bd3ccd39ae"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.6"
+    version: "4.0.7"
   build_config:
     dependency: transitive
     description:
       name: build_config
-      sha256: "4070d2a59f8eec34c97c86ceb44403834899075f66e8a9d59706f8e7834f6f71"
+      sha256: f2c223156a26eea323e6244b85141d76413a80aeee9fe0b380773789fabaf8ae
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.3.1"
   build_daemon:
     dependency: transitive
     description:
       name: build_daemon
-      sha256: bf05f6e12cfea92d3c09308d7bcdab1906cd8a179b023269eed00c071004b957
+      sha256: fd754058c342243718d5171a95f352cfc9fcf0cba8cfa26df67cb13a5836db78
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.1"
+    version: "4.1.2"
   build_runner:
     dependency: "direct dev"
     description:
       name: build_runner
-      sha256: "1523ce62448ebac2c15a8ba5fbad8acac169788658a7dd2a1c2d9c2a9318b9a6"
+      sha256: "5367e521935b102bdf1e735d2aab461e36b2edca6517662d088dd04cc39f8d16"
       url: "https://pub.dev"
     source: hosted
-    version: "2.15.0"
+    version: "2.15.1"
   built_collection:
     dependency: transitive
     description:
@@ -681,10 +681,10 @@ packages:
     dependency: "direct main"
     description:
       name: lottie
-      sha256: "586554b887a00bbec87aa6ec0f69a47af95873b809478192f6c5d61250be5474"
+      sha256: "58dda9eee3f1b1fb9d490b0161635cffe93022b3b8ca0687e3df33a53620ead2"
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.0"
+    version: "3.5.1"
   matcher:
     dependency: transitive
     description:
@@ -717,6 +717,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  mocktail:
+    dependency: "direct dev"
+    description:
+      name: mocktail
+      sha256: "5e1bf53cc7baa8062a33b84424deb61513858ea05c601b8509e683815b5914aa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   nested:
     dependency: transitive
     description:
@@ -985,34 +993,34 @@ packages:
     dependency: "direct main"
     description:
       name: sky_architecture
-      sha256: "7f958a96a00f51de3eac230753ed8fc4e2e7d6c3625386f3a8aac82dfeb74b8d"
+      sha256: "4f63fa58c6d3c31c02a0125c095af9da5aa7eae49444b903d37ae51afb33fa3a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "1.7.2"
   sky_bloc:
     dependency: "direct main"
     description:
       name: sky_bloc
-      sha256: d70cd9ad6ce1ee11d8bba81560bbd1df3fe656a423615df59c024dd8d55f3c52
+      sha256: "904271df154386ab9446b73b374a66adbf4ab0511e120d34bdce41cc574a08fe"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.2"
   sky_design_system:
     dependency: "direct main"
     description:
       name: sky_design_system
-      sha256: e307dd551b2fa1d73cadc44fd560bc5b90b51370ab22c3a3eae7918425f502e5
+      sha256: "8b7d85eee46ce451368e33e8544049ca6c9cc864629eaf8aebd00164c582ad3d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.2"
+    version: "1.7.3"
   sky_devtools:
     dependency: "direct main"
     description:
       name: sky_devtools
-      sha256: "2e06b5f5f0f7b736e33cb87b4322297df354ed161c9ecd9a82d2f919bbe9fcd2"
+      sha256: d98ac708d11c9e4f2f172f13cc7cfc506fe4181474a573245f051c254b9a7596
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1030,50 +1038,50 @@ packages:
     dependency: "direct main"
     description:
       name: sky_network
-      sha256: "322e366b1a259da213290174dafb5f0cc48db2c8c60514bb867b239f64eed1dd"
+      sha256: d344629d7cda6b7403cba35ec55d49cff87db41eb59087d89d96753e94fc78df
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.10"
+    version: "1.1.12"
   sky_router:
     dependency: "direct main"
     description:
       name: sky_router
-      sha256: f8fad53308954b718f512d96779e58c9c6b33b54fa9f7306004bd04856b6f947
+      sha256: "3e9f3f05915f9c5b5fbefc609efc43860bba708bfbd3a1cf6bdcc78527ed342a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.3"
+    version: "1.1.7"
   sky_storage:
     dependency: "direct main"
     description:
       name: sky_storage
-      sha256: "57ae3a4d20db532f9cfcdd5a0e416a25fd7e3aa1eb50944647a9f3df4acd40ba"
+      sha256: e2a63b5bb7541efbee8fd157297d666061bc7688ff394337b82136352cc9a525
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   sky_storage_hive:
     dependency: "direct main"
     description:
       name: sky_storage_hive
-      sha256: "6644b70a5664e244aedf3f837287d37342f1e15c0fe57159b4e9b7bb9b250f3f"
+      sha256: "14e81062dd7f1a2f43bef092e1cc8be3d5aeef3bede0cc7921e30d627c49b013"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   sky_telemetry:
     dependency: "direct main"
     description:
       name: sky_telemetry
-      sha256: d11a37d63f49dcd81355ee28f44758b03a6608d0c178469b3b5e268ac010da77
+      sha256: "794bcc2d83a50d49735f228e643600806e0191061e35f6f0902aaf77863d770b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.3"
   sky_utils:
     dependency: "direct main"
     description:
       name: sky_utils
-      sha256: "1c0d9e9876380bdb8c555b855273738163d2c9c9e1b3374c1e8379ba3b02b8e3"
+      sha256: e20843fa1dba5e9c0e82648584c1e65ead96454a1e0b0df46691d71cc665f0d9
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "1.2.0"
   source_gen:
     dependency: transitive
     description:
