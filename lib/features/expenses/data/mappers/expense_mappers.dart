@@ -15,7 +15,7 @@ import 'package:splittr/features/expenses/domain/entities/user_balance.dart';
 
 extension SplitModelX on SplitModel {
   Split toDomain() {
-    final parsedSplitType = SplitType.values.byName(splitType.pascalCase);
+    final parsedSplitType = SplitType.values.byName(splitType.camelCase);
 
     return switch (parsedSplitType) {
       SplitType.exact => Split.exact(

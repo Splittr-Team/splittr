@@ -4,8 +4,7 @@ import 'package:splittr/features/expenses/domain/entities/balances.dart';
 import 'package:splittr/features/expenses/domain/repositories/expenses_repository.dart';
 
 @lazySingleton
-final class GetBalancesUseCase
-    implements UseCase<Balances, GetBalancesParams> {
+final class GetBalancesUseCase implements UseCase<Balances, GetBalancesParams> {
   const GetBalancesUseCase(this._repository);
 
   final ExpensesRepository _repository;

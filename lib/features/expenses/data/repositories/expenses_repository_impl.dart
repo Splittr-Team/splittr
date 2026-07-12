@@ -31,7 +31,7 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     String? groupId,
   }) async {
     final result = await _apiCallHandler.handle(
-          () => _dataSource.createExpense(
+      () => _dataSource.createExpense(
         CreateExpensePayload(
           description: description,
           amount: amount,
