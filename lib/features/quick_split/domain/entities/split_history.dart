@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'split_history.freezed.dart';
-part 'split_history.g.dart';
 
 @freezed
 abstract class SplitHistory with _$SplitHistory {
@@ -12,7 +11,4 @@ abstract class SplitHistory with _$SplitHistory {
     required Map<String, double> individualShares,
     required DateTime createdAt,
   }) = _SplitHistory;
-
-  factory SplitHistory.fromJson(Map<String, dynamic> json) =>
-      _$SplitHistoryFromJson(json);
 }

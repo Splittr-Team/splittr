@@ -20,6 +20,4 @@ class UserModel {
   final String? name;
   final String? email;
   final String? phone;
-
-  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }

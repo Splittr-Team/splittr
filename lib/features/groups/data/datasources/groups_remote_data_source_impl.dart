@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:splittr/features/groups/data/datasources/groups_api_client.dart';
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
-import 'package:splittr/features/groups/data/models/create_group_model.dart';
+import 'package:splittr/features/groups/data/models/create_group_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 
 @LazySingleton(as: GroupsDataSource)
@@ -21,7 +21,7 @@ final class GroupsDatasourceImpl implements GroupsDataSource {
     required String description,
   }) {
     return _groupsApiClient.createGroup(
-      CreateGroupModel(description: description, name: name),
+      CreateGroupPayload(description: description, name: name),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:sky_network/sky_network.dart';
-import 'package:splittr/features/groups/data/models/create_group_model.dart';
+import 'package:splittr/features/groups/data/models/create_group_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 
 part 'groups_api_client.g.dart';
@@ -16,5 +16,5 @@ abstract class GroupsApiClient {
   Future<List<GroupModel>> getGroups();
 
   @POST('/')
-  Future<GroupModel> createGroup(@Body() CreateGroupModel body);
+  Future<GroupModel> createGroup(@Body() CreateGroupPayload body);
 }

@@ -1,6 +1,18 @@
 targets:
   $default:
+    dependencies:
+      - :payloads_target
+      - :models_target
+
     builders:
+      source_gen|combining_builder:
+        options:
+          preamble: |
+            // Ignore warnings for generated code.
+            // ignore_for_file: type=warning
+            // ignore_for_file: type=lint
+            // coverage:ignore-file
+
       freezed:
         options:
           format: false
@@ -10,39 +22,12 @@ targets:
             maybe_when: false
             when_or_null: false
         generate_for:
-          - lib/core/global/presentation/blocs/global_bloc.dart
-          - lib/core/user/domain/models/user.dart
-          - lib/features/auth_landing/presentation/blocs/auth_landing_bloc.dart
-          - lib/features/dashboard/presentation/blocs/dashboard_bloc.dart
-          - lib/features/group_dashboard/presentation/blocs/group_dashboard_bloc.dart
-          - lib/features/groups/presentation/blocs/groups_bloc.dart
-          - lib/features/login/presentation/blocs/login_bloc.dart
-          - lib/features/otp_verification/presentation/blocs/otp_verification_bloc.dart
-          - lib/features/personal_transaction/domain/models/personal_transaction.dart
-          - lib/features/personal_transaction/presentation/blocs/personal_transaction_bloc.dart
-          - lib/features/profile/presentation/blocs/profile_bloc.dart
-          - lib/features/quick_settle/presentation/blocs/quick_settle_bloc.dart
-          - lib/features/quick_split/presentation/blocs/quick_split_bloc.dart
-          - lib/features/signup/presentation/blocs/sign_up_bloc.dart
-          - lib/features/splash/presentation/blocs/splash_bloc.dart
           - lib/features/*/domain/entities/*.dart
           - lib/features/*/presentation/blocs/*_bloc.dart
           - lib/features/*/presentation/blocs/*/*_bloc.dart
 
-
-      source_gen|combining_builder:
-        options:
-          ignore_for_file:
-            - type=lint
-
       json_serializable:
-        options:
-          explicit_to_json: true
-        generate_for:
-          - lib/features/*/data/models/*.dart
-          - lib/core/user/data/dtos/user_dto.dart
-          - lib/features/personal_transaction/data/dtos/personal_transaction_dto.dart
-          - lib/features/*/domain/entities/*.dart
+        enabled: false
 
       retrofit_generator:
         generate_for:
@@ -50,35 +35,56 @@ targets:
 
       injectable_generator:injectable_builder:
         generate_for:
-          - lib/features/*/data/datasources/*_api_client.dart
-          - lib/core/auth/data/repositories/auth_repository.dart
-          - lib/core/firebase/data/repositories/firestore_database_repository.dart
-          - lib/core/global/presentation/blocs/global_bloc.dart
-          - lib/core/user/data/repositories/user_repository.dart
-          - lib/di/injection.dart
           - lib/di/injection_register_module.dart
-          - lib/features/auth_landing/presentation/blocs/auth_landing_bloc.dart
-          - lib/features/dashboard/presentation/blocs/dashboard_bloc.dart
-          - lib/features/group_dashboard/presentation/blocs/group_dashboard_bloc.dart
-          - lib/features/groups/presentation/blocs/groups_bloc.dart
-          - lib/features/login/presentation/blocs/login_bloc.dart
-          - lib/features/otp_verification/presentation/blocs/otp_verification_bloc.dart
-          - lib/features/personal_transaction/domain/models/personal_transaction.dart
-          - lib/features/personal_transaction/presentation/blocs/personal_transaction_bloc.dart
-          - lib/features/profile/presentation/blocs/profile_bloc.dart
-          - lib/features/quick_settle/presentation/blocs/quick_settle_bloc.dart
-          - lib/features/quick_split/presentation/blocs/quick_split_bloc.dart
-          - lib/features/signup/presentation/blocs/sign_up_bloc.dart
-          - lib/features/splash/presentation/blocs/splash_bloc.dart
-          - lib/features/*/presentation/blocs/*_bloc.dart
-          - lib/features/*/presentation/blocs/*/*_bloc.dart
-          - lib/features/*/data/datasources/*_impl.dart
-          - lib/features/*/data/repositories/*_impl.dart
-          - lib/features/*/domain/usecases/*.dart
           - lib/core/network/network_module.dart
           - lib/core/firebase/firebase_auth_interceptor.dart
+          - lib/features/*/data/datasources/*_api_client.dart
+          - lib/features/*/data/datasources/*_data_source_impl.dart
+          - lib/features/*/data/repositories/*_repository_impl.dart
+          - lib/features/*/domain/usecases/*.dart
+          - lib/features/*/presentation/blocs/*_bloc.dart
+          - lib/features/*/presentation/blocs/*/*_bloc.dart
 
+      injectable_generator:injectable_config_builder:
+        generate_for:
+          - lib/di/injection.dart
 
       envied_generator:envied:
         generate_for:
           - lib/core/app_config/env/*.dart
+
+      hive_ce_generator:hive_type_adapter_generator:
+        generate_for:
+          - lib/features/quick_split/data/models/quick_split_hive_registerer.dart
+
+      hive_ce_generator:hive_adapters_generator:
+        generate_for:
+          - lib/features/quick_split/data/models/quick_split_hive_registerer.dart
+
+      hive_ce_generator:hive_registrar_intermediate_generator:
+        generate_for:
+          - lib/features/quick_split/data/models/quick_split_hive_registerer.dart
+
+  payloads_target:
+    sources:
+      - lib/features/*/data/models/*_payload.dart
+    builders:
+      json_serializable:
+        options:
+          create_factory: false
+          create_to_json: true
+          explicit_to_json: true
+      source_gen|combining_builder:
+        enabled: false
+
+  models_target:
+    sources:
+      - lib/features/*/data/models/*_model.dart
+    builders:
+      json_serializable:
+        options:
+          create_factory: true
+          create_to_json: false
+          explicit_to_json: false
+      source_gen|combining_builder:
+        enabled: false
