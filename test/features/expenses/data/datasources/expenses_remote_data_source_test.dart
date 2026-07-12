@@ -21,37 +21,39 @@ void main() {
   test(
     'should call createExpense on ApiClient and return ExpenseDetailsModel',
     () async {
-    const payload = CreateExpensePayload(
-      description: 'Rent',
-      amount: 1000,
-      currency: 'USD',
-      category: 'Rent',
-      paidBy: 'user-1',
-      splitType: 'EQUAL',
-      splits: [],
-    );
-
-    final detailsModel = ExpenseDetailsModel(
-      expense: ExpenseModel(
-        id: 'exp-rent',
+      const payload = CreateExpensePayload(
         description: 'Rent',
         amount: 1000,
         currency: 'USD',
         category: 'Rent',
         paidBy: 'user-1',
-        createdBy: 'user-1',
-        isPayment: false,
-        spentAt: DateTime(2026, 7, 12),
-      ),
-      splits: [],
-    );
+        splitType: 'EQUAL',
+        splits: [],
+      );
 
-    when(() => mockApiClient.createExpense(payload))
-        .thenAnswer((_) async => detailsModel);
+      final detailsModel = ExpenseDetailsModel(
+        expense: ExpenseModel(
+          id: 'exp-rent',
+          description: 'Rent',
+          amount: 1000,
+          currency: 'USD',
+          category: 'Rent',
+          paidBy: 'user-1',
+          createdBy: 'user-1',
+          isPayment: false,
+          spentAt: DateTime(2026, 7, 12),
+        ),
+        splits: [],
+      );
 
-    final result = await dataSource.createExpense(payload);
+      when(
+        () => mockApiClient.createExpense(payload),
+      ).thenAnswer((_) async => detailsModel);
 
-    expect(result.expense.id, 'exp-rent');
-    verify(() => mockApiClient.createExpense(payload)).called(1);
-  });
+      final result = await dataSource.createExpense(payload);
+
+      expect(result.expense.id, 'exp-rent');
+      verify(() => mockApiClient.createExpense(payload)).called(1);
+    },
+  );
 }

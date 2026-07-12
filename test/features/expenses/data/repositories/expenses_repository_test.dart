@@ -51,15 +51,17 @@ void main() {
         splits: [],
       );
 
-      when(() => mockDataSource.getExpenseDetails('exp-1'))
-          .thenAnswer((_) async => detailsModel);
+      when(
+        () => mockDataSource.getExpenseDetails('exp-1'),
+      ).thenAnswer((_) async => detailsModel);
 
-    final result = await repository.getExpenseDetails('exp-1');
+      final result = await repository.getExpenseDetails('exp-1');
 
-    expect(result.isRight(), true);
-    result.fold(
-      (failure) => fail('should have succeeded'),
-      (expense) => expect(expense.id, 'exp-1'),
-    );
-  });
+      expect(result.isRight(), true);
+      result.fold(
+        (failure) => fail('should have succeeded'),
+        (expense) => expect(expense.id, 'exp-1'),
+      );
+    },
+  );
 }
