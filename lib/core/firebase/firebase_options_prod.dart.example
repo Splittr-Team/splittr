@@ -1,0 +1,12 @@
+import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+
+class DefaultFirebaseOptions {
+  static FirebaseOptions get currentPlatform {
+    return const FirebaseOptions(
+      apiKey: 'dummy-api-key-prod',
+      appId: 'dummy-app-id-prod',
+      messagingSenderId: 'dummy-sender-id-prod',
+      projectId: 'dummy-project-id-prod',
+    );
+  }
+}

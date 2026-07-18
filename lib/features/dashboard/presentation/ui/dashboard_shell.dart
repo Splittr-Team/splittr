@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart'
     show
+        AppIconButton,
         AppListTile,
         AppNavigationBar,
         AppNavigationDrawer,
@@ -33,6 +34,16 @@ class DashboardShell extends StatelessWidget {
           RoutePaths.profile => 'Profile',
           _ => 'Dashboard',
         },
+        actions: [
+          Padding(
+            padding: const .only(right: 4),
+            child: AppIconButton(
+              icon: Icons.notifications_outlined,
+              onPressed: () =>
+                  RouteHandler.push<void>(context, RoutePaths.notifications),
+            ),
+          ),
+        ],
       ),
       drawer: AppNavigationDrawer(
         selectedIndex: 0,
