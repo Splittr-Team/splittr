@@ -17,6 +17,7 @@ final class RoutePaths {
   static const quickSplit = '/quick-split';
   static const splitHistory = '/split-history';
   static const joinGroup = '/join-group/:code';
+  static const notifications = '/notifications';
 
   /// Generates a group dashboard path with a specific [groupId].
   static String groupDashboardPath(String groupId) =>
