@@ -1,11 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive_ce.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart' show AppTheme;
 import 'package:sky_devtools/sky_devtools.dart';
 import 'package:sky_router/sky_router.dart';
-import 'package:sky_storage_hive/sky_storage_hive.dart';
 import 'package:sky_telemetry/sky_telemetry.dart';
 import 'package:splittr/constants/env/env.dart';
 import 'package:splittr/core/app_config/i_app_config.dart';
@@ -13,7 +11,6 @@ import 'package:splittr/core/bloc/app_bloc_observer.dart';
 import 'package:splittr/core/router/app_router.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
-import 'package:splittr/features/quick_split/data/models/quick_split_hive_registerer.dart';
 import 'package:splittr/l10n/generated/app_localizations.dart';
 
 Future<void> mainCommon(Env env) async {
@@ -23,14 +20,7 @@ Future<void> mainCommon(Env env) async {
 
   await Firebase.initializeApp(options: appConfig.firebaseOptions);
 
-  final hiveInit = HiveDatabaseInitializer(
-    registerers: [
-      QuickSplitHiveRegisterer(), // Add more here as your app grows
-    ],
-  );
-  await hiveInit.initialize();
-
-  configureDependencies(env);
+  await configureDependencies(env);
 
   // Setup uncaught error logging
   FlutterError.onError = (details) {
@@ -89,20 +79,8 @@ class MyApp extends StatelessWidget {
                   navigatorKey: rootNavigatorKey,
                   onClearCache: () async {
                     AppLoggerRegistry.instance.warning(
-                      'Clearing all Hive boxes...',
+                      'Clear cache is not implemented.',
                     );
-                    try {
-                      await Hive.deleteFromDisk();
-                      AppLoggerRegistry.instance.info(
-                        'Hive databases successfully deleted.',
-                      );
-                    } on Exception catch (e, stackTrace) {
-                      AppLoggerRegistry.instance.error(
-                        'Failed to clear Hive storage',
-                        error: e,
-                        stackTrace: stackTrace,
-                      );
-                    }
                   },
                 ),
                 child: child!,

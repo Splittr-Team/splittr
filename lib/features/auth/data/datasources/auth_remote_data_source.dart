@@ -14,5 +14,7 @@ abstract interface class AuthRemoteDataSource {
 
   Future<UserModel> checkAuthStatus();
 
+  Future<UserModel> signInAnonymously();
+
   Future<void> logout();
 }

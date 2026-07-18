@@ -57,17 +57,9 @@ targets:
         generate_for:
           - lib/core/app_config/env/*.dart
 
-      hive_ce_generator:hive_type_adapter_generator:
+      isar_community_generator:
         generate_for:
-          - lib/features/quick_split/data/models/quick_split_hive_registerer.dart
-
-      hive_ce_generator:hive_adapters_generator:
-        generate_for:
-          - lib/features/quick_split/data/models/quick_split_hive_registerer.dart
-
-      hive_ce_generator:hive_registrar_intermediate_generator:
-        generate_for:
-          - lib/features/quick_split/data/models/quick_split_hive_registerer.dart
+          - lib/features/*/data/models/*_isar_model.dart
 
   payloads_target:
     sources:
@@ -80,6 +72,8 @@ targets:
           explicit_to_json: true
       source_gen|combining_builder:
         enabled: false
+      isar_community_generator:
+        enabled: false
 
   models_target:
     sources:
@@ -91,4 +85,6 @@ targets:
           create_to_json: false
           explicit_to_json: false
       source_gen|combining_builder:
+        enabled: false
+      isar_community_generator:
         enabled: false

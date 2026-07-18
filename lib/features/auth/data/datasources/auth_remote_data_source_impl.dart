@@ -38,10 +38,19 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String name,
   }) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final currentUser = _firebaseAuth.currentUser;
+      if (currentUser != null && currentUser.isAnonymous) {
+        final credential = EmailAuthProvider.credential(
+          email: email,
+          password: password,
+        );
+        await currentUser.linkWithCredential(credential);
+      } else {
+        await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+      }
 
       return await _authApiClient.createUser(
         CreateUserPayload(name: name, email: email),
@@ -65,6 +74,21 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return await _authApiClient.getMe();
     } on Exception catch (_) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<UserModel> signInAnonymously() async {
+    try {
+      await _firebaseAuth.signInAnonymously();
+      final user = _firebaseAuth.currentUser!;
+      return UserModel(
+        id: user.uid,
+        firebaseUid: user.uid,
+        name: 'Guest',
+      );
+    } on FirebaseException catch (e) {
+      throw e.toServerException();
     }
   }
 

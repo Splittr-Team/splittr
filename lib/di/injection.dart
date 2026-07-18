@@ -6,4 +6,5 @@ import 'package:splittr/di/injection.config.dart';
 final GetIt getIt = GetIt.instance;
 
 @injectableInit
-void configureDependencies(Env env) => getIt.init(environment: env.name);
+Future<void> configureDependencies(Env env) =>
+    getIt.init(environment: env.name);

@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
-import 'package:splittr/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:splittr/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:splittr/features/auth/data/mappers/user.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
@@ -13,12 +13,10 @@ import 'package:splittr/features/auth/domain/repositories/auth_repository.dart';
 final class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(
     this._authRemoteDataSource,
-    this._authLocalDataSource,
     this._apiCallHandler,
   );
 
   final AuthRemoteDataSource _authRemoteDataSource;
-  final AuthLocalDataSource _authLocalDataSource;
   final ApiCallHandler _apiCallHandler;
 
   final StreamController<Option<User>> _authStateStreamController =
@@ -32,10 +30,6 @@ final class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    try {
-      await _authLocalDataSource.clearSession();
-    } on Exception catch (_) {}
-
     final result = await _apiCallHandler.handle(
       () => _authRemoteDataSource.loginWithEmail(
         email: email,
@@ -54,10 +48,6 @@ final class AuthRepositoryImpl implements AuthRepository {
     required String password,
     required String name,
   }) async {
-    try {
-      await _authLocalDataSource.clearSession();
-    } on Exception catch (_) {}
-
     final result = await _apiCallHandler.handle(
       () => _authRemoteDataSource.signUpWithEmail(
         email: email,
@@ -74,11 +64,15 @@ final class AuthRepositoryImpl implements AuthRepository {
   @override
   FutureEitherFailure<User> checkAuthStatus() async {
     try {
-      final isGuest = await _authLocalDataSource.isGuestUser();
-      if (isGuest) {
-        const guestUser = User(id: 'guest', name: 'Guest');
-        _authStateStreamController.add(const Some(guestUser));
-        return const Right(guestUser);
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null && user.isAnonymous) {
+        final guestUser = User(
+          id: 'guest',
+          firebaseUid: user.uid,
+          name: 'Guest',
+        );
+        _authStateStreamController.add(Some(guestUser));
+        return Right(guestUser);
       }
     } on Exception catch (e) {
       return Left(e.toFailure());
@@ -97,13 +91,8 @@ final class AuthRepositoryImpl implements AuthRepository {
   @override
   FutureEitherFailure<Unit> logout() async {
     try {
-      await (
-        _authLocalDataSource.clearSession(),
-        _authRemoteDataSource.logout(),
-      ).wait;
-
+      await _authRemoteDataSource.logout();
       _authStateStreamController.add(const None());
-
       return const Right(unit);
     } on Exception catch (e) {
       return Left(e.toFailure());
@@ -112,21 +101,23 @@ final class AuthRepositoryImpl implements AuthRepository {
 
   @override
   FutureEitherFailure<Unit> saveGuestSession() async {
-    try {
-      await _authLocalDataSource.saveGuestSession();
+    final result = await _apiCallHandler.handle(
+      _authRemoteDataSource.signInAnonymously,
+    );
+    return result.map((_) {
+      final user = FirebaseAuth.instance.currentUser!;
       _authStateStreamController.add(
-        const Some(User(id: 'guest', name: 'Guest')),
+        Some(User(id: 'guest', firebaseUid: user.uid, name: 'Guest')),
       );
-      return const Right(unit);
-    } on Exception catch (e) {
-      return Left(e.toFailure());
-    }
+      return unit;
+    });
   }
 
   @override
   Future<bool> isGuestUser() async {
     try {
-      return await _authLocalDataSource.isGuestUser();
+      final user = FirebaseAuth.instance.currentUser;
+      return user != null && user.isAnonymous;
     } on Exception catch (_) {
       return false;
     }
