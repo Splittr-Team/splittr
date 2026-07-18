@@ -16,8 +16,13 @@ final class RoutePaths {
   static const quickSettle = '/quick-settle';
   static const quickSplit = '/quick-split';
   static const splitHistory = '/split-history';
+  static const joinGroup = '/join-group/:code';
 
   /// Generates a group dashboard path with a specific [groupId].
   static String groupDashboardPath(String groupId) =>
       '/group-dashboard/$groupId';
+
+  /// Generates a join group path with a specific [inviteCode].
+  static String joinGroupPath(String inviteCode) =>
+      '/join-group/$inviteCode';
 }

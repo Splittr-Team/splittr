@@ -8,21 +8,31 @@ class _GroupDetailsForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppTopBar(title: group.name ?? 'Group Details'),
+      appBar: AppTopBar(title: group.name!),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.md),
         children: [
-          _buildInviteCodeCard(context),
+          _InviteCodeCard(inviteCode: group.inviteCode ?? ''),
+          const SizedBox(height: AppSpacing.md),
+          _InviteLinkCard(inviteCode: group.inviteCode ?? ''),
         ],
       ),
     );
   }
+}
 
-  Widget _buildInviteCodeCard(BuildContext context) {
-    final inviteCode = group.inviteCode;
+class _InviteCodeCard extends StatelessWidget {
+  const _InviteCodeCard({required this.inviteCode});
 
+  final String inviteCode;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
         color: context.colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(12),
@@ -37,13 +47,13 @@ class _GroupDetailsForm extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Invite Code',
+                context.strings.inviteCode,
                 style: context.textTheme.labelMedium?.copyWith(
                   color: context.colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 4),
-              Text(inviteCode!),
+              const SizedBox(height: AppSpacing.xs),
+              Text(inviteCode),
             ],
           ),
           IconButton.filledTonal(
@@ -51,16 +61,87 @@ class _GroupDetailsForm extends StatelessWidget {
               await Clipboard.setData(ClipboardData(text: inviteCode));
 
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Invite code copied to clipboard!'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
+                AppSnackBar.show(
+                  context,
+                  message: context.strings.inviteCodeCopied,
                 );
               }
             },
             icon: const Icon(Icons.copy_rounded),
-            tooltip: 'Copy Code',
+            tooltip: context.strings.copyCode,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _InviteLinkCard extends StatelessWidget {
+  const _InviteLinkCard({required this.inviteCode});
+
+  final String inviteCode;
+
+  @override
+  Widget build(BuildContext context) {
+    final baseUri = Uri.parse(appConfig.deeplinkBaseUrl);
+
+    final inviteLink = baseUri
+        .replace(
+          pathSegments: [
+            ...baseUri.pathSegments.where((segment) => segment.isNotEmpty),
+            'join-group',
+            inviteCode,
+          ],
+        )
+        .toString();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: context.colorScheme.outlineVariant,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.strings.inviteLink,
+                  style: context.textTheme.labelMedium?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  inviteLink,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          IconButton.filledTonal(
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: inviteLink));
+
+              if (context.mounted) {
+                AppSnackBar.show(
+                  context,
+                  message: context.strings.inviteLinkCopied,
+                );
+              }
+            },
+            icon: const Icon(Icons.link_rounded),
+            tooltip: context.strings.copyLink,
           ),
         ],
       ),

@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:sky_router/sky_router.dart';
+import 'package:splittr/core/router/route_paths.dart';
 import 'package:splittr/di/injection.dart';
-import 'package:splittr/features/groups/presentation/blocs/group_details/group_details_bloc.dart';
+import 'package:splittr/features/groups/presentation/blocs/join_group/join_group_cubit.dart';
 import 'package:splittr/utils/extensions/extensions.dart';
 
 class JoinGroupBottomSheet extends StatefulWidget {
@@ -14,64 +17,95 @@ class JoinGroupBottomSheet extends StatefulWidget {
 }
 
 class _JoinGroupBottomSheetState extends State<JoinGroupBottomSheet> {
+  late final TextEditingController _codeController;
+
+  @override
+  void initState() {
+    super.initState();
+    _codeController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _codeController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<GroupDetailsBloc>(),
-      child: BlocListener<GroupDetailsBloc, GroupDetailsState>(
-        listener: (context, state) => switch (state) {
-          JoinGroupSuccess _ => RouteHandler.pop<void>(context),
-          _ => () {},
+      create: (context) => getIt<JoinGroupCubit>(),
+      child: BlocListener<JoinGroupCubit, JoinGroupState>(
+        listener: (context, state) {
+          switch (state) {
+            case JoinGroupSuccess():
+              RouteHandler.pop<void>(context);
+              unawaited(
+                RouteHandler.push<void>(
+                  context,
+                  RoutePaths.groupDetails,
+                  extra: {'group': state.group},
+                ),
+              );
+            case JoinGroupFailure(:final failure):
+              AppSnackBar.show(context, message: failure.message);
+            case _:
+              break;
+          }
         },
-        child: const _SheetBody(),
-      ),
-    );
-  }
-}
+        child: BlocBuilder<JoinGroupCubit, JoinGroupState>(
+          builder: (context, state) {
+            final isLoading = state is JoinGroupLoading;
 
-class _SheetBody extends StatelessWidget {
-  const _SheetBody();
+            return AppScrollView(
+              mainAxisSize: .min,
+              children: [
+                Text(
+                  context.strings.joinGroup,
+                  style: context.textTheme.titleLarge,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  context.strings.enterCode,
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                AppTextField(
+                  controller: _codeController,
+                  labelText: context.strings.groupCode,
+                  enabled: !isLoading,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: _codeController,
+                  builder: (context, textValue, _) {
+                    final isValid =
+                        textValue.text.trim().isNotEmpty && !isLoading;
 
-  @override
-  Widget build(BuildContext context) {
-    return AppScrollView(
-      mainAxisSize: .min,
-      children: [
-        Text(
-          context.strings.joinGroup,
-          style: context.textTheme.titleLarge,
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Text(
-          context.strings.enterCode,
-          style: context.textTheme.bodyMedium?.copyWith(
-            color: context.colorScheme.onSurfaceVariant,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.md),
-        AppTextField(
-          onChanged: (inviteCode) => getBloc<GroupDetailsBloc>(
-            context,
-          ).inviteCodeChanged(inviteCode: inviteCode),
-          labelText: context.strings.groupCode,
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        BlocSelector<GroupDetailsBloc, GroupDetailsState, bool>(
-          selector: (state) => state.store.inviteCode.trim().isNotEmpty,
-          builder: (context, isValid) {
-            return AppButton.primary(
-              text: context.strings.joinGroup,
-              // TODO(Chaitanya): add loading condition
-              onPressed: isValid
-                  ? () => getBloc<GroupDetailsBloc>(
-                      context,
-                    ).joinGroupButtonClicked()
-                  : null,
+                    return AppButton.primary(
+                      text: context.strings.joinGroup,
+                      onPressed: isValid
+                          ? () => context.read<JoinGroupCubit>().joinGroup(
+                              inviteCode: _codeController.text.trim(),
+                            )
+                          : null,
+                    );
+                  },
+                ),
+                if (isLoading) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  const Center(
+                    child: AppProgressIndicator.circular(),
+                  ),
+                ],
+                const SizedBox(height: AppSpacing.md),
+              ],
             );
           },
         ),
-        const SizedBox(height: AppSpacing.md),
-      ],
+      ),
     );
   }
 }

@@ -30,4 +30,6 @@ abstract interface class IAppConfig {
   String get apiBaseUrl;
 
   String get vercelBypassKey;
+
+  String get deeplinkBaseUrl;
 }

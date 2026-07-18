@@ -25,6 +25,8 @@ targets:
           - lib/features/*/domain/entities/*.dart
           - lib/features/*/presentation/blocs/*_bloc.dart
           - lib/features/*/presentation/blocs/*/*_bloc.dart
+          - lib/features/*/presentation/blocs/*_cubit.dart
+          - lib/features/*/presentation/blocs/*/*_cubit.dart
 
       json_serializable:
         enabled: false
@@ -44,6 +46,8 @@ targets:
           - lib/features/*/domain/usecases/*.dart
           - lib/features/*/presentation/blocs/*_bloc.dart
           - lib/features/*/presentation/blocs/*/*_bloc.dart
+          - lib/features/*/presentation/blocs/*_cubit.dart
+          - lib/features/*/presentation/blocs/*/*_cubit.dart
 
       injectable_generator:injectable_config_builder:
         generate_for:

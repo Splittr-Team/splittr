@@ -30,4 +30,7 @@ abstract class MultiEnv {
 
   @EnviedField()
   abstract final String vercelBypassKey;
+
+  @EnviedField()
+  abstract final String deeplinkBaseUrl;
 }

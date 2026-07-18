@@ -3,7 +3,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:sky_network/sky_network.dart';
 import 'package:splittr/features/groups/data/models/create_group_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
-import 'package:splittr/features/groups/data/models/join_group_model.dart';
+import 'package:splittr/features/groups/data/models/join_group_payload.dart';
 
 part 'groups_api_client.g.dart';
 
@@ -17,7 +17,7 @@ abstract class GroupsApiClient {
   Future<List<GroupModel>> getGroups();
 
   @POST('/join')
-  Future<GroupModel> joinGroup(@Body() JoinGroupModel body);
+  Future<GroupModel> joinGroup(@Body() JoinGroupPayload body);
 
   @POST('/')
   Future<GroupModel> createGroup(@Body() CreateGroupPayload body);

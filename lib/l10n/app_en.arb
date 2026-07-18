@@ -34,5 +34,15 @@
   "profile": "Profile",
   "enterCode" : "Enter the invite code shared by your friend.",
   "groupCode" : "Group Code",
-  "validGroupCode" : "Please enter a valid group code"
+  "validGroupCode" : "Please enter a valid group code",
+  "failedToJoinGroup": "Failed to join group",
+  "goToDashboard": "Go to Dashboard",
+  "joiningGroup": "Joining group...",
+  "joiningGroupSubtitle": "Please wait while we add you to the group.",
+  "inviteCode": "Invite Code",
+  "inviteLink": "Invite Link",
+  "copyCode": "Copy Code",
+  "copyLink": "Copy Link",
+  "inviteCodeCopied": "Invite code copied to clipboard!",
+  "inviteLinkCopied": "Invite link copied to clipboard!"
 }

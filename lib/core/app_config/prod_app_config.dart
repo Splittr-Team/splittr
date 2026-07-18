@@ -18,4 +18,7 @@ final class ProdAppConfig implements IAppConfig {
 
   @override
   String get vercelBypassKey => MultiEnv.instance.vercelBypassKey;
+
+  @override
+  String get deeplinkBaseUrl => MultiEnv.instance.deeplinkBaseUrl;
 }

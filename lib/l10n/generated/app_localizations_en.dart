@@ -112,4 +112,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validGroupCode => 'Please enter a valid group code';
+
+  @override
+  String get failedToJoinGroup => 'Failed to join group';
+
+  @override
+  String get goToDashboard => 'Go to Dashboard';
+
+  @override
+  String get joiningGroup => 'Joining group...';
+
+  @override
+  String get joiningGroupSubtitle =>
+      'Please wait while we add you to the group.';
+
+  @override
+  String get inviteCode => 'Invite Code';
+
+  @override
+  String get inviteLink => 'Invite Link';
+
+  @override
+  String get copyCode => 'Copy Code';
+
+  @override
+  String get copyLink => 'Copy Link';
+
+  @override
+  String get inviteCodeCopied => 'Invite code copied to clipboard!';
+
+  @override
+  String get inviteLinkCopied => 'Invite link copied to clipboard!';
 }

@@ -8,22 +8,14 @@ sealed class GroupDetailsState extends BaseState with _$GroupDetailsState {
     required GroupDetailsStateStore store,
   }) = Initial;
 
-  const factory GroupDetailsState.joinGroupSuccess({
-    required GroupDetailsStateStore store,
-  }) = JoinGroupSuccess;
-
-  const factory GroupDetailsState.changeLoaderState({
-    required GroupDetailsStateStore store,
-  }) = ChangeLoaderState;
-
-  const factory GroupDetailsState.inviteCodeChange({
-    required GroupDetailsStateStore store,
-  }) = InviteCodeChange;
-
   const factory GroupDetailsState.onFailure({
     required GroupDetailsStateStore store,
     required Failure failure,
   }) = OnFailure;
+
+  const factory GroupDetailsState.changeLoaderState({
+    required GroupDetailsStateStore store,
+  }) = ChangeLoaderState;
 
   @override
   BaseState getFailureState({required Failure failure}) =>
@@ -43,12 +35,8 @@ sealed class GroupDetailsState extends BaseState with _$GroupDetailsState {
 class GroupDetailsStateStore with _$GroupDetailsStateStore {
   const GroupDetailsStateStore({
     this.loading = false,
-    this.inviteCode = '',
   });
 
   @override
   final bool loading;
-
-  @override
-  final String inviteCode;
 }
