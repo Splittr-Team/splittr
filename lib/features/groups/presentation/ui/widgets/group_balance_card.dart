@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 
@@ -42,8 +43,9 @@ class GroupBalanceCard extends StatelessWidget {
         statusText = 'You owe';
       case BalanceState.settled:
         // Muted gray for settled status
-        statusColor = context.colorScheme.onSurfaceVariant
-            .withValues(alpha: 0.7);
+        statusColor = context.colorScheme.onSurfaceVariant.withValues(
+          alpha: 0.7,
+        );
         statusText = 'Settle up';
     }
 
@@ -62,8 +64,9 @@ class GroupBalanceCard extends StatelessWidget {
               // Left section: Circular avatar with icon
               CircleAvatar(
                 radius: 22,
-                backgroundColor: context.colorScheme.onSurface
-                    .withValues(alpha: 0.08),
+                backgroundColor: context.colorScheme.onSurface.withValues(
+                  alpha: 0.08,
+                ),
                 foregroundColor: context.colorScheme.onSurfaceVariant,
                 child: AppIcon.md(
                   icon,

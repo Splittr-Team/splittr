@@ -22,15 +22,20 @@ final class JoinGroupCubit extends BaseCubit<JoinGroupState> {
 
   Future<void> joinGroup({required String inviteCode}) async {
     emit(const JoinGroupState.joinGroupLoading());
+
     final result = await _joinGroupUseCase.call(
       JoinGroupParams(inviteCode: inviteCode),
     );
+
+    if (isClosed) return;
+
     result.fold(
       (failure) => emit(JoinGroupState.joinGroupFailure(failure: failure)),
       (group) => emit(JoinGroupState.joinGroupSuccess(group: group)),
     );
   }
 
+  // TODO(Chaitanya): Remove isLoading as required in BaseCubit
   @override
   bool get isLoading => state is JoinGroupLoading;
 }

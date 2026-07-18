@@ -6,4 +6,3 @@ class GroupDetailsEvent extends BaseEvent with _$GroupDetailsEvent {
 
   const factory GroupDetailsEvent.started() = _Started;
 }
-
