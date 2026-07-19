@@ -12,7 +12,7 @@ part 'create_group_state.dart';
 
 @injectable
 final class CreateGroupBloc
-    extends BaseBloc<CreateGroupEvent, CreateGroupState> {
+    extends BaseBloc<CreateGroupEvent, CreateGroupState, NoParams> {
   CreateGroupBloc(this._createGroupUseCase)
     : super(const CreateGroupState.initial(store: CreateGroupStateStore()));
 
@@ -26,7 +26,7 @@ final class CreateGroupBloc
   }
 
   @override
-  void started({Map<String, dynamic>? args}) {}
+  void started(NoParams params) {}
 
   FutureOr<void> _onGroupNameChanged(
     _GroupNameChanged event,

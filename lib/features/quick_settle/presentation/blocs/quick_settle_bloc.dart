@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
-import 'package:splittr/constants/constants.dart';
 import 'package:splittr/features/quick_settle/dataclass/split_transaction.dart';
 import 'package:splittr/features/quick_split/domain/entities/split_history.dart';
 import 'package:splittr/features/quick_split/domain/repositories/i_quick_split_repository.dart';
@@ -14,7 +13,7 @@ part 'quick_settle_state.dart';
 
 @injectable
 final class QuickSettleBloc
-    extends BaseBloc<QuickSettleEvent, QuickSettleState> {
+    extends BaseBloc<QuickSettleEvent, QuickSettleState, QuickSettleParams> {
   QuickSettleBloc(this._repository)
     : super(const QuickSettleState.initial(store: QuickSettleStateStore()));
 
@@ -162,15 +161,11 @@ final class QuickSettleBloc
   }
 
   @override
-  void started({Map<String, dynamic>? args}) {
-    final peopleRecords =
-        args?[StringConstants.peopleRecords]
-            as List<({double amount, String name})>;
-    final splitTitle = (args?[StringConstants.splitTitle] as String?) ?? '';
+  void started(QuickSettleParams params) {
     add(
       QuickSettleEvent.started(
-        peopleRecord: peopleRecords,
-        splitTitle: splitTitle,
+        peopleRecord: params.peopleRecords,
+        splitTitle: params.splitTitle,
       ),
     );
   }

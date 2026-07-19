@@ -16,7 +16,7 @@ part 'notifications_state.dart';
 
 @injectable
 final class NotificationsBloc
-    extends BaseBloc<NotificationsEvent, NotificationsState> {
+    extends BaseBloc<NotificationsEvent, NotificationsState, NoParams> {
   NotificationsBloc(
     this._getNotificationsUseCase,
     this._watchNotificationsUseCase,
@@ -122,7 +122,7 @@ final class NotificationsBloc
   }
 
   @override
-  void started({Map<String, dynamic>? args}) {
+  void started(NoParams params) {
     add(const NotificationsEvent.started());
   }
 

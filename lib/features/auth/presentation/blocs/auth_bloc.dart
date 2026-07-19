@@ -15,7 +15,7 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 @injectable
-class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
+class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
   AuthBloc(
     this._checkAuthStatusUseCase,
     this._logoutUseCase,
@@ -74,7 +74,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
   }
 
   @override
-  void started({Map<String, dynamic>? args}) {
+  void started(NoParams params) {
     add(const AuthEvent.started());
   }
 

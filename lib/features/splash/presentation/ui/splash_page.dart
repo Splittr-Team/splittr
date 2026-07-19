@@ -5,9 +5,7 @@ import 'package:splittr/constants/constants.dart';
 part 'splash_form.dart';
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({this.args, super.key});
-
-  final Map<String, dynamic>? args;
+  const SplashPage({super.key});
 
   @override
   Widget build(BuildContext context) {

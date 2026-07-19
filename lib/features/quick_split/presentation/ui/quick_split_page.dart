@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
-import 'package:sky_router/sky_router.dart';
-import 'package:splittr/constants/constants.dart';
-import 'package:splittr/core/router/route_paths.dart';
+import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/quick_split/presentation/blocs/quick_split_bloc.dart';
 import 'package:splittr/features/quick_split/presentation/ui/components/quick_split_input_card.dart';
@@ -14,12 +13,10 @@ import 'package:splittr/features/quick_split/presentation/ui/components/split_hi
 part 'quick_split_form.dart';
 
 class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
-  const QuickSplitPage({required this.args, super.key});
-
-  final Map<String, dynamic>? args;
+  const QuickSplitPage({super.key});
 
   @override
-  QuickSplitBloc createBloc() => getIt<QuickSplitBloc>()..started(args: args);
+  QuickSplitBloc createBloc() => getIt<QuickSplitBloc>()..started(noParams);
 
   @override
   Widget buildPage(BuildContext context) {
@@ -168,12 +165,10 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
     required QuickSplitState state,
   }) {
     unawaited(
-      RouteHandler.push<void>(
-        context,
-        RoutePaths.quickSettle,
-        extra: {
-          StringConstants.splitTitle: state.store.splitTitle,
-          StringConstants.peopleRecords: state.store.peopleRecords.map((
+      QuickSettleRoute(
+        QuickSettleArgs(
+          splitTitle: state.store.splitTitle,
+          peopleRecords: state.store.peopleRecords.map((
             peopleRecord,
           ) {
             return (
@@ -181,8 +176,8 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
               amount: double.tryParse(peopleRecord.amount) ?? 0,
             );
           }).toList(),
-        },
-      ),
+        ),
+      ).push(context),
     );
   }
 

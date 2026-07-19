@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:splittr/di/injection.dart';
@@ -11,16 +12,11 @@ part 'notifications_form.dart';
 /// Page that displays the user's notification list with mark-all-read support.
 class NotificationsPage
     extends BasePage<NotificationsBloc, NotificationsState> {
-  const NotificationsPage({
-    this.args,
-    super.key,
-  });
-
-  final Map<String, dynamic>? args;
+  const NotificationsPage({super.key});
 
   @override
   NotificationsBloc createBloc() =>
-      getIt<NotificationsBloc>()..started(args: args);
+      getIt<NotificationsBloc>()..started(noParams);
 
   @override
   Widget buildPage(BuildContext context) {

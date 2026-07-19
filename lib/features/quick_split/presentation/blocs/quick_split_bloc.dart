@@ -11,7 +11,8 @@ part 'quick_split_event.dart';
 part 'quick_split_state.dart';
 
 @injectable
-final class QuickSplitBloc extends BaseBloc<QuickSplitEvent, QuickSplitState> {
+final class QuickSplitBloc
+    extends BaseBloc<QuickSplitEvent, QuickSplitState, NoParams> {
   QuickSplitBloc(this._repository)
     : super(const QuickSplitState.initial(store: QuickSplitStateStore()));
 
@@ -192,7 +193,7 @@ final class QuickSplitBloc extends BaseBloc<QuickSplitEvent, QuickSplitState> {
   }
 
   @override
-  void started({Map<String, dynamic>? args}) {
+  void started(NoParams params) {
     add(const QuickSplitEvent.started());
   }
 }

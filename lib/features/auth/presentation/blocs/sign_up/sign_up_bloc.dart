@@ -11,7 +11,7 @@ part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 @injectable
-class SignUpBloc extends BaseBloc<SignUpEvent, SignUpState> {
+class SignUpBloc extends BaseBloc<SignUpEvent, SignUpState, NoParams> {
   SignUpBloc(this._signUpWithEmailUseCase)
     : super(const SignUpState.initial(store: SignUpStateStore()));
 
@@ -97,7 +97,7 @@ class SignUpBloc extends BaseBloc<SignUpEvent, SignUpState> {
   }
 
   @override
-  void started({Map<String, dynamic>? args}) {
+  void started(NoParams params) {
     add(const SignUpEvent.started());
   }
 

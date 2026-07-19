@@ -49,5 +49,9 @@
   "createGroupEmptyStateSubtitle": "Create a group to start splitting expenses with your friends.",
   "youAreOwed": "You are owed",
   "youOwe": "You owe",
-  "settleUp": "Settle up"
+  "settleUp": "Settle up",
+  "navigationError": "Navigation Error",
+  "backToDashboard": "Back to Dashboard",
+  "myGroups": "My Groups",
+  "groupDetails": "Group Details"
 }

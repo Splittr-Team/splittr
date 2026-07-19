@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
-import 'package:sky_router/sky_router.dart';
-import 'package:splittr/core/router/route_paths.dart';
+import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/quick_settle/presentation/blocs/quick_settle_bloc.dart';
 import 'package:splittr/features/quick_settle/presentation/ui/components/quick_settle_output_arrow_card.dart';
@@ -16,10 +15,16 @@ part 'quick_settle_form.dart';
 class QuickSettlePage extends BasePage<QuickSettleBloc, QuickSettleState> {
   const QuickSettlePage({required this.args, super.key});
 
-  final Map<String, dynamic>? args;
+  final QuickSettleArgs args;
 
   @override
-  QuickSettleBloc createBloc() => getIt<QuickSettleBloc>()..started(args: args);
+  QuickSettleBloc createBloc() => getIt<QuickSettleBloc>()
+    ..started(
+      QuickSettleParams(
+        splitTitle: args.splitTitle,
+        peopleRecords: args.peopleRecords,
+      ),
+    );
 
   @override
   Widget buildPage(BuildContext context) {
@@ -64,9 +69,6 @@ class QuickSettlePage extends BasePage<QuickSettleBloc, QuickSettleState> {
 
   void _onSaveSuccess(BuildContext context) {
     AppSnackBar.show(context, message: 'Split saved successfully!');
-    RouteHandler.pushAndRemoveUntil(
-      context,
-      RoutePaths.splitHistory,
-    );
+    const SplitHistoryRoute().pushAndRemoveUntil(context);
   }
 }

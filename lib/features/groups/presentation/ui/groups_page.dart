@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:splittr/di/injection.dart';
@@ -17,13 +18,11 @@ part 'groups_form.dart';
 
 class GroupsPage extends BasePage<GroupsBloc, GroupsState> {
   const GroupsPage({
-    this.args,
     super.key,
   });
-  final Map<String, dynamic>? args;
 
   @override
-  GroupsBloc createBloc() => getIt<GroupsBloc>()..started(args: args);
+  GroupsBloc createBloc() => getIt<GroupsBloc>()..started(noParams);
 
   @override
   Widget buildPage(BuildContext context) {

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sky_router/sky_router.dart';
 import 'package:sky_telemetry/sky_telemetry.dart';
-import 'package:splittr/core/router/route_paths.dart';
+import 'package:splittr/core/router/app_routes.dart';
+import 'package:splittr/core/router/route_error_page.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:splittr/features/auth/presentation/pages/login/login_page.dart';
 import 'package:splittr/features/auth/presentation/pages/sign_up/sign_up_page.dart';
+import 'package:splittr/features/dashboard/presentation/ui/animated_branch_container.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_shell.dart';
 import 'package:splittr/features/groups/presentation/ui/group_details/group_details_page.dart';
@@ -19,99 +21,88 @@ import 'package:splittr/features/splash/presentation/ui/splash_page.dart';
 
 /// Routes that do not require authentication.
 const List<String> _publicRoutes = [
-  RoutePaths.splash,
-  RoutePaths.login,
-  RoutePaths.signUp,
+  SplashRoute.pathTemplate,
+  LoginRoute.pathTemplate,
+  SignUpRoute.pathTemplate,
 ];
 
 /// Routes accessible only by guest users.
 const List<String> _guestRoutes = [
-  RoutePaths.quickSplit,
-  RoutePaths.quickSettle,
-  RoutePaths.splitHistory,
+  QuickSplitRoute.pathTemplate,
+  QuickSettleRoute.pathTemplate,
+  SplitHistoryRoute.pathTemplate,
 ];
 
 /// Root navigator key for the application.
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
 /// Creates and configures the application's [GoRouter] instance.
-///
-/// The [authBloc] is used for both:
-/// - Creating a [GoRouterRefreshStream] to trigger route re-evaluation
-///   when the authentication state changes.
-/// - Evaluating the current auth state inside the redirect callback.
 GoRouter createAppRouter({
   required AuthBloc authBloc,
   required AppLogger logger,
 }) {
   return GoRouter(
     navigatorKey: rootNavigatorKey,
-    initialLocation: RoutePaths.splash,
+    initialLocation: SplashRoute.pathTemplate,
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
     observers: [
       CustomNavigatorObserver(logger: logger),
     ],
     redirect: (context, state) => _redirect(authBloc, state),
     routes: _routes,
+    errorBuilder: (context, state) {
+      final errorMsg =
+          state.error?.message ?? state.error?.toString() ?? 'Page not found.';
+      return RouteErrorPage(
+        errorMessage: errorMsg
+            .replaceFirst('Exception: ', '')
+            .replaceFirst('GoException: ', ''),
+      );
+    },
   );
 }
 
 /// Redirect logic based on the current [AuthBloc] state.
-///
-/// - During splash (initial state), no redirect happens — the splash screen
-///   handles its own 3-second delay and triggers auth check.
-/// - Once auth resolves:
-///   - Authenticated → redirect auth pages to `/dashboard`.
-///   - Guest → redirect auth pages to `/split-history`.
-///   - Unauthenticated/Logout → redirect protected pages to `/login`.
 String? _redirect(AuthBloc authBloc, GoRouterState state) {
   final authState = authBloc.state;
   final currentLocation = state.matchedLocation;
 
   // During initial state (splash screen is resolving), do not redirect.
-  // Let the SplashPage handle its animation and auth check flow.
   if (authState case Loading _) return null;
 
   final isOnPublicRoute = _publicRoutes.contains(currentLocation);
-  final isOnSplash = currentLocation == RoutePaths.splash;
+  final isOnSplash = currentLocation == SplashRoute.pathTemplate;
 
   // User is authenticated.
   if (authState case OnUserAuthenticated _) {
-    // If on a public route (splash/login/signUp), redirect to dashboard (or redirect target).
     if (isOnPublicRoute) {
-      final redirectTarget = state.uri.queryParameters['redirect'];
+      final redirectTarget = LoginRoute.fromState(state)?.redirect;
       if (redirectTarget != null) {
         return Uri.decodeComponent(redirectTarget);
       }
-      return RoutePaths.dashboard;
+      return const DashboardRoute().path;
     }
     return null;
   }
 
   // User is a guest (unauthenticated but using app in guest mode).
   if (authState is Guest) {
-    // If on a public route, redirect to split history.
-    if (isOnPublicRoute) return RoutePaths.splitHistory;
+    if (isOnPublicRoute) return const SplitHistoryRoute().path;
 
-    // Guest users can only access guest routes.
     final isOnGuestRoute = _guestRoutes.contains(currentLocation);
-    if (!isOnGuestRoute) return RoutePaths.splitHistory;
+    if (!isOnGuestRoute) return const SplitHistoryRoute().path;
 
     return null;
   }
 
   // User is unauthenticated or logged out.
   if (authState is OnUserUnauthenticated || authState is OnLogout) {
-    // If already on a public route, stay there.
     if (isOnPublicRoute) {
-      // But if on splash, redirect to login.
-      if (isOnSplash) return RoutePaths.login;
+      if (isOnSplash) return LoginRoute.pathTemplate;
       return null;
     }
-    // Redirect any protected route to login, passing the original location
-    // as a redirect param.
     final target = state.uri.toString();
-    return '${RoutePaths.login}?redirect=${Uri.encodeComponent(target)}';
+    return LoginRoute(redirect: target).path;
   }
 
   return null;
@@ -119,93 +110,112 @@ String? _redirect(AuthBloc authBloc, GoRouterState state) {
 
 final List<RouteBase> _routes = [
   GoRoute(
-    path: RoutePaths.splash,
-    builder: (context, state) =>
-        SplashPage(args: state.extra as Map<String, dynamic>?),
+    path: SplashRoute.pathTemplate,
+    builder: (context, state) => const SplashPage(),
   ),
   GoRoute(
-    path: RoutePaths.login,
-    builder: (context, state) =>
-        LoginPage(args: state.extra as Map<String, dynamic>?),
+    path: LoginRoute.pathTemplate,
+    builder: (context, state) => const LoginPage(),
   ),
   GoRoute(
-    path: RoutePaths.signUp,
-    builder: (context, state) =>
-        SignUpPage(args: state.extra as Map<String, dynamic>?),
+    path: SignUpRoute.pathTemplate,
+    builder: (context, state) => const SignUpPage(),
   ),
-  ShellRoute(
-    builder: (context, state, child) => DashboardShell(
-      currentLocation: state.matchedLocation,
-      child: child,
+  StatefulShellRoute(
+    builder: (context, state, navigationShell) => DashboardShell(
+      navigationShell: navigationShell,
     ),
-    routes: [
-      GoRoute(
-        path: RoutePaths.dashboard,
-        pageBuilder: (context, state) => ShellTransitionPage<void>(
-          key: state.pageKey,
-          targetIndex: 0,
-          child: _TabBackRedirectGuard(
-            isDashboard: true,
-            child: DashboardPage(args: state.extra as Map<String, dynamic>?),
-          ),
+    navigatorContainerBuilder: (context, navigationShell, children) =>
+        AnimatedBranchContainer(
+          currentIndex: navigationShell.currentIndex,
+          children: children,
         ),
-      ),
-      GoRoute(
-        path: RoutePaths.groups,
-        pageBuilder: (context, state) => ShellTransitionPage<void>(
-          key: state.pageKey,
-          targetIndex: 1,
-          child: const _TabBackRedirectGuard(
-            child: GroupsPage(),
-          ),
-        ),
+    branches: [
+      StatefulShellBranch(
         routes: [
           GoRoute(
-            path: RoutePaths.groupDetails,
-            builder: (context, state) =>
-                GroupDetailsPage(args: state.extra as Map<String, dynamic>?),
-          ),
-          GoRoute(
-            path: RoutePaths.joinGroup,
-            builder: (context, state) {
-              final code = state.pathParameters['code'] ?? '';
-              return JoinGroupPage(inviteCode: code);
-            },
+            path: DashboardRoute.pathTemplate,
+            builder: (context, state) => const _TabBackRedirectGuard(
+              isDashboard: true,
+              child: DashboardPage(),
+            ),
           ),
         ],
       ),
-      GoRoute(
-        path: RoutePaths.profile,
-        pageBuilder: (context, state) => ShellTransitionPage<void>(
-          key: state.pageKey,
-          targetIndex: 2,
-          child: _TabBackRedirectGuard(
-            child: ProfilePage(args: state.extra as Map<String, dynamic>?),
+      StatefulShellBranch(
+        routes: [
+          GoRoute(
+            path: GroupsRoute.pathTemplate,
+            builder: (context, state) => const _TabBackRedirectGuard(
+              child: GroupsPage(),
+            ),
+            routes: [
+              GoRoute(
+                path: GroupDetailsRoute.relativePathTemplate,
+                builder: (context, state) {
+                  final route = GroupDetailsRoute.fromState(state);
+
+                  if (route == null) {
+                    throw GoException('Invalid or missing group identifier.');
+                  }
+
+                  return GroupDetailsPage(
+                    groupId: route.groupId,
+                    group: route.group,
+                  );
+                },
+              ),
+              GoRoute(
+                path: JoinGroupRoute.relativePathTemplate,
+                builder: (context, state) {
+                  final route = JoinGroupRoute.fromState(state);
+
+                  if (route == null) {
+                    throw GoException('Invalid or missing invite code.');
+                  }
+
+                  return JoinGroupPage(inviteCode: route.code);
+                },
+              ),
+            ],
           ),
-        ),
+        ],
+      ),
+      StatefulShellBranch(
+        routes: [
+          GoRoute(
+            path: ProfileRoute.pathTemplate,
+            builder: (context, state) => const _TabBackRedirectGuard(
+              child: ProfilePage(),
+            ),
+          ),
+        ],
       ),
     ],
   ),
   GoRoute(
-    path: RoutePaths.quickSettle,
-    builder: (context, state) =>
-        QuickSettlePage(args: state.extra as Map<String, dynamic>?),
+    path: QuickSettleRoute.pathTemplate,
+    builder: (context, state) {
+      final route = QuickSettleRoute.fromState(state);
+
+      if (route == null) {
+        throw GoException('Invalid or missing settlement arguments.');
+      }
+
+      return QuickSettlePage(args: route.args);
+    },
   ),
   GoRoute(
-    path: RoutePaths.quickSplit,
-    builder: (context, state) =>
-        QuickSplitPage(args: state.extra as Map<String, dynamic>?),
+    path: QuickSplitRoute.pathTemplate,
+    builder: (context, state) => const QuickSplitPage(),
   ),
   GoRoute(
-    path: RoutePaths.splitHistory,
-    builder: (context, state) =>
-        SplitHistoryPage(args: state.extra as Map<String, dynamic>?),
+    path: SplitHistoryRoute.pathTemplate,
+    builder: (context, state) => const SplitHistoryPage(),
   ),
   GoRoute(
-    path: RoutePaths.notifications,
-    builder: (context, state) => NotificationsPage(
-      args: state.extra as Map<String, dynamic>?,
-    ),
+    path: NotificationsRoute.pathTemplate,
+    builder: (context, state) => const NotificationsPage(),
   ),
 ];
 
@@ -224,48 +234,9 @@ class _TabBackRedirectGuard extends StatelessWidget {
       canPop: isDashboard,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        RouteHandler.go(context, RoutePaths.dashboard);
+        const DashboardRoute().go(context);
       },
       child: child,
     );
   }
-}
-
-int _lastTabIndex = 0;
-
-class ShellTransitionPage<T> extends CustomTransitionPage<T> {
-  ShellTransitionPage({
-    required int targetIndex,
-    required super.child,
-    required super.key,
-  }) : super(
-         transitionDuration: const Duration(milliseconds: 250),
-         reverseTransitionDuration: const Duration(milliseconds: 250),
-         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-           final movingForward = targetIndex > _lastTabIndex;
-           final beginOffset = movingForward
-               ? const Offset(1, 0)
-               : const Offset(-1, 0);
-
-           _lastTabIndex = targetIndex;
-
-           return SlideTransition(
-             position: animation.drive(
-               Tween<Offset>(
-                 begin: beginOffset,
-                 end: Offset.zero,
-               ).chain(CurveTween(curve: Curves.easeOutBack)),
-             ),
-             child: SlideTransition(
-               position: secondaryAnimation.drive(
-                 Tween<Offset>(
-                   begin: Offset.zero,
-                   end: -beginOffset,
-                 ).chain(CurveTween(curve: Curves.easeOutBack)),
-               ),
-               child: child,
-             ),
-           );
-         },
-       );
 }

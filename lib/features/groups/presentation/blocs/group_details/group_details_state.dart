@@ -40,3 +40,16 @@ class GroupDetailsStateStore with _$GroupDetailsStateStore {
   @override
   final bool loading;
 }
+
+class GroupDetailsParams extends Equatable {
+  const GroupDetailsParams({
+    required this.groupId,
+    this.group,
+  });
+
+  final String groupId;
+  final Group? group;
+
+  @override
+  List<Object?> get props => [groupId, group];
+}

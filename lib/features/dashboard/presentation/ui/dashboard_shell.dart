@@ -10,37 +10,30 @@ import 'package:sky_design_system/sky_design_system.dart'
         AppTopBar,
         SkyDesignSystemContextExtension;
 import 'package:sky_router/sky_router.dart';
-import 'package:splittr/core/router/route_paths.dart';
+import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:splittr/utils/extensions/l10n_extensions.dart';
 
 class DashboardShell extends StatelessWidget {
   const DashboardShell({
-    required this.child,
-    required this.currentLocation,
+    required this.navigationShell,
     super.key,
   });
 
-  final Widget child;
-  final String currentLocation;
+  final StatefulNavigationShell navigationShell;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: child,
+      body: navigationShell,
       appBar: AppTopBar(
-        title: switch (currentLocation) {
-          RoutePaths.groups => ' My Groups',
-          RoutePaths.profile => 'Profile',
-          _ => 'Dashboard',
-        },
+        title: _resolveTitle(context),
         actions: [
           Padding(
-            padding: const .only(right: 4),
+            padding: const EdgeInsets.only(right: 4),
             child: AppIconButton(
               icon: Icons.notifications_outlined,
-              onPressed: () =>
-                  RouteHandler.push<void>(context, RoutePaths.notifications),
+              onPressed: () => const NotificationsRoute().push<void>(context),
             ),
           ),
         ],
@@ -54,7 +47,7 @@ class DashboardShell extends StatelessWidget {
               color: context.colorScheme.primaryContainer,
             ),
             child: Column(
-              mainAxisSize: .min,
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -62,6 +55,12 @@ class DashboardShell extends StatelessWidget {
                   context.strings.appName,
                   color: context.colorScheme.onPrimaryContainer,
                 ),
+                if (getBloc<AuthBloc>(context).state.user?.email
+                    case final String email when email.isNotEmpty)
+                  AppText.headlineSmall(
+                    email,
+                    color: context.colorScheme.onPrimaryContainer,
+                  ),
               ],
             ),
           ),
@@ -73,45 +72,81 @@ class DashboardShell extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: AppNavigationBar(
-        selectedIndex: _getSelectedIndex(),
+        selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: (index) =>
             _onDestinationSelected(context, index),
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.dashboard_outlined),
-            selectedIcon: const Icon(Icons.dashboard),
-            label: context.strings.dashboard,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.group_outlined),
-            selectedIcon: const Icon(Icons.group),
-            label: context.strings.groups,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.notifications_active_outlined),
-            selectedIcon: const Icon(Icons.notifications_active),
-            label: context.strings.activities,
-          ),
-        ],
+        destinations: _tabs
+            .map(
+              (tab) => NavigationDestination(
+                icon: tab.icon,
+                selectedIcon: tab.selectedIcon,
+                label: tab.getLabel(context),
+              ),
+            )
+            .toList(),
       ),
     );
   }
 
-  int _getSelectedIndex() {
-    return switch (currentLocation) {
-      RoutePaths.groups => 1,
-      RoutePaths.profile => 2,
-      _ => 0,
-    };
-  }
+  static final List<ShellTab> _tabs = [
+    ShellTab(
+      pathPrefix: DashboardRoute.pathTemplate,
+      icon: const Icon(Icons.dashboard_outlined),
+      selectedIcon: const Icon(Icons.dashboard),
+      getLabel: (context) => context.strings.dashboard,
+      defaultRoute: const DashboardRoute(),
+    ),
+    ShellTab(
+      pathPrefix: GroupsRoute.pathTemplate,
+      icon: const Icon(Icons.group_outlined),
+      selectedIcon: const Icon(Icons.group),
+      getLabel: (context) => context.strings.groups,
+      defaultRoute: const GroupsRoute(),
+    ),
+    ShellTab(
+      pathPrefix: ProfileRoute.pathTemplate,
+      icon: const Icon(Icons.notifications_active_outlined),
+      selectedIcon: const Icon(Icons.notifications_active),
+      getLabel: (context) => context.strings.activities,
+      defaultRoute: const ProfileRoute(),
+    ),
+  ];
 
   void _onDestinationSelected(BuildContext context, int index) {
-    final path = switch (index) {
-      0 => RoutePaths.dashboard,
-      1 => RoutePaths.groups,
-      2 => RoutePaths.profile,
-      _ => RoutePaths.dashboard,
-    };
-    RouteHandler.go(context, path);
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
   }
+
+  String _resolveTitle(BuildContext context) {
+    switch (navigationShell.currentIndex) {
+      case 1:
+        final state = navigationShell.shellRouteContext.routerState;
+        if (state.pathParameters case {'groupId': _}) {
+          return context.strings.groupDetails;
+        }
+        return context.strings.myGroups;
+      case 2:
+        return context.strings.profile;
+      default:
+        return context.strings.dashboard;
+    }
+  }
+}
+
+class ShellTab {
+  const ShellTab({
+    required this.pathPrefix,
+    required this.icon,
+    required this.selectedIcon,
+    required this.getLabel,
+    required this.defaultRoute,
+  });
+
+  final String pathPrefix;
+  final Widget icon;
+  final Widget selectedIcon;
+  final String Function(BuildContext) getLabel;
+  final AppRoute defaultRoute;
 }

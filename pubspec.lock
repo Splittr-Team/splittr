@@ -1009,26 +1009,26 @@ packages:
     dependency: "direct main"
     description:
       name: sky_bloc
-      sha256: "904271df154386ab9446b73b374a66adbf4ab0511e120d34bdce41cc574a08fe"
+      sha256: "27daf487050cc61e0a80c90bd0a37164cb88525bb46f2eaf79c65df72ff05550"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.2"
+    version: "2.3.1"
   sky_design_system:
     dependency: "direct main"
     description:
       name: sky_design_system
-      sha256: "8b7d85eee46ce451368e33e8544049ca6c9cc864629eaf8aebd00164c582ad3d"
+      sha256: f5eb112667a20c81d3505c21eec44f37c07a419b97ce5cd1015407673d852bf6
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.3"
+    version: "1.8.1"
   sky_devtools:
     dependency: "direct main"
     description:
       name: sky_devtools
-      sha256: d98ac708d11c9e4f2f172f13cc7cfc506fe4181474a573245f051c254b9a7596
+      sha256: "5f783ea059c22ae693eceb88a99aa2e35f38f06337435bacefb6138be581ed06"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.4"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1054,10 +1054,10 @@ packages:
     dependency: "direct main"
     description:
       name: sky_router
-      sha256: "3e9f3f05915f9c5b5fbefc609efc43860bba708bfbd3a1cf6bdcc78527ed342a"
+      sha256: "3c76aa9161affb720ebb93378e98c2a21544d0f515c61dfdc5ce3af4143f3318"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.7"
+    version: "1.2.1"
   sky_storage:
     dependency: transitive
     description:

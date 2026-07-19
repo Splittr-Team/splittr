@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sky_router/sky_router.dart';
-import 'package:splittr/core/router/route_paths.dart';
+import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/presentation/ui/widgets/group_balance_card.dart';
 
@@ -39,11 +38,10 @@ class GroupsListView extends StatelessWidget {
           balanceState: balanceState,
           amountText: '1000',
           onTap: () async {
-            await RouteHandler.push<void>(
-              context,
-              RoutePaths.groupDetails,
-              extra: {'group': group},
-            );
+            await GroupDetailsRoute(
+              groupId: group.id ?? '',
+              group: group,
+            ).push<void>(context);
           },
         );
       },

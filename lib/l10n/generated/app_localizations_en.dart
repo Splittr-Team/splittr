@@ -159,4 +159,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settleUp => 'Settle up';
+
+  @override
+  String get navigationError => 'Navigation Error';
+
+  @override
+  String get backToDashboard => 'Back to Dashboard';
+
+  @override
+  String get myGroups => 'My Groups';
+
+  @override
+  String get groupDetails => 'Group Details';
 }
