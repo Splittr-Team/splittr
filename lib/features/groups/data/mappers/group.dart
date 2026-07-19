@@ -1,3 +1,4 @@
+import 'package:splittr/features/groups/data/mappers/member.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
 
@@ -8,6 +9,7 @@ extension GroupModelX on GroupModel {
     description: description,
     inviteCode: inviteCode,
     createdBy: createdBy,
+    members: members?.toDomain() ?? const [],
   );
 }
 

@@ -3,6 +3,7 @@ import 'package:splittr/features/groups/data/datasources/groups_api_client.dart'
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
 import 'package:splittr/features/groups/data/models/create_group_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
+import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 import 'package:splittr/features/groups/data/models/join_group_payload.dart';
 
 @LazySingleton(as: GroupsRemoteDataSource)
@@ -12,8 +13,11 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   final GroupsApiClient _groupsApiClient;
 
   @override
-  Future<List<GroupModel>> getGroups() {
-    return _groupsApiClient.getGroups();
+  Future<GroupsResponseModel> getGroups({
+    String? cursor,
+    int? limit,
+  }) {
+    return _groupsApiClient.getGroups(cursor: cursor, limit: limit);
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sky_architecture/sky_architecture.dart' hide Group;
 import 'package:sky_network/sky_network.dart';
+import 'package:splittr/core/network/pagination.dart';
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
 import 'package:splittr/features/groups/data/mappers/group.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
@@ -24,15 +25,30 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       _groupsSubject.stream;
 
   @override
-  FutureEitherFailure<List<Group>> getGroups() async {
+  FutureEitherFailure<PaginatedList<Group>> getGroups({
+    String? cursor,
+    int? limit,
+  }) async {
     final result = await _apiCallHandler.handle(
-      _groupsRemoteDataSource.getGroups,
+      () => _groupsRemoteDataSource.getGroups(
+        cursor: cursor,
+        limit: limit,
+      ),
     );
 
-    final groupsOrFailure = result.map((groups) => groups.toDomain());
-    _groupsSubject.add(groupsOrFailure);
+    return result.map((response) {
+      final newGroups = response.data.toDomain();
+      final pagination = response.pagination.toDomain();
 
-    return groupsOrFailure;
+      final currentList = _groupsSubject.value.getOrElse((_) => []);
+
+      final updatedList = cursor == null
+          ? newGroups
+          : [...currentList, ...newGroups];
+
+      _groupsSubject.add(Right(updatedList));
+      return PaginatedList(items: newGroups, pagination: pagination);
+    });
   }
 
   @override

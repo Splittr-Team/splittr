@@ -38,11 +38,16 @@ class GroupsStateStore with _$GroupsStateStore {
   const GroupsStateStore({
     required this.groups,
     this.loading = false,
+    this.hasMore = false,
+    this.nextCursor,
   });
 
   @override
   final bool loading;
-
   @override
   final List<Group> groups;
+  @override
+  final bool hasMore;
+  @override
+  final String? nextCursor;
 }

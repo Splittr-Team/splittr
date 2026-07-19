@@ -11,4 +11,6 @@ class GroupsEvent extends BaseEvent with _$GroupsEvent {
 
   const factory GroupsEvent.groupsUpdated({required List<Group> groups}) =
       _GroupsUpdated;
+
+  const factory GroupsEvent.fetchNextPage() = _FetchNextPage;
 }

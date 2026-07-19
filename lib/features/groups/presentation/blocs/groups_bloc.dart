@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart' hide Group;
@@ -32,21 +33,18 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState, NoParams> {
 
   @override
   void handleEvents() {
-    on<_Started>(_onStarted);
+    on<_Started>(_onStarted, transformer: restartable());
     on<_GroupsUpdated>(_onGroupsUpdated);
     on<_GroupsFailed>(_onGroupsFailed);
+    on<_FetchNextPage>(_onFetchNextPage, transformer: droppable());
   }
 
   void _listenToRepositoryStream() {
     _groupsSubscription = _watchGroupsUseCase.call(noParams).listen(
       (result) {
         result.fold(
-          (failure) {
-            add(GroupsEvent.groupsFailed(failure: failure));
-          },
-          (groups) {
-            add(GroupsEvent.groupsUpdated(groups: groups));
-          },
+          (failure) => groupsFailed(failure: failure),
+          (groups) => groupsUpdated(groups: groups),
         );
       },
     );
@@ -58,13 +56,47 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState, NoParams> {
   ) async {
     changeLoadingState(emit: emit, loading: true);
 
-    final result = await _getGroupsUseCase.call(noParams);
+    final result = await _getGroupsUseCase.call(const GetGroupsParams());
 
     result.fold(
       (failure) => handleFailure(emit: emit, failure: failure),
-      (_) {
-        changeLoadingState(emit: emit, loading: false);
-      },
+      (paginatedList) => emit(
+        GroupsState.onGroupsUpdate(
+          store: state.store.copyWith(
+            loading: false,
+            hasMore: paginatedList.pagination.hasMore,
+            nextCursor: paginatedList.pagination.nextCursor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _onFetchNextPage(
+    _FetchNextPage event,
+    Emitter<GroupsState> emit,
+  ) async {
+    if (state.store.loading || !state.store.hasMore) {
+      return;
+    }
+
+    changeLoadingState(emit: emit, loading: true);
+
+    final result = await _getGroupsUseCase.call(
+      GetGroupsParams(cursor: state.store.nextCursor),
+    );
+
+    result.fold(
+      (failure) => handleFailure(emit: emit, failure: failure),
+      (paginatedList) => emit(
+        GroupsState.onGroupsUpdate(
+          store: state.store.copyWith(
+            loading: false,
+            hasMore: paginatedList.pagination.hasMore,
+            nextCursor: paginatedList.pagination.nextCursor,
+          ),
+        ),
+      ),
     );
   }
 
@@ -89,6 +121,18 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState, NoParams> {
   @override
   void started(NoParams params) {
     add(const GroupsEvent.started());
+  }
+
+  void groupsFailed({required Failure failure}) {
+    add(GroupsEvent.groupsFailed(failure: failure));
+  }
+
+  void groupsUpdated({required List<Group> groups}) {
+    add(GroupsEvent.groupsUpdated(groups: groups));
+  }
+
+  void fetchNextPage() {
+    add(const GroupsEvent.fetchNextPage());
   }
 
   @override

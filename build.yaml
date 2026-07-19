@@ -27,6 +27,7 @@ targets:
           - lib/features/*/presentation/blocs/*/*_bloc.dart
           - lib/features/*/presentation/blocs/*_cubit.dart
           - lib/features/*/presentation/blocs/*/*_cubit.dart
+          - lib/core/network/pagination.dart
 
       json_serializable:
         enabled: false
@@ -78,6 +79,7 @@ targets:
   models_target:
     sources:
       - lib/features/*/data/models/*_model.dart
+      - lib/core/network/pagination_model.dart
     builders:
       json_serializable:
         options:

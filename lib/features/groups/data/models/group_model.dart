@@ -1,4 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:splittr/features/groups/data/models/member_model.dart';
 
 part 'group_model.g.dart';
 
@@ -10,6 +11,7 @@ class GroupModel {
     this.description,
     this.inviteCode,
     this.createdBy,
+    this.members,
   });
 
   factory GroupModel.fromJson(Map<String, dynamic> json) =>
@@ -20,4 +22,5 @@ class GroupModel {
   final String? description;
   final String? inviteCode;
   final String? createdBy;
+  final List<MemberModel>? members;
 }
