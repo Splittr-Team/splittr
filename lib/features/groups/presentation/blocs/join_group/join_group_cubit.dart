@@ -11,14 +11,14 @@ part 'join_group_cubit.freezed.dart';
 part 'join_group_state.dart';
 
 @injectable
-final class JoinGroupCubit extends BaseCubit<JoinGroupState> {
+final class JoinGroupCubit extends BaseCubit<JoinGroupState, NoParams> {
   JoinGroupCubit(this._joinGroupUseCase)
     : super(const JoinGroupState.joinGroupInitial());
 
   final JoinGroupUseCase _joinGroupUseCase;
 
   @override
-  void started({Map<String, dynamic>? args}) {}
+  void started(NoParams params) {}
 
   Future<void> joinGroup({required String inviteCode}) async {
     emit(const JoinGroupState.joinGroupLoading());
@@ -34,8 +34,4 @@ final class JoinGroupCubit extends BaseCubit<JoinGroupState> {
       (group) => emit(JoinGroupState.joinGroupSuccess(group: group)),
     );
   }
-
-  // TODO(Chaitanya): Remove isLoading as required in BaseCubit
-  @override
-  bool get isLoading => state is JoinGroupLoading;
 }

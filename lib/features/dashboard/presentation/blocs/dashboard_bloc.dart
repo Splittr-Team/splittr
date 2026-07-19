@@ -8,7 +8,8 @@ part 'dashboard_event.dart';
 part 'dashboard_state.dart';
 
 @injectable
-final class DashboardBloc extends BaseBloc<DashboardEvent, DashboardState> {
+final class DashboardBloc
+    extends BaseBloc<DashboardEvent, DashboardState, NoParams> {
   DashboardBloc()
     : super(const DashboardState.initial(store: DashboardStateStore()));
 
@@ -20,7 +21,7 @@ final class DashboardBloc extends BaseBloc<DashboardEvent, DashboardState> {
   void _onStarted(_Started event, Emitter<DashboardState> emit) {}
 
   @override
-  void started({Map<String, dynamic>? args}) {
+  void started(NoParams params) {
     add(const DashboardEvent.started());
   }
 }

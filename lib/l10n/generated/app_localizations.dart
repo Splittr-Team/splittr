@@ -393,6 +393,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settle up'**
   String get settleUp;
+
+  /// No description provided for @navigationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigation Error'**
+  String get navigationError;
+
+  /// No description provided for @backToDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Dashboard'**
+  String get backToDashboard;
+
+  /// No description provided for @myGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'My Groups'**
+  String get myGroups;
+
+  /// No description provided for @groupDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Group Details'**
+  String get groupDetails;
 }
 
 class _AppLocalizationsDelegate

@@ -8,7 +8,7 @@ part 'profile_event.dart';
 part 'profile_state.dart';
 
 @injectable
-final class ProfileBloc extends BaseBloc<ProfileEvent, ProfileState> {
+final class ProfileBloc extends BaseBloc<ProfileEvent, ProfileState, NoParams> {
   ProfileBloc() : super(const ProfileState.initial(store: ProfileStateStore()));
 
   @override
@@ -19,7 +19,7 @@ final class ProfileBloc extends BaseBloc<ProfileEvent, ProfileState> {
   void _onStarted(_Started event, Emitter<ProfileState> emit) {}
 
   @override
-  void started({Map<String, dynamic>? args}) {
+  void started(NoParams params) {
     add(const ProfileEvent.started());
   }
 }

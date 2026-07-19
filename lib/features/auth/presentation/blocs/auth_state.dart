@@ -29,4 +29,9 @@ sealed class AuthState extends BaseState with _$AuthState {
   BaseState getFailureState({required Failure failure}) {
     return AuthState.onFailure(failure: failure);
   }
+
+  User? get user => switch (this) {
+    OnUserAuthenticated(:final user) => user,
+    _ => null,
+  };
 }

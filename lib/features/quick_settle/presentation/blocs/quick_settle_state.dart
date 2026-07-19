@@ -71,3 +71,16 @@ class QuickSettleStateStore with _$QuickSettleStateStore {
   @override
   final String splitTitle;
 }
+
+class QuickSettleParams extends Equatable {
+  const QuickSettleParams({
+    required this.splitTitle,
+    required this.peopleRecords,
+  });
+
+  final String splitTitle;
+  final List<({double amount, String name})> peopleRecords;
+
+  @override
+  List<Object?> get props => [splitTitle, peopleRecords];
+}

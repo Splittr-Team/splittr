@@ -7,16 +7,13 @@ class _GroupDetailsForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppTopBar(title: group.name!),
-      body: ListView(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        children: [
-          _InviteCodeCard(inviteCode: group.inviteCode ?? ''),
-          const SizedBox(height: AppSpacing.md),
-          _InviteLinkCard(inviteCode: group.inviteCode ?? ''),
-        ],
-      ),
+    return ListView(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      children: [
+        _InviteCodeCard(inviteCode: group.inviteCode ?? ''),
+        const SizedBox(height: AppSpacing.md),
+        _InviteLinkCard(inviteCode: group.inviteCode ?? ''),
+      ],
     );
   }
 }
@@ -81,7 +78,7 @@ class _InviteLinkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final inviteLink = RoutePaths.joinGroupPath(inviteCode);
+    final inviteLink = JoinGroupRoute(inviteCode).toDeepLink();
 
     return Container(
       padding: const EdgeInsets.symmetric(

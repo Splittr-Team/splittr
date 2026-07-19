@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart' show AppTheme;
 import 'package:sky_devtools/sky_devtools.dart';
@@ -104,7 +105,7 @@ class _GlobalBlocsWidget extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => getIt<AuthBloc>()..started(),
+          create: (_) => getIt<AuthBloc>()..started(noParams),
           lazy: false,
         ),
       ],

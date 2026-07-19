@@ -13,7 +13,7 @@ part 'groups_event.dart';
 part 'groups_state.dart';
 
 @injectable
-final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
+final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState, NoParams> {
   GroupsBloc(
     this._getGroupsUseCase,
     this._watchGroupsUseCase,
@@ -87,7 +87,7 @@ final class GroupsBloc extends BaseBloc<GroupsEvent, GroupsState> {
   }
 
   @override
-  void started({Map<String, dynamic>? args}) {
+  void started(NoParams params) {
     add(const GroupsEvent.started());
   }
 

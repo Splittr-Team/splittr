@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
-import 'package:sky_router/sky_router.dart';
-import 'package:splittr/core/router/route_paths.dart';
+import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart'
     hide OnFailure;
@@ -11,12 +11,10 @@ import 'package:splittr/features/quick_split/presentation/blocs/quick_split_bloc
 import 'package:splittr/features/quick_split/presentation/ui/components/split_history_list.dart';
 
 class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
-  const SplitHistoryPage({required this.args, super.key});
-
-  final Map<String, dynamic>? args;
+  const SplitHistoryPage({super.key});
 
   @override
-  QuickSplitBloc createBloc() => getIt<QuickSplitBloc>()..started(args: args);
+  QuickSplitBloc createBloc() => getIt<QuickSplitBloc>()..started(noParams);
 
   @override
   Widget buildPage(BuildContext context) {
@@ -159,10 +157,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                             ElevatedButton.icon(
                               onPressed: () {
                                 unawaited(
-                                  RouteHandler.push<void>(
-                                    context,
-                                    RoutePaths.quickSplit,
-                                  ),
+                                  const QuickSplitRoute().push(context),
                                 );
                               },
                               icon: const Icon(Icons.add_rounded),
@@ -183,7 +178,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
               unawaited(
-                RouteHandler.push<void>(context, RoutePaths.quickSplit),
+                const QuickSplitRoute().push(context),
               );
             },
             icon: const Icon(Icons.add_rounded),

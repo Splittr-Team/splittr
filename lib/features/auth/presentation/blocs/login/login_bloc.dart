@@ -11,7 +11,7 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 @injectable
-class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
+class LoginBloc extends BaseBloc<LoginEvent, LoginState, NoParams> {
   LoginBloc(this._loginWithEmailUseCase)
     : super(const LoginState.initial(store: LoginStateStore()));
 
@@ -73,7 +73,7 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
   }
 
   @override
-  void started({Map<String, dynamic>? args}) {
+  void started(NoParams params) {
     add(const LoginEvent.started());
   }
 

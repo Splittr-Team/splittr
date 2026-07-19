@@ -19,12 +19,10 @@ import 'package:splittr/utils/extensions/l10n_extensions.dart';
 part 'sign_up_form.dart';
 
 class SignUpPage extends BasePage<SignUpBloc, SignUpState> {
-  const SignUpPage({required this.args, super.key});
-
-  final Map<String, dynamic>? args;
+  const SignUpPage({super.key});
 
   @override
-  SignUpBloc createBloc() => getIt<SignUpBloc>()..started(args: args);
+  SignUpBloc createBloc() => getIt<SignUpBloc>()..started(noParams);
 
   @override
   bool showLoading(SignUpState state) => state.store.loading;
