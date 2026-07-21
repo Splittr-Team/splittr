@@ -1033,10 +1033,10 @@ packages:
     dependency: "direct main"
     description:
       name: sky_devtools
-      sha256: "5f783ea059c22ae693eceb88a99aa2e35f38f06337435bacefb6138be581ed06"
+      sha256: "8293f552a1ef27c888c254f8eba349db3159969a0a8ace3dfbc6f82418fd0a04"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.4"
+    version: "1.1.5"
   sky_engine:
     dependency: transitive
     description: flutter

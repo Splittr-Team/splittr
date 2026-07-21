@@ -48,7 +48,7 @@ dependencies:
   sky_architecture: ^1.7.0
   sky_bloc: ^2.3.1
   sky_design_system: ^1.8.1
-  sky_devtools: ^1.1.0
+  sky_devtools: ^1.1.5
   sky_network: ^1.1.10
   sky_router: ^1.2.1
   sky_storage_isar: ^1.1.0
