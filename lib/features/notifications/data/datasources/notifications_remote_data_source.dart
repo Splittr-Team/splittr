@@ -1,7 +1,10 @@
-import 'package:splittr/features/notifications/data/models/notification_model.dart';
+import 'package:splittr/features/notifications/data/models/notifications_response_model.dart';
 
 abstract interface class NotificationsRemoteDataSource {
-  Future<List<NotificationModel>> getNotifications();
+  Future<NotificationsResponseModel> getNotifications({
+    String? cursor,
+    int? limit,
+  });
 
   Future<void> readAllNotifications();
 

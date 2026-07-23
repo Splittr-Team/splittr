@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
@@ -40,9 +41,10 @@ final class NotificationsBloc
 
   @override
   void handleEvents() {
-    on<_Started>(_onStarted);
+    on<_Started>(_onStarted, transformer: restartable());
     on<_NotificationsUpdated>(_onNotificationsUpdated);
     on<_NotificationsFailed>(_onNotificationsFailed);
+    on<_FetchNextPage>(_onFetchNextPage, transformer: droppable());
     on<_MarkAllRead>(_onMarkAllRead);
     on<_MarkRead>(_onMarkRead);
   }
@@ -69,11 +71,49 @@ final class NotificationsBloc
   ) async {
     changeLoadingState(emit: emit, loading: true);
 
-    final result = await _getNotificationsUseCase.call(noParams);
+    final result = await _getNotificationsUseCase.call(
+      const GetNotificationsParams(),
+    );
 
     result.fold(
       (failure) => handleFailure(emit: emit, failure: failure),
-      (_) => changeLoadingState(emit: emit, loading: false),
+      (paginatedList) => emit(
+        NotificationsState.onNotificationsUpdate(
+          store: state.store.copyWith(
+            loading: false,
+            hasMore: paginatedList.pagination.hasMore,
+            nextCursor: paginatedList.pagination.nextCursor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _onFetchNextPage(
+    _FetchNextPage event,
+    Emitter<NotificationsState> emit,
+  ) async {
+    if (state.store.loading || !state.store.hasMore) {
+      return;
+    }
+
+    changeLoadingState(emit: emit, loading: true);
+
+    final result = await _getNotificationsUseCase.call(
+      GetNotificationsParams(cursor: state.store.nextCursor),
+    );
+
+    result.fold(
+      (failure) => handleFailure(emit: emit, failure: failure),
+      (paginatedList) => emit(
+        NotificationsState.onNotificationsUpdate(
+          store: state.store.copyWith(
+            loading: false,
+            hasMore: paginatedList.pagination.hasMore,
+            nextCursor: paginatedList.pagination.nextCursor,
+          ),
+        ),
+      ),
     );
   }
 
@@ -129,6 +169,11 @@ final class NotificationsBloc
   /// Triggers a refresh of the notifications list.
   void refreshNotifications() {
     add(const NotificationsEvent.started());
+  }
+
+  /// Triggers loading the next page of notifications.
+  void fetchNextPage() {
+    add(const NotificationsEvent.fetchNextPage());
   }
 
   /// Marks all notifications as read.

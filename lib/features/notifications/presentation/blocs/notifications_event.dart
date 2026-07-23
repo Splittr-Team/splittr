@@ -14,6 +14,8 @@ class NotificationsEvent extends BaseEvent with _$NotificationsEvent {
     required Failure failure,
   }) = _NotificationsFailed;
 
+  const factory NotificationsEvent.fetchNextPage() = _FetchNextPage;
+
   const factory NotificationsEvent.markAllRead() = _MarkAllRead;
 
   const factory NotificationsEvent.markRead({

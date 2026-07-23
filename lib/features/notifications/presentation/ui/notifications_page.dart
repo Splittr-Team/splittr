@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Notification;
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
+import 'package:splittr/core/presentation/widgets/paginated_list_view.dart';
 import 'package:splittr/di/injection.dart';
+import 'package:splittr/features/notifications/domain/entities/notification.dart';
 import 'package:splittr/features/notifications/presentation/blocs/notifications_bloc.dart';
 import 'package:splittr/features/notifications/presentation/ui/widgets/notification_list_tile.dart';
 import 'package:splittr/features/notifications/presentation/ui/widgets/notifications_shimmer_loader.dart';

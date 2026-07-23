@@ -39,12 +39,16 @@ class _NotificationsForm extends StatelessWidget {
                         context,
                       ).refreshNotifications();
                     },
-                    child: ListView.builder(
+                    child: PaginatedListView<Notification>(
+                      items: state.store.notifications,
+                      hasMore: state.store.hasMore,
+                      isLoadingMore: state.store.loading,
+                      onLoadMore: () =>
+                          getBloc<NotificationsBloc>(context).fetchNextPage(),
                       padding: const EdgeInsets.all(AppSpacing.md),
-                      itemCount: state.store.notifications.length,
-                      itemBuilder: (context, index) {
-                        final notification = state.store.notifications[index];
-
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: AppSpacing.sm),
+                      itemBuilder: (context, notification, index) {
                         return NotificationListTile(
                           notification: notification,
                           onMarkRead: () {

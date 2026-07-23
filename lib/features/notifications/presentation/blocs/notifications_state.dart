@@ -40,6 +40,8 @@ class NotificationsStateStore with _$NotificationsStateStore {
   const NotificationsStateStore({
     required this.notifications,
     this.loading = false,
+    this.hasMore = false,
+    this.nextCursor,
   });
 
   @override
@@ -47,4 +49,10 @@ class NotificationsStateStore with _$NotificationsStateStore {
 
   @override
   final List<Notification> notifications;
+
+  @override
+  final bool hasMore;
+
+  @override
+  final String? nextCursor;
 }
