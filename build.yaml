@@ -44,6 +44,7 @@ targets:
           - lib/features/*/data/datasources/*_api_client.dart
           - lib/features/*/data/datasources/*_data_source_impl.dart
           - lib/features/*/data/repositories/*_repository_impl.dart
+          - lib/features/*/data/models/*_schema_provider.dart
           - lib/features/*/domain/usecases/*.dart
           - lib/features/*/presentation/blocs/*_bloc.dart
           - lib/features/*/presentation/blocs/*/*_bloc.dart
@@ -61,6 +62,7 @@ targets:
       isar_community_generator:
         generate_for:
           - lib/features/*/data/models/*_isar_model.dart
+          - lib/core/storage/models/*_isar_model.dart
 
   payloads_target:
     sources:

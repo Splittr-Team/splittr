@@ -8,6 +8,7 @@ class SplitTransaction {
       json['amount'] as double,
     );
   }
+
   late String sender;
   late String receiver;
   late double amount;

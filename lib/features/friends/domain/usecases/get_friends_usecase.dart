@@ -6,6 +6,7 @@ import 'package:splittr/features/friends/domain/repositories/friends_repository.
 @lazySingleton
 final class GetFriendsUseCase implements UseCase<List<User>, NoParams> {
   const GetFriendsUseCase(this._repository);
+
   final FriendsRepository _repository;
 
   @override

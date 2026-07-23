@@ -7,6 +7,7 @@ class QuickSettleOutputArrowCard extends StatelessWidget {
     required this.amount,
     super.key,
   });
+
   final String sender;
   final String receiver;
   final String amount;

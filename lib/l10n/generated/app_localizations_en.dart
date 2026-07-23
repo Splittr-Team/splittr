@@ -171,4 +171,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get groupDetails => 'Group Details';
+
+  @override
+  String get deleteGroup => 'Delete Group';
+
+  @override
+  String get deleteGroupConfirmation =>
+      'Are you sure you want to delete this group? This action cannot be undone.';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get cancel => 'Cancel';
 }

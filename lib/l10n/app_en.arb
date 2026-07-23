@@ -53,5 +53,9 @@
   "navigationError": "Navigation Error",
   "backToDashboard": "Back to Dashboard",
   "myGroups": "My Groups",
-  "groupDetails": "Group Details"
+  "groupDetails": "Group Details",
+  "deleteGroup": "Delete Group",
+  "deleteGroupConfirmation": "Are you sure you want to delete this group? This action cannot be undone.",
+  "delete": "Delete",
+  "cancel": "Cancel"
 }

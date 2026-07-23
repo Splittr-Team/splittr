@@ -11,6 +11,8 @@ class GroupModel {
     this.description,
     this.inviteCode,
     this.createdBy,
+    this.createdAt,
+    this.updatedAt,
     this.members,
   });
 
@@ -22,5 +24,7 @@ class GroupModel {
   final String? description;
   final String? inviteCode;
   final String? createdBy;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final List<MemberModel>? members;
 }

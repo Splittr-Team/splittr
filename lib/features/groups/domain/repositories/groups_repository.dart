@@ -19,5 +19,7 @@ abstract interface class GroupsRepository {
     required String description,
   });
 
-  Future<void> dispose();
+  FutureEitherFailureUnit deleteGroup({
+    required String groupId,
+  });
 }

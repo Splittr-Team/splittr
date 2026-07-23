@@ -5,6 +5,7 @@ import 'package:splittr/features/friends/domain/repositories/friends_repository.
 @lazySingleton
 final class RemoveFriendUseCase implements UseCase<Unit, RemoveFriendParams> {
   const RemoveFriendUseCase(this._repository);
+
   final FriendsRepository _repository;
 
   @override
@@ -15,6 +16,7 @@ final class RemoveFriendUseCase implements UseCase<Unit, RemoveFriendParams> {
 
 class RemoveFriendParams extends Equatable {
   const RemoveFriendParams(this.friendId);
+
   final String friendId;
 
   @override
