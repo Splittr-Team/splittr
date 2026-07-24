@@ -13,6 +13,8 @@ class _GroupDetailsForm extends StatelessWidget {
         _InviteCodeCard(inviteCode: group.inviteCode ?? ''),
         const SizedBox(height: AppSpacing.md),
         _InviteLinkCard(inviteCode: group.inviteCode ?? ''),
+        const SizedBox(height: AppSpacing.xl),
+        const _DeleteGroupCard(),
       ],
     );
   }
@@ -130,4 +132,42 @@ class _InviteLinkCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DeleteGroupCard extends StatelessWidget {
+  const _DeleteGroupCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppButton.outlined(
+      icon: Icons.delete_outline_rounded,
+      text: context.strings.deleteGroup,
+      onPressed: () => _confirmDelete(context),
+    );
+  }
+}
+
+void _confirmDelete(BuildContext context) {
+  unawaited(
+    AppDialog.show<void>(
+      context: context,
+      title: context.strings.deleteGroup,
+      // TODO(SKY): add desc field
+      content: AppText.bodyMedium(context.strings.deleteGroupConfirmation),
+      actions: [
+        AppButton.text(
+          onPressed: () => RouteHandler.pop<void>(context),
+          text: context.strings.cancel,
+        ),
+        AppButton.text(
+          onPressed: () {
+            RouteHandler.pop<void>(context);
+            context.read<GroupDetailsBloc>().deleteGroup();
+          },
+          text: context.strings.delete,
+          color: context.colorScheme.error,
+        ),
+      ],
+    ),
+  );
 }

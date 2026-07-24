@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/features/quick_split/domain/entities/split_history.dart';
-
 import 'package:splittr/features/quick_split/domain/repositories/i_quick_split_repository.dart';
 
 part 'quick_split_bloc.freezed.dart';

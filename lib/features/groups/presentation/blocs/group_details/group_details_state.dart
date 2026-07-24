@@ -8,6 +8,10 @@ sealed class GroupDetailsState extends BaseState with _$GroupDetailsState {
     required GroupDetailsStateStore store,
   }) = Initial;
 
+  const factory GroupDetailsState.onGroupDeleted({
+    required GroupDetailsStateStore store,
+  }) = OnGroupDeleted;
+
   const factory GroupDetailsState.onFailure({
     required GroupDetailsStateStore store,
     required Failure failure,

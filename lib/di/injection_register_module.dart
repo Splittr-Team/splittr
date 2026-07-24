@@ -10,6 +10,7 @@ import 'package:splittr/core/app_config/i_app_config.dart';
 import 'package:splittr/core/router/app_router.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
+import 'package:splittr/features/groups/data/models/groups_isar_schema_provider.dart';
 import 'package:splittr/features/quick_split/data/models/quick_split_isar_schema_provider.dart';
 
 @module
@@ -20,7 +21,10 @@ abstract class RegisterModule {
     final dir = await getApplicationDocumentsDirectory();
 
     final isarInit = IsarDatabaseInitializer(
-      providers: [const QuickSplitIsarSchemaProvider()],
+      providers: [
+        const QuickSplitIsarSchemaProvider(),
+        const GroupsIsarSchemaProvider(),
+      ],
       directory: dir.path,
     );
 

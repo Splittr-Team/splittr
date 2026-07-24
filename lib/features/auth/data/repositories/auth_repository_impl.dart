@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
+import 'package:sky_storage_isar/sky_storage_isar.dart';
 import 'package:splittr/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:splittr/features/auth/data/mappers/user.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
@@ -14,10 +15,12 @@ final class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(
     this._authRemoteDataSource,
     this._apiCallHandler,
+    this._isar,
   );
 
   final AuthRemoteDataSource _authRemoteDataSource;
   final ApiCallHandler _apiCallHandler;
+  final Isar _isar;
 
   final StreamController<Option<User>> _authStateStreamController =
       StreamController<Option<User>>.broadcast();
@@ -92,6 +95,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   FutureEitherFailure<Unit> logout() async {
     try {
       await _authRemoteDataSource.logout();
+      await _isar.writeTxn(() async => _isar.clear());
       _authStateStreamController.add(const None());
       return const Right(unit);
     } on Exception catch (e) {

@@ -11,6 +11,8 @@ class Group with _$Group {
     this.description,
     this.inviteCode,
     this.createdBy,
+    this.createdAt,
+    this.updatedAt,
     this.members = const [],
   });
 
@@ -24,6 +26,10 @@ class Group with _$Group {
   final String? inviteCode;
   @override
   final String? createdBy;
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
   @override
   final List<Member> members;
 }

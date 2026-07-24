@@ -25,4 +25,7 @@ abstract class GroupsApiClient {
 
   @POST('/')
   Future<GroupModel> createGroup(@Body() CreateGroupPayload body);
+
+  @DELETE('/{id}')
+  Future<void> deleteGroup(@Path('id') String id);
 }

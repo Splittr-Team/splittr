@@ -6,6 +6,7 @@ import 'package:splittr/features/quick_split/domain/repositories/i_quick_split_r
 @Injectable(as: IQuickSplitRepository)
 class QuickSplitRepositoryImpl implements IQuickSplitRepository {
   QuickSplitRepositoryImpl(this._localDataSource);
+
   final QuickSplitLocalDataSource _localDataSource;
 
   @override

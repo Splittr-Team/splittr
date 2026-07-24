@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SummaryBottomSheet extends StatelessWidget {
   const SummaryBottomSheet({required this.summaryMap, super.key});
+
   final Map<String, List<Map<String, double>>> summaryMap;
 
   @override

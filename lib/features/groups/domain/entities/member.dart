@@ -18,6 +18,7 @@ class Member with _$Member {
   final String? groupId;
   @override
   final String? userId;
+
   // TODO(SKY): add enum
   @override
   final String? role;

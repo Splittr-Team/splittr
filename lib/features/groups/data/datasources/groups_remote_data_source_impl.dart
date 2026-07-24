@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/groups/data/datasources/groups_api_client.dart';
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
 import 'package:splittr/features/groups/data/models/create_group_payload.dart';
@@ -35,5 +36,12 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
     required String inviteCode,
   }) {
     return _groupsApiClient.joinGroup(JoinGroupPayload(inviteCode: inviteCode));
+  }
+
+  @override
+  Future<Unit> deleteGroup({required String groupId}) async {
+    await _groupsApiClient.deleteGroup(groupId);
+
+    return unit;
   }
 }

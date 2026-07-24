@@ -5,4 +5,6 @@ class GroupDetailsEvent extends BaseEvent with _$GroupDetailsEvent {
   const GroupDetailsEvent._();
 
   const factory GroupDetailsEvent.started() = _Started;
+
+  const factory GroupDetailsEvent.deleteGroup() = _DeleteGroup;
 }
