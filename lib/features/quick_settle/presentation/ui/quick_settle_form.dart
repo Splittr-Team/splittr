@@ -192,11 +192,10 @@ class _QuickSettleForm extends StatelessWidget {
                       context,
                     ).state.store.summaryMap;
                     unawaited(
-                      showModalBottomSheet<void>(
+                      AppBottomSheet.show<void>(
                         context: context,
-                        builder: (context) {
-                          return SummaryBottomSheet(summaryMap: summary);
-                        },
+                        title: 'Summary',
+                        child: SummaryBottomSheet(summaryMap: summary),
                       ),
                     );
                   },

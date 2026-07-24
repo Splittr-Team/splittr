@@ -10,7 +10,9 @@ import 'package:splittr/features/groups/presentation/blocs/join_group/join_group
 import 'package:splittr/utils/extensions/extensions.dart';
 
 class JoinGroupBottomSheet extends StatefulWidget {
-  const JoinGroupBottomSheet({super.key});
+  const JoinGroupBottomSheet({this.inviteCode, super.key});
+
+  final String? inviteCode;
 
   @override
   State<JoinGroupBottomSheet> createState() => _JoinGroupBottomSheetState();
@@ -22,7 +24,7 @@ class _JoinGroupBottomSheetState extends State<JoinGroupBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _codeController = TextEditingController();
+    _codeController = TextEditingController(text: widget.inviteCode ?? '');
   }
 
   @override
@@ -34,7 +36,13 @@ class _JoinGroupBottomSheetState extends State<JoinGroupBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<JoinGroupCubit>(),
+      create: (context) {
+        final cubit = getIt<JoinGroupCubit>();
+        if (widget.inviteCode != null && widget.inviteCode!.isNotEmpty) {
+          unawaited(cubit.joinGroup(inviteCode: widget.inviteCode!));
+        }
+        return cubit;
+      },
       child: BlocListener<JoinGroupCubit, JoinGroupState>(
         listener: (context, state) {
           switch (state) {
@@ -56,18 +64,10 @@ class _JoinGroupBottomSheetState extends State<JoinGroupBottomSheet> {
           builder: (context, state) {
             final isLoading = state is JoinGroupLoading;
 
-            return AppScrollView(
-              mainAxisSize: .min,
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                AppText.titleLarge(
-                  context.strings.joinGroup,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppText.bodyMedium(
-                  context.strings.enterCode,
-                  color: context.colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(height: AppSpacing.md),
                 AppTextField(
                   controller: _codeController,
                   labelText: context.strings.groupCode,

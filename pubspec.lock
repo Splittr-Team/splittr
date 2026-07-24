@@ -1033,10 +1033,10 @@ packages:
     dependency: "direct main"
     description:
       name: sky_design_system
-      sha256: "88ee7bc589b2413e5b3c785a9620d7efd9b50e68681dcb556cf6a3beb3654fdc"
+      sha256: "82c70e6aad9ffae5971cc717965188f00550444ff31aee982e1b171d5aa0ab0e"
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.0"
+    version: "1.10.0"
   sky_devtools:
     dependency: "direct main"
     description:

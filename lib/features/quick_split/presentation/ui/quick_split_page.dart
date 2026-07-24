@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
+import 'package:sky_router/sky_router.dart';
 import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/quick_split/presentation/blocs/quick_split_bloc.dart';
@@ -197,19 +198,18 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
     return AppDialog.show<bool>(
       context: context,
       title: 'Discard Split?',
-      content: const Text(
-        'You have unsaved split details. '
-        'Are you sure you want to discard them?',
-      ),
+      description:
+          'You have unsaved split details. '
+          'Are you sure you want to discard them?',
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Keep Editing'),
+        AppButton.text(
+          onPressed: () => RouteHandler.pop<bool>(context, false),
+          text: 'Keep Editing',
         ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          style: TextButton.styleFrom(foregroundColor: Colors.red),
-          child: const Text('Discard'),
+        AppButton.text(
+          onPressed: () => RouteHandler.pop<bool>(context, true),
+          text: 'Discard',
+          color: context.colorScheme.error,
         ),
       ],
     );

@@ -152,8 +152,7 @@ void _confirmDelete(BuildContext context) {
     AppDialog.show<void>(
       context: context,
       title: context.strings.deleteGroup,
-      // TODO(SKY): add desc field
-      content: AppText.bodyMedium(context.strings.deleteGroupConfirmation),
+      description: context.strings.deleteGroupConfirmation,
       actions: [
         AppButton.text(
           onPressed: () => RouteHandler.pop<void>(context),

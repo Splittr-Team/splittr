@@ -13,6 +13,7 @@ import 'package:splittr/features/groups/presentation/ui/widgets/groups_error_sta
 import 'package:splittr/features/groups/presentation/ui/widgets/groups_list_view.dart';
 import 'package:splittr/features/groups/presentation/ui/widgets/groups_shimmer_list.dart';
 import 'package:splittr/features/groups/presentation/ui/widgets/join_group_bottom_sheet.dart';
+import 'package:splittr/utils/extensions/extensions.dart';
 
 part 'groups_form.dart';
 
@@ -39,6 +40,7 @@ class GroupsPage extends BasePage<GroupsBloc, GroupsState> {
     unawaited(
       AppBottomSheet.show<void>(
         context: context,
+        title: context.strings.createGroup,
         child: const CreateGroupBottomSheet(),
       ),
     );
@@ -48,6 +50,8 @@ class GroupsPage extends BasePage<GroupsBloc, GroupsState> {
     unawaited(
       AppBottomSheet.show<void>(
         context: context,
+        title: context.strings.joinGroup,
+        description: context.strings.enterCode,
         child: const JoinGroupBottomSheet(),
       ),
     );
