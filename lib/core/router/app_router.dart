@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sky_design_system/sky_design_system.dart';
 import 'package:sky_router/sky_router.dart';
 import 'package:sky_telemetry/sky_telemetry.dart';
 import 'package:splittr/core/router/app_routes.dart';
@@ -11,7 +12,7 @@ import 'package:splittr/features/dashboard/presentation/ui/dashboard_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_shell.dart';
 import 'package:splittr/features/groups/presentation/ui/group_details/group_details_page.dart';
 import 'package:splittr/features/groups/presentation/ui/groups_page.dart';
-import 'package:splittr/features/groups/presentation/ui/join_group_page.dart';
+import 'package:splittr/features/groups/presentation/ui/widgets/join_group_bottom_sheet.dart';
 import 'package:splittr/features/notifications/presentation/ui/notifications_page.dart';
 import 'package:splittr/features/profile/presentation/ui/profile_page.dart';
 import 'package:splittr/features/quick_settle/presentation/ui/quick_settle_page.dart';
@@ -166,15 +167,21 @@ final List<RouteBase> _routes = [
                 },
               ),
               GoRoute(
+                parentNavigatorKey: rootNavigatorKey,
                 path: JoinGroupRoute.relativePathTemplate,
-                builder: (context, state) {
+                pageBuilder: (context, state) {
                   final route = JoinGroupRoute.fromState(state);
 
                   if (route == null) {
                     throw GoException('Invalid or missing invite code.');
                   }
 
-                  return JoinGroupPage(inviteCode: route.code);
+                  return AppBottomSheetPage<void>(
+                    key: state.pageKey,
+                    title: 'Join Group',
+                    description: 'Enter code to join group',
+                    child: JoinGroupBottomSheet(inviteCode: route.code),
+                  );
                 },
               ),
             ],

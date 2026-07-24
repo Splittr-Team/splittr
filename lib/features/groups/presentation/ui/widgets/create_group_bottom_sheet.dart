@@ -30,13 +30,10 @@ class _BottomSheetBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScrollView(
-      mainAxisSize: .min,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AppText.titleLarge(
-          context.strings.createGroup,
-        ),
-        const SizedBox(height: AppSpacing.md),
         AppTextField(
           labelText: context.strings.groupName,
           onChanged: (groupName) => getBloc<CreateGroupBloc>(
