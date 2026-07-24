@@ -9,6 +9,8 @@ import 'package:splittr/constants/env/env.dart';
 import 'package:splittr/core/app_config/i_app_config.dart';
 import 'package:splittr/core/router/app_router.dart';
 import 'package:splittr/di/injection.dart';
+import 'package:splittr/features/app_config/data/models/app_config_isar_schema_provider.dart';
+import 'package:splittr/features/app_config/domain/stores/app_config_store.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:splittr/features/groups/data/models/groups_isar_schema_provider.dart';
 import 'package:splittr/features/quick_split/data/models/quick_split_isar_schema_provider.dart';
@@ -24,6 +26,7 @@ abstract class RegisterModule {
       providers: [
         const QuickSplitIsarSchemaProvider(),
         const GroupsIsarSchemaProvider(),
+        const AppConfigIsarSchemaProvider(),
       ],
       directory: dir.path,
     );
@@ -56,6 +59,7 @@ abstract class RegisterModule {
   @lazySingleton
   GoRouter get goRouter => createAppRouter(
     authBloc: getIt<AuthBloc>(),
+    appConfigStore: getIt<AppConfigStore>(),
     logger: getIt<AppLogger>(),
   );
 }

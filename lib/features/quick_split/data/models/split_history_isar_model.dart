@@ -11,12 +11,12 @@ class SplitHistoryIsarModel {
     return SplitHistoryIsarModel()
       ..id = entity.id
       ..title = entity.title
-      ..totalAmount = entity.totalAmount
+      ..totalAmount = entity.totalAmount.toDouble()
       ..individualShares = entity.individualShares.entries
           .map(
             (e) => ShareIsarModel()
               ..userId = e.key
-              ..shareAmount = e.value,
+              ..shareAmount = e.value.toDouble(),
           )
           .toList()
       ..createdAt = entity.createdAt;
@@ -35,7 +35,7 @@ class SplitHistoryIsarModel {
   late DateTime createdAt;
 
   SplitHistory toEntity() {
-    final sharesMap = {
+    final sharesMap = <String, num>{
       for (final share in individualShares) share.userId: share.shareAmount,
     };
     return SplitHistory(

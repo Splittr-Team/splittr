@@ -174,7 +174,7 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
           ) {
             return (
               name: peopleRecord.name,
-              amount: double.tryParse(peopleRecord.amount) ?? 0,
+              amount: num.tryParse(peopleRecord.amount) ?? 0,
             );
           }).toList(),
         ),

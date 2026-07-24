@@ -4,6 +4,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
+import 'package:splittr/features/app_config/domain/stores/app_config_store.dart';
+import 'package:splittr/features/app_config/domain/usecases/get_app_config_use_case.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
 import 'package:splittr/features/auth/domain/usecases/check_auth_status_usecase.dart';
 import 'package:splittr/features/auth/domain/usecases/login_as_guest_usecase.dart';
@@ -21,6 +23,8 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
     this._logoutUseCase,
     this._watchAuthStateUseCase,
     this._loginAsGuestUseCase,
+    this._getAppConfigUseCase,
+    this._appConfigStore,
   ) : super(const AuthState.loading()) {
     _authStateStreamSubscription = _watchAuthStateUseCase
         .call(noParams)
@@ -31,6 +35,8 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
   final LogoutUseCase _logoutUseCase;
   final WatchAuthStateUseCase _watchAuthStateUseCase;
   final LoginAsGuestUseCase _loginAsGuestUseCase;
+  final GetAppConfigUseCase _getAppConfigUseCase;
+  final AppConfigStore _appConfigStore;
 
   StreamSubscription<Option<User>>? _authStateStreamSubscription;
 
@@ -43,6 +49,11 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
   }
 
   FutureOr<void> _onStarted(_Started event, Emitter<AuthState> emit) async {
+    final configResult = await _getAppConfigUseCase.call(noParams);
+    configResult.fold(
+      (_) {},
+      (appConfig) => _appConfigStore.config = appConfig,
+    );
     await _checkAuthStatusUseCase.call(noParams);
   }
 

@@ -4,7 +4,7 @@ import 'package:sky_design_system/sky_design_system.dart';
 class SummaryBottomSheet extends StatelessWidget {
   const SummaryBottomSheet({required this.summaryMap, super.key});
 
-  final Map<String, List<Map<String, double>>> summaryMap;
+  final Map<String, List<Map<String, num>>> summaryMap;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class SummaryBottomSheet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: summaryMap.entries.map<Widget>((entry) {
         final receiver = entry.key;
-        final givers = List<Map<String, double>>.from(entry.value);
+        final givers = List<Map<String, num>>.from(entry.value);
 
         return Card(
           margin: const EdgeInsets.symmetric(

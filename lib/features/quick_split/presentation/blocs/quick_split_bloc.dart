@@ -131,7 +131,7 @@ final class QuickSplitBloc
   ) {
     changeLoadingState(emit: emit, loading: true);
     for (final peopleRecord in state.store.peopleRecords) {
-      final amount = double.tryParse(peopleRecord.amount);
+      final amount = num.tryParse(peopleRecord.amount);
       if (amount == null || amount < 0) {
         emit(
           QuickSplitState.invalidAmount(

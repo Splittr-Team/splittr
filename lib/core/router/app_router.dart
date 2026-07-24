@@ -4,6 +4,9 @@ import 'package:sky_router/sky_router.dart';
 import 'package:sky_telemetry/sky_telemetry.dart';
 import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/core/router/route_error_page.dart';
+import 'package:splittr/features/app_config/domain/stores/app_config_store.dart';
+import 'package:splittr/features/app_config/presentation/ui/force_update_page.dart';
+import 'package:splittr/features/app_config/presentation/ui/maintenance_page.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:splittr/features/auth/presentation/pages/login/login_page.dart';
 import 'package:splittr/features/auth/presentation/pages/sign_up/sign_up_page.dart';
@@ -25,6 +28,8 @@ const List<String> _publicRoutes = [
   SplashRoute.pathTemplate,
   LoginRoute.pathTemplate,
   SignUpRoute.pathTemplate,
+  ForceUpdateRoute.pathTemplate,
+  MaintenanceRoute.pathTemplate,
 ];
 
 /// Routes accessible only by guest users.
@@ -40,6 +45,7 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 /// Creates and configures the application's [GoRouter] instance.
 GoRouter createAppRouter({
   required AuthBloc authBloc,
+  required AppConfigStore appConfigStore,
   required AppLogger logger,
 }) {
   return GoRouter(
@@ -49,7 +55,7 @@ GoRouter createAppRouter({
     observers: [
       CustomNavigatorObserver(logger: logger),
     ],
-    redirect: (context, state) => _redirect(authBloc, state),
+    redirect: (context, state) => _redirect(authBloc, appConfigStore, state),
     routes: _routes,
     errorBuilder: (context, state) {
       final errorMsg =
@@ -63,10 +69,27 @@ GoRouter createAppRouter({
   );
 }
 
-/// Redirect logic based on the current [AuthBloc] state.
-String? _redirect(AuthBloc authBloc, GoRouterState state) {
-  final authState = authBloc.state;
+/// Redirect logic based on the current [AuthBloc] state and [AppConfigStore].
+String? _redirect(
+  AuthBloc authBloc,
+  AppConfigStore appConfigStore,
+  GoRouterState state,
+) {
   final currentLocation = state.matchedLocation;
+
+  // Rule 1: Maintenance Check
+  if (appConfigStore.inMaintenance &&
+      currentLocation != MaintenanceRoute.pathTemplate) {
+    return const MaintenanceRoute().path;
+  }
+
+  // Rule 2: Force Update Check
+  if (appConfigStore.isForceUpdateRequired &&
+      currentLocation != ForceUpdateRoute.pathTemplate) {
+    return const ForceUpdateRoute().path;
+  }
+
+  final authState = authBloc.state;
 
   // During initial state (splash screen is resolving), do not redirect.
   if (authState case Loading _) return null;
@@ -113,6 +136,14 @@ final List<RouteBase> _routes = [
   GoRoute(
     path: SplashRoute.pathTemplate,
     builder: (context, state) => const SplashPage(),
+  ),
+  GoRoute(
+    path: ForceUpdateRoute.pathTemplate,
+    builder: (context, state) => const ForceUpdatePage(),
+  ),
+  GoRoute(
+    path: MaintenanceRoute.pathTemplate,
+    builder: (context, state) => const MaintenancePage(),
   ),
   GoRoute(
     path: LoginRoute.pathTemplate,
