@@ -50,6 +50,7 @@ targets:
           - lib/features/*/presentation/blocs/*/*_bloc.dart
           - lib/features/*/presentation/blocs/*_cubit.dart
           - lib/features/*/presentation/blocs/*/*_cubit.dart
+          - lib/features/app_config/domain/stores/app_config_store.dart
 
       injectable_generator:injectable_config_builder:
         generate_for:

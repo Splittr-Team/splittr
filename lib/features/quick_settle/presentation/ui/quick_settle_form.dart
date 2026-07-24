@@ -122,7 +122,7 @@ class _QuickSettleForm extends StatelessWidget {
                     final sender = transaction.keys.first;
                     final details = transaction[sender]!.split('|');
                     final receiver = details[0];
-                    final amount = double.parse(details[1]);
+                    final amount = num.parse(details[1]);
                     if (state.store.toggleCard) {
                       return QuickSettleOutputArrowCard(
                         sender: sender,

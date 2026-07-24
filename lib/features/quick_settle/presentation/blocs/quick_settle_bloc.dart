@@ -28,16 +28,16 @@ final class QuickSettleBloc
   }
 
   void _onStarted(_Started event, Emitter<QuickSettleState> emit) {
-    final people = List<({double amount, String name})>.from(event.peopleRecord)
+    final people = List<({num amount, String name})>.from(event.peopleRecord)
       ..sort((a, b) => a.amount.compareTo(b.amount));
 
-    double total = 0;
+    num total = 0;
     for (final person in people) {
       total += person.amount;
     }
     final individualShare = total / people.length;
 
-    final individualShareList = List<double>.generate(
+    final individualShareList = List<num>.generate(
       people.length,
       (index) => people[index].amount - individualShare,
     );
@@ -62,12 +62,12 @@ final class QuickSettleBloc
     Emitter<QuickSettleState> emit,
   ) {
     final people = state.store.peopleRecord;
-    final individualShareList = List<double>.from(
+    final individualShareList = List<num>.from(
       state.store.individualShareList,
     );
     final finalTransaction = <Map<String, String>>[];
     final tags = <SplitTransaction>[];
-    final summaryMap = <String, List<Map<String, double>>>{};
+    final summaryMap = <String, List<Map<String, num>>>{};
 
     var i = 0;
     var j = people.length - 1;
@@ -129,7 +129,7 @@ final class QuickSettleBloc
 
       final splitValue = value.split('|');
       final receiver = splitValue[0];
-      final amount = double.parse(splitValue[1]);
+      final amount = num.parse(splitValue[1]);
 
       if (!summaryMap.containsKey(receiver)) {
         summaryMap[receiver] = [];

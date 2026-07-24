@@ -36,6 +36,24 @@ class SplashRoute extends AppRoute {
   String get path => pathTemplate;
 }
 
+class ForceUpdateRoute extends AppRoute {
+  const ForceUpdateRoute();
+
+  static const String pathTemplate = '/force-update';
+
+  @override
+  String get path => pathTemplate;
+}
+
+class MaintenanceRoute extends AppRoute {
+  const MaintenanceRoute();
+
+  static const String pathTemplate = '/maintenance';
+
+  @override
+  String get path => pathTemplate;
+}
+
 class LoginRoute extends AppRoute {
   const LoginRoute({this.redirect});
 
@@ -151,7 +169,7 @@ class QuickSettleArgs {
   });
 
   final String splitTitle;
-  final List<({double amount, String name})> peopleRecords;
+  final List<({num amount, String name})> peopleRecords;
 }
 
 class QuickSettleRoute extends AppRoute {

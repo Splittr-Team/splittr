@@ -5,13 +5,13 @@ class SplitTransaction {
     return SplitTransaction(
       json['sender'] as String,
       json['receiver'] as String,
-      json['amount'] as double,
+      json['amount'] as num,
     );
   }
 
   late String sender;
   late String receiver;
-  late double amount;
+  late num amount;
 
   Map<String, dynamic> toJson() => {
     'sender': sender,

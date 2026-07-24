@@ -53,17 +53,17 @@ class QuickSettleStateStore with _$QuickSettleStateStore {
   @override
   final bool loading;
   @override
-  final List<({String name, double amount})> peopleRecord;
+  final List<({String name, num amount})> peopleRecord;
   @override
-  final double total;
+  final num total;
   @override
-  final double individualShare;
+  final num individualShare;
   @override
-  final List<double> individualShareList;
+  final List<num> individualShareList;
   @override
   final List<Map<String, String>> finalTransaction;
   @override
-  final Map<String, List<Map<String, double>>> summaryMap;
+  final Map<String, List<Map<String, num>>> summaryMap;
   @override
   final List<SplitTransaction> tags;
   @override
@@ -79,7 +79,7 @@ class QuickSettleParams extends Equatable {
   });
 
   final String splitTitle;
-  final List<({double amount, String name})> peopleRecords;
+  final List<({num amount, String name})> peopleRecords;
 
   @override
   List<Object?> get props => [splitTitle, peopleRecords];

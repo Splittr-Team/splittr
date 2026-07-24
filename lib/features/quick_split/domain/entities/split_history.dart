@@ -7,8 +7,8 @@ abstract class SplitHistory with _$SplitHistory {
   const factory SplitHistory({
     required String id,
     required String title,
-    required double totalAmount,
-    required Map<String, double> individualShares,
+    required num totalAmount,
+    required Map<String, num> individualShares,
     required DateTime createdAt,
   }) = _SplitHistory;
 }
