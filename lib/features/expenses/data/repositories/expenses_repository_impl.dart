@@ -1,7 +1,11 @@
 import 'package:injectable/injectable.dart';
+import 'package:mutex/mutex.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
 import 'package:sky_utils/sky_utils.dart';
+import 'package:splittr/core/network/pagination.dart';
+import 'package:splittr/core/storage/models/pagination_metadata_isar_model.dart';
+import 'package:splittr/features/expenses/data/datasources/expenses_local_data_source.dart';
 import 'package:splittr/features/expenses/data/datasources/expenses_remote_data_source.dart';
 import 'package:splittr/features/expenses/data/mappers/expense_mappers.dart';
 import 'package:splittr/features/expenses/data/models/create_expense_payload.dart';
@@ -14,13 +18,74 @@ import 'package:splittr/features/expenses/domain/repositories/expenses_repositor
 
 @LazySingleton(as: ExpensesRepository)
 final class ExpensesRepositoryImpl implements ExpensesRepository {
-  const ExpensesRepositoryImpl(
+  ExpensesRepositoryImpl(
     this._apiCallHandler,
     this._expensesRemoteDataSource,
+    this._expensesLocalDataSource,
   );
 
   final ApiCallHandler _apiCallHandler;
   final ExpensesRemoteDataSource _expensesRemoteDataSource;
+  final ExpensesLocalDataSource _expensesLocalDataSource;
+  final Mutex _syncLock = Mutex();
+
+  @override
+  Stream<EitherFailure<List<Expense>>> watchExpenses({String? groupId}) =>
+      _expensesLocalDataSource
+          .watchExpenses(groupId: groupId)
+          .map((models) => Right(models.toDomain()));
+
+  @override
+  FutureEitherFailure<PaginatedList<Expense>> getExpenses({
+    String? cursor,
+    int? limit,
+    String? groupId,
+  }) async {
+    return _syncLock.protect(() async {
+      var effectiveCursor = cursor;
+
+      if (cursor != null) {
+        final meta = await _expensesLocalDataSource.getPaginationMetadata(
+          FeatureCacheKey.expenses,
+        );
+        if (meta != null && !meta.hasMore) {
+          return const Right(
+            PaginatedList(
+              items: [],
+              pagination: Pagination(hasMore: false),
+            ),
+          );
+        }
+        effectiveCursor = meta?.nextCursor ?? cursor;
+      }
+
+      final result = await _apiCallHandler.handle(
+        () => _expensesRemoteDataSource.getExpenses(
+          cursor: effectiveCursor,
+          limit: limit,
+          groupId: groupId,
+        ),
+      );
+
+      return result.fold(
+        Left.new,
+        (response) async {
+          final domainExpenses = response.data.toDomain();
+          final pagination = response.pagination.toDomain();
+
+          await _expensesLocalDataSource.saveExpenses(
+            expenses: response.data.toIsar(),
+            nextCursor: pagination.nextCursor,
+            hasMore: pagination.hasMore,
+          );
+
+          return Right(
+            PaginatedList(items: domainExpenses, pagination: pagination),
+          );
+        },
+      );
+    });
+  }
 
   @override
   FutureEitherFailure<Expense> createExpense({

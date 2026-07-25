@@ -2,13 +2,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
+import 'package:splittr/features/expenses/data/datasources/expenses_local_data_source.dart';
 import 'package:splittr/features/expenses/data/datasources/expenses_remote_data_source.dart';
 import 'package:splittr/features/expenses/data/models/expense_details_model.dart';
 import 'package:splittr/features/expenses/data/models/expense_model.dart';
 import 'package:splittr/features/expenses/data/repositories/expenses_repository_impl.dart';
 import 'package:splittr/features/expenses/domain/repositories/expenses_repository.dart';
 
-class MockExpensesDataSource extends Mock implements ExpensesRemoteDataSource {}
+class MockExpensesRemoteDataSource extends Mock
+    implements ExpensesRemoteDataSource {}
+
+class MockExpensesLocalDataSource extends Mock
+    implements ExpensesLocalDataSource {}
 
 class MockApiCallHandler extends Mock implements ApiCallHandler {
   @override
@@ -23,14 +28,20 @@ class MockApiCallHandler extends Mock implements ApiCallHandler {
 }
 
 void main() {
-  late MockExpensesDataSource mockDataSource;
+  late MockExpensesRemoteDataSource mockRemoteDataSource;
+  late MockExpensesLocalDataSource mockLocalDataSource;
   late MockApiCallHandler mockHandler;
   late ExpensesRepository repository;
 
   setUp(() {
-    mockDataSource = MockExpensesDataSource();
+    mockRemoteDataSource = MockExpensesRemoteDataSource();
+    mockLocalDataSource = MockExpensesLocalDataSource();
     mockHandler = MockApiCallHandler();
-    repository = ExpensesRepositoryImpl(mockHandler, mockDataSource);
+    repository = ExpensesRepositoryImpl(
+      mockHandler,
+      mockRemoteDataSource,
+      mockLocalDataSource,
+    );
   });
 
   test(
@@ -52,7 +63,7 @@ void main() {
       );
 
       when(
-        () => mockDataSource.getExpenseDetails('exp-1'),
+        () => mockRemoteDataSource.getExpenseDetails('exp-1'),
       ).thenAnswer((_) async => detailsModel);
 
       final result = await repository.getExpenseDetails('exp-1');

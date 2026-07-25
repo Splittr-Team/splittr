@@ -10,6 +10,7 @@ class MaintenancePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = getIt<AppConfigStore>();
     final message = store.maintenanceMessage;
+    final estimatedEndTime = store.config?.system.maintenance.estimatedEndTime;
 
     return Scaffold(
       body: Padding(
@@ -26,6 +27,13 @@ class MaintenancePage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             AppText.bodyMedium(message, textAlign: TextAlign.center),
+            if (estimatedEndTime != null) ...[
+              const SizedBox(height: 12),
+              AppText.bodySmall(
+                'Estimated completion: $estimatedEndTime',
+                textAlign: TextAlign.center,
+              ),
+            ],
           ],
         ),
       ),

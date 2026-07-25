@@ -4,6 +4,7 @@ import 'package:sky_network/sky_network.dart';
 import 'package:splittr/features/expenses/data/models/balances_model.dart';
 import 'package:splittr/features/expenses/data/models/create_expense_payload.dart';
 import 'package:splittr/features/expenses/data/models/expense_details_model.dart';
+import 'package:splittr/features/expenses/data/models/expenses_response_model.dart';
 import 'package:splittr/features/expenses/data/models/settle_expense_payload.dart';
 
 part 'expenses_api_client.g.dart';
@@ -13,6 +14,13 @@ part 'expenses_api_client.g.dart';
 abstract class ExpensesApiClient {
   @factoryMethod
   factory ExpensesApiClient(Dio dio) = _ExpensesApiClient;
+
+  @GET('/expenses')
+  Future<ExpensesResponseModel> getExpenses({
+    @Query('cursor') String? cursor,
+    @Query('limit') int? limit,
+    @Query('groupId') String? groupId,
+  });
 
   @POST('/expenses')
   Future<ExpenseDetailsModel> createExpense(

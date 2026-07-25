@@ -2,12 +2,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
+import 'package:splittr/core/network/pagination_model.dart';
 import 'package:splittr/features/auth/data/models/user_model.dart';
+import 'package:splittr/features/friends/data/datasources/friends_local_data_source.dart';
 import 'package:splittr/features/friends/data/datasources/friends_remote_data_source.dart';
+import 'package:splittr/features/friends/data/models/friends_response_model.dart';
 import 'package:splittr/features/friends/data/repositories/friends_repository_impl.dart';
 import 'package:splittr/features/friends/domain/repositories/friends_repository.dart';
 
-class MockFriendsDataSource extends Mock implements FriendsRemoteDataSource {}
+class MockFriendsRemoteDataSource extends Mock
+    implements FriendsRemoteDataSource {}
+
+class MockFriendsLocalDataSource extends Mock
+    implements FriendsLocalDataSource {}
 
 class MockApiCallHandler extends Mock implements ApiCallHandler {
   @override
@@ -22,14 +29,20 @@ class MockApiCallHandler extends Mock implements ApiCallHandler {
 }
 
 void main() {
-  late MockFriendsDataSource mockDataSource;
+  late MockFriendsRemoteDataSource mockRemoteDataSource;
+  late MockFriendsLocalDataSource mockLocalDataSource;
   late MockApiCallHandler mockHandler;
   late FriendsRepository repository;
 
   setUp(() {
-    mockDataSource = MockFriendsDataSource();
+    mockRemoteDataSource = MockFriendsRemoteDataSource();
+    mockLocalDataSource = MockFriendsLocalDataSource();
     mockHandler = MockApiCallHandler();
-    repository = FriendsRepositoryImpl(mockHandler, mockDataSource);
+    repository = FriendsRepositoryImpl(
+      mockHandler,
+      mockRemoteDataSource,
+      mockLocalDataSource,
+    );
   });
 
   group('FriendsRepositoryImpl', () {
@@ -41,27 +54,39 @@ void main() {
       phone: '123456',
     );
 
-    test('getFriends returns list of domain Users', () async {
+    test('getFriends returns paginated domain Users', () async {
       when(
-        () => mockDataSource.getFriends(),
-      ).thenAnswer((_) async => [userModel]);
+        () => mockRemoteDataSource.getFriends(),
+      ).thenAnswer(
+        (_) async => const FriendsResponseModel(
+          data: [userModel],
+          pagination: PaginationModel(hasMore: false),
+        ),
+      );
+      when(
+        () => mockLocalDataSource.saveFriends(
+          friends: any(named: 'friends'),
+          nextCursor: null,
+          hasMore: false,
+        ),
+      ).thenAnswer((_) async {});
 
       final result = await repository.getFriends();
 
       expect(result.isRight(), true);
       result.fold(
         (failure) => fail('Should succeed'),
-        (users) {
-          expect(users.length, 1);
-          expect(users[0].id, 'user-123');
-          expect(users[0].name, 'John Doe');
+        (paginatedList) {
+          expect(paginatedList.items.length, 1);
+          expect(paginatedList.items[0].id, 'user-123');
+          expect(paginatedList.items[0].name, 'John Doe');
         },
       );
     });
 
     test('addFriend returns domain User', () async {
       when(
-        () => mockDataSource.addFriend(
+        () => mockRemoteDataSource.addFriend(
           friendEmail: 'john@example.com',
           friendPhone: '123456',
         ),
@@ -81,7 +106,7 @@ void main() {
 
     test('removeFriend returns Unit', () async {
       when(
-        () => mockDataSource.removeFriend('user-123'),
+        () => mockRemoteDataSource.removeFriend('user-123'),
       ).thenAnswer((_) async => unit);
 
       final result = await repository.removeFriend('user-123');

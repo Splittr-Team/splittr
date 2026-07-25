@@ -4,6 +4,7 @@ import 'package:splittr/features/expenses/data/datasources/expenses_remote_data_
 import 'package:splittr/features/expenses/data/models/balances_model.dart';
 import 'package:splittr/features/expenses/data/models/create_expense_payload.dart';
 import 'package:splittr/features/expenses/data/models/expense_details_model.dart';
+import 'package:splittr/features/expenses/data/models/expenses_response_model.dart';
 import 'package:splittr/features/expenses/data/models/settle_expense_payload.dart';
 
 @LazySingleton(as: ExpensesRemoteDataSource)
@@ -11,6 +12,19 @@ final class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
   const ExpensesRemoteDataSourceImpl(this._apiClient);
 
   final ExpensesApiClient _apiClient;
+
+  @override
+  Future<ExpensesResponseModel> getExpenses({
+    String? cursor,
+    int? limit,
+    String? groupId,
+  }) {
+    return _apiClient.getExpenses(
+      cursor: cursor,
+      limit: limit,
+      groupId: groupId,
+    );
+  }
 
   @override
   Future<ExpenseDetailsModel> createExpense(CreateExpensePayload payload) {
