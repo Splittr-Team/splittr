@@ -18,7 +18,8 @@ enum FeatureCacheKey {
   groups(ttl: Duration(minutes: 15)),
   expenses(ttl: Duration(minutes: 5)),
   friends(ttl: Duration(minutes: 30)),
-  notifications(ttl: Duration(minutes: 10));
+  notifications(ttl: Duration(minutes: 10)),
+  activities(ttl: Duration(minutes: 15));
 
   const FeatureCacheKey({required this.ttl});
 

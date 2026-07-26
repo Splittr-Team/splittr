@@ -1,6 +1,8 @@
 import 'package:recase/recase.dart';
 import 'package:splittr/features/expenses/data/models/balances_model.dart';
 import 'package:splittr/features/expenses/data/models/expense_details_model.dart';
+import 'package:splittr/features/expenses/data/models/expense_isar_model.dart';
+import 'package:splittr/features/expenses/data/models/expense_model.dart';
 import 'package:splittr/features/expenses/data/models/input_split_payload.dart';
 import 'package:splittr/features/expenses/data/models/settlement_model.dart';
 import 'package:splittr/features/expenses/data/models/split_model.dart';
@@ -127,4 +129,58 @@ extension SettlementModelListX on List<SettlementModel> {
   List<Settlement> toDomain() {
     return map((s) => s.toDomain()).toList();
   }
+}
+
+extension ExpenseModelX on ExpenseModel {
+  Expense toDomain() => Expense(
+    id: id,
+    description: description,
+    amount: amount,
+    currency: currency,
+    paidBy: paidBy,
+    createdBy: createdBy,
+    isPayment: isPayment,
+    spentAt: spentAt,
+    splits: const [],
+    category: category,
+    groupId: groupId,
+  );
+
+  ExpenseIsarModel toIsar() => ExpenseIsarModel()
+    ..id = id
+    ..description = description
+    ..amount = amount.toDouble()
+    ..currency = currency
+    ..paidBy = paidBy
+    ..createdBy = createdBy
+    ..isPayment = isPayment
+    ..spentAt = spentAt
+    ..category = category
+    ..groupId = groupId;
+}
+
+extension ExpenseModelListX on List<ExpenseModel> {
+  List<Expense> toDomain() => map((e) => e.toDomain()).toList();
+
+  List<ExpenseIsarModel> toIsar() => map((e) => e.toIsar()).toList();
+}
+
+extension ExpenseIsarModelX on ExpenseIsarModel {
+  Expense toDomain() => Expense(
+    id: id ?? '',
+    description: description ?? '',
+    amount: amount ?? 0,
+    currency: currency ?? 'USD',
+    paidBy: paidBy ?? '',
+    createdBy: createdBy ?? '',
+    isPayment: isPayment ?? false,
+    spentAt: spentAt ?? DateTime.now(),
+    splits: const [],
+    category: category,
+    groupId: groupId,
+  );
+}
+
+extension ExpenseIsarModelListX on List<ExpenseIsarModel> {
+  List<Expense> toDomain() => map((e) => e.toDomain()).toList();
 }

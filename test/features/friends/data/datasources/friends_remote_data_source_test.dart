@@ -1,11 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sky_architecture/sky_architecture.dart';
+import 'package:splittr/core/network/pagination_model.dart';
 import 'package:splittr/features/auth/data/models/user_model.dart';
 import 'package:splittr/features/friends/data/datasources/friends_api_client.dart';
 import 'package:splittr/features/friends/data/datasources/friends_remote_data_source.dart';
 import 'package:splittr/features/friends/data/datasources/friends_remote_data_source_impl.dart';
 import 'package:splittr/features/friends/data/models/add_friend_payload.dart';
+import 'package:splittr/features/friends/data/models/friends_response_model.dart';
 
 class MockFriendsApiClient extends Mock implements FriendsApiClient {}
 
@@ -29,13 +31,18 @@ void main() {
     );
 
     test('getFriends calls apiClient.getFriends', () async {
+      const responseModel = FriendsResponseModel(
+        data: [userModel],
+        pagination: PaginationModel(hasMore: false),
+      );
+
       when(
         () => mockApiClient.getFriends(),
-      ).thenAnswer((_) async => [userModel]);
+      ).thenAnswer((_) async => responseModel);
 
       final result = await dataSource.getFriends();
 
-      expect(result, [userModel]);
+      expect(result, responseModel);
       verify(() => mockApiClient.getFriends()).called(1);
     });
 

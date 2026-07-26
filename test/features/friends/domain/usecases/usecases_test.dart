@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sky_architecture/sky_architecture.dart';
+import 'package:splittr/core/network/pagination.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
 import 'package:splittr/features/friends/domain/repositories/friends_repository.dart';
 import 'package:splittr/features/friends/domain/usecases/add_friend_usecase.dart';
@@ -32,18 +33,25 @@ void main() {
     );
 
     test('GetFriendsUseCase calls repository.getFriends', () async {
+      const expectedList = PaginatedList<User>(
+        items: [user],
+        pagination: Pagination(hasMore: false),
+      );
+
       when(
         () => mockRepository.getFriends(),
-      ).thenAnswer((_) async => const Right([user]));
+      ).thenAnswer((_) async => const Right(expectedList));
 
-      final result = await getFriendsUseCase.call(const NoParams());
+      final result = await getFriendsUseCase.call(const GetFriendsParams());
 
       expect(result.isRight(), true);
       result.fold(
         (failure) => fail('Should succeed'),
-        (users) => expect(users, [user]),
+        (res) => expect(res, expectedList),
       );
-      verify(() => mockRepository.getFriends()).called(1);
+      verify(
+        () => mockRepository.getFriends(),
+      ).called(1);
     });
 
     test('AddFriendUseCase calls repository.addFriend', () async {

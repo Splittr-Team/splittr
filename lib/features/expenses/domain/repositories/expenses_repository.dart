@@ -1,10 +1,19 @@
 import 'package:sky_architecture/sky_architecture.dart';
+import 'package:splittr/core/network/pagination.dart';
 import 'package:splittr/features/expenses/domain/entities/balances.dart';
 import 'package:splittr/features/expenses/domain/entities/expense.dart';
 import 'package:splittr/features/expenses/domain/entities/input_split.dart';
 import 'package:splittr/features/expenses/domain/entities/split_type.dart';
 
 abstract interface class ExpensesRepository {
+  Stream<EitherFailure<List<Expense>>> watchExpenses({String? groupId});
+
+  FutureEitherFailure<PaginatedList<Expense>> getExpenses({
+    String? cursor,
+    int? limit,
+    String? groupId,
+  });
+
   FutureEitherFailure<Expense> createExpense({
     required String description,
     required num amount,

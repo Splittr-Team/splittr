@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:splittr/features/app_config/domain/entities/app_config.dart';
 import 'package:splittr/features/app_config/domain/entities/domain_config.dart';
 
-@lazySingleton
+@LazySingleton()
 class AppConfigStore {
   AppConfig? _config;
 
