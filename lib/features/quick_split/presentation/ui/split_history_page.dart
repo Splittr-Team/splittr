@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
+import 'package:sky_design_system/sky_design_system.dart';
 import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart'
@@ -167,7 +168,14 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                         ),
                       ),
                     )
-                  : SplitHistoryList(history: history),
+                  : AppRefreshIndicator(
+                      onRefresh: () async {
+                        getBloc<QuickSplitBloc>(context).add(
+                          const QuickSplitEvent.loadHistory(),
+                        );
+                      },
+                      child: SplitHistoryList(history: history),
+                    ),
             _ => (() {
               getBloc<QuickSplitBloc>(context).add(
                 const QuickSplitEvent.loadHistory(),

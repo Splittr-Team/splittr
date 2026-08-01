@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
+import 'package:sky_design_system/sky_design_system.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/profile/presentation/blocs/profile_bloc.dart';
 

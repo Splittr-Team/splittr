@@ -51,7 +51,9 @@ class SplitHistoryList extends StatelessWidget {
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      physics: const BouncingScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
       itemCount: history.length,
       itemBuilder: (context, index) {
         final split = history[index];

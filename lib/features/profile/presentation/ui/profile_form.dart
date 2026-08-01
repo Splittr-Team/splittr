@@ -5,6 +5,17 @@ class _ProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Profile Page'));
+    return AppRefreshIndicator(
+      onRefresh: () async {
+        getBloc<ProfileBloc>(context).started(noParams);
+      },
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: const [
+          SizedBox(height: AppSpacing.xxl),
+          Center(child: AppText.bodyMedium('Profile Page')),
+        ],
+      ),
+    );
   }
 }
