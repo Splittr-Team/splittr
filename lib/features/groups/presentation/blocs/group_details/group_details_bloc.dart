@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart' hide Group;
@@ -28,7 +29,7 @@ final class GroupDetailsBloc
 
   @override
   void handleEvents() {
-    on<_Started>(_onStarted);
+    on<_Started>(_onStarted, transformer: restartable());
     on<_DeleteGroup>(_onDeleteGroup);
   }
 

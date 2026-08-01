@@ -57,5 +57,10 @@
   "deleteGroup": "Delete Group",
   "deleteGroupConfirmation": "Are you sure you want to delete this group? This action cannot be undone.",
   "delete": "Delete",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "activity": "Activity",
+  "noRecentActivity": "No recent activity",
+  "noRecentActivitySubtitle": "Activities in your groups will appear here.",
+  "failedToLoadActivities": "Failed to load activities",
+  "retry": "Retry"
 }

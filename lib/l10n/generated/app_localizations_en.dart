@@ -184,4 +184,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get activity => 'Activity';
+
+  @override
+  String get noRecentActivity => 'No recent activity';
+
+  @override
+  String get noRecentActivitySubtitle =>
+      'Activities in your groups will appear here.';
+
+  @override
+  String get failedToLoadActivities => 'Failed to load activities';
+
+  @override
+  String get retry => 'Retry';
 }
