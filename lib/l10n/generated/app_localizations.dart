@@ -441,6 +441,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @activity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activity;
+
+  /// No description provided for @noRecentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent activity'**
+  String get noRecentActivity;
+
+  /// No description provided for @noRecentActivitySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities in your groups will appear here.'**
+  String get noRecentActivitySubtitle;
+
+  /// No description provided for @failedToLoadActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load activities'**
+  String get failedToLoadActivities;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate
