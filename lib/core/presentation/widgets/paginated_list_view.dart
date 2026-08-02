@@ -63,6 +63,7 @@ class _PaginatedListViewState<T> extends State<PaginatedListView<T>> {
       controller: _scrollController,
       padding: widget.padding,
       itemCount: totalCount,
+      physics: const AlwaysScrollableScrollPhysics(),
       separatorBuilder: (context, index) {
         if (index < widget.items.length - 1 &&
             widget.separatorBuilder != null) {

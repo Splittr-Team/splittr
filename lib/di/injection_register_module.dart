@@ -8,11 +8,16 @@ import 'package:sky_telemetry/sky_telemetry.dart';
 import 'package:splittr/constants/env/env.dart';
 import 'package:splittr/core/app_config/i_app_config.dart';
 import 'package:splittr/core/router/app_router.dart';
+import 'package:splittr/core/storage/models/core_isar_schema_provider.dart';
 import 'package:splittr/di/injection.dart';
+import 'package:splittr/features/activities/data/models/activities_isar_schema_provider.dart';
 import 'package:splittr/features/app_config/data/models/app_config_isar_schema_provider.dart';
 import 'package:splittr/features/app_config/domain/stores/app_config_store.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
+import 'package:splittr/features/expenses/data/models/expenses_isar_schema_provider.dart';
+import 'package:splittr/features/friends/data/models/friends_isar_schema_provider.dart';
 import 'package:splittr/features/groups/data/models/groups_isar_schema_provider.dart';
+import 'package:splittr/features/notifications/data/models/notifications_isar_schema_provider.dart';
 import 'package:splittr/features/quick_split/data/models/quick_split_isar_schema_provider.dart';
 
 @module
@@ -24,9 +29,14 @@ abstract class RegisterModule {
 
     final isarInit = IsarDatabaseInitializer(
       providers: [
+        const CoreIsarSchemaProvider(),
         const QuickSplitIsarSchemaProvider(),
         const GroupsIsarSchemaProvider(),
         const AppConfigIsarSchemaProvider(),
+        const NotificationsIsarSchemaProvider(),
+        const ActivitiesIsarSchemaProvider(),
+        const ExpensesIsarSchemaProvider(),
+        const FriendsIsarSchemaProvider(),
       ],
       directory: dir.path,
     );

@@ -7,15 +7,23 @@ class _GroupDetailsForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      children: [
-        _InviteCodeCard(inviteCode: group.inviteCode ?? ''),
-        const SizedBox(height: AppSpacing.md),
-        _InviteLinkCard(inviteCode: group.inviteCode ?? ''),
-        const SizedBox(height: AppSpacing.xl),
-        const _DeleteGroupCard(),
-      ],
+    return AppRefreshIndicator(
+      onRefresh: () async {
+        context.read<GroupDetailsBloc>().started(
+          GroupDetailsParams(groupId: group.id ?? '', group: group),
+        );
+      },
+      child: ListView(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          _InviteCodeCard(inviteCode: group.inviteCode ?? ''),
+          const SizedBox(height: AppSpacing.md),
+          _InviteLinkCard(inviteCode: group.inviteCode ?? ''),
+          const SizedBox(height: AppSpacing.xl),
+          const _DeleteGroupCard(),
+        ],
+      ),
     );
   }
 }
