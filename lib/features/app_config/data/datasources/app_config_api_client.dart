@@ -11,7 +11,7 @@ abstract class AppConfigApiClient {
   @factoryMethod
   factory AppConfigApiClient(Dio dio) = _AppConfigApiClient;
 
-  @GET('/')
+  @GET('')
   Future<HttpResponse<AppConfigResponseModel>> getAppConfig({
     @Header('If-None-Match') String? etag,
   });
