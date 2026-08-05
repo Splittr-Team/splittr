@@ -5,6 +5,8 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart' hide Group;
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
+import 'package:splittr/features/groups/domain/entities/group_preview.dart';
+import 'package:splittr/features/groups/domain/usecases/get_group_preview_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/join_group_usecase.dart';
 
 part 'join_group_cubit.freezed.dart';
@@ -12,19 +14,41 @@ part 'join_group_state.dart';
 
 @injectable
 final class JoinGroupCubit extends BaseCubit<JoinGroupState, NoParams> {
-  JoinGroupCubit(this._joinGroupUseCase)
-    : super(const JoinGroupState.joinGroupInitial());
+  JoinGroupCubit(
+    this._getGroupPreviewUseCase,
+    this._joinGroupUseCase,
+  ) : super(const JoinGroupState.joinGroupInitial());
 
+  final GetGroupPreviewUseCase _getGroupPreviewUseCase;
   final JoinGroupUseCase _joinGroupUseCase;
 
   @override
   void started(NoParams params) {}
 
-  Future<void> joinGroup({required String inviteCode}) async {
+  Future<void> fetchGroupPreview(String code) async {
+    emit(const JoinGroupState.joinGroupPreviewLoading());
+
+    final result = await _getGroupPreviewUseCase.call(
+      GetGroupPreviewParams(inviteCode: code),
+    );
+
+    if (isClosed) return;
+
+    result.fold(
+      (failure) => emit(
+        JoinGroupState.joinGroupPreviewFailure(failure: failure),
+      ),
+      (preview) => emit(
+        JoinGroupState.joinGroupPreviewSuccess(preview: preview),
+      ),
+    );
+  }
+
+  Future<void> joinGroup(String code) async {
     emit(const JoinGroupState.joinGroupLoading());
 
     final result = await _joinGroupUseCase.call(
-      JoinGroupParams(inviteCode: inviteCode),
+      JoinGroupParams(inviteCode: code),
     );
 
     if (isClosed) return;

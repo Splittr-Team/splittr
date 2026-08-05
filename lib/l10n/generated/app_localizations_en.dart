@@ -183,6 +183,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get failedToLoadPreview => 'Failed to load group preview.';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String invitedBy(String creatorName) {
+    return 'Invited by $creatorName';
+  }
+
+  @override
+  String membersCount(int count) {
+    return '$count members';
+  }
+
+  @override
+  String get decline => 'Decline';
+
+  @override
+  String get acceptInvite => 'Accept Invite';
+
+  @override
+  String get friends => 'Friends';
+
+  @override
+  String get myFriends => 'My Friends';
+
+  @override
+  String get noFriendsYet => 'No friends yet';
+
+  @override
+  String get addFriendsEmptyStateSubtitle =>
+      'Add friends to start splitting expenses with them.';
+
+  @override
   String get cancel => 'Cancel';
 
   @override
@@ -197,7 +235,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToLoadActivities => 'Failed to load activities';
-
-  @override
-  String get retry => 'Retry';
 }

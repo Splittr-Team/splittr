@@ -39,7 +39,7 @@ class _JoinGroupBottomSheetState extends State<JoinGroupBottomSheet> {
       create: (context) {
         final cubit = getIt<JoinGroupCubit>();
         if (widget.inviteCode != null && widget.inviteCode!.isNotEmpty) {
-          unawaited(cubit.joinGroup(inviteCode: widget.inviteCode!));
+          unawaited(cubit.joinGroup(widget.inviteCode!));
         }
         return cubit;
       },
@@ -84,7 +84,7 @@ class _JoinGroupBottomSheetState extends State<JoinGroupBottomSheet> {
                       text: context.strings.joinGroup,
                       onPressed: isValid
                           ? () => context.read<JoinGroupCubit>().joinGroup(
-                              inviteCode: _codeController.text.trim(),
+                              _codeController.text.trim(),
                             )
                           : null,
                     );

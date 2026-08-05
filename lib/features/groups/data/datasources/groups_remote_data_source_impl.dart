@@ -4,6 +4,7 @@ import 'package:splittr/features/groups/data/datasources/groups_api_client.dart'
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
 import 'package:splittr/features/groups/data/models/create_group_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
+import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 import 'package:splittr/features/groups/data/models/join_group_payload.dart';
 
@@ -43,5 +44,10 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
     await _groupsApiClient.deleteGroup(groupId);
 
     return unit;
+  }
+
+  @override
+  Future<GroupPreviewModel> getGroupPreview(String inviteCode) {
+    return _groupsApiClient.getGroupPreview(inviteCode);
   }
 }

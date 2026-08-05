@@ -6,6 +6,17 @@ sealed class JoinGroupState extends BaseState with _$JoinGroupState {
 
   const factory JoinGroupState.joinGroupInitial() = JoinGroupInitial;
 
+  const factory JoinGroupState.joinGroupPreviewLoading() =
+      JoinGroupPreviewLoading;
+
+  const factory JoinGroupState.joinGroupPreviewSuccess({
+    required GroupPreview preview,
+  }) = JoinGroupPreviewSuccess;
+
+  const factory JoinGroupState.joinGroupPreviewFailure({
+    required Failure failure,
+  }) = JoinGroupPreviewFailure;
+
   const factory JoinGroupState.joinGroupLoading() = JoinGroupLoading;
 
   const factory JoinGroupState.joinGroupSuccess({

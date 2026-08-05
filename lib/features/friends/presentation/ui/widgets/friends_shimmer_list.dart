@@ -1,0 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:splittr/features/friends/presentation/ui/widgets/friend_card.dart';
+
+class FriendsShimmerList extends StatelessWidget {
+  const FriendsShimmerList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: 5,
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      itemBuilder: (context, index) => const FriendCardShimmer(),
+    );
+  }
+}

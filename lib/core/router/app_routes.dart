@@ -105,6 +105,15 @@ class GroupsRoute extends AppRoute {
   String get path => pathTemplate;
 }
 
+class FriendsRoute extends AppRoute {
+  const FriendsRoute();
+
+  static const String pathTemplate = '/friends';
+
+  @override
+  String get path => pathTemplate;
+}
+
 class GroupDetailsRoute extends AppRoute {
   const GroupDetailsRoute({required this.groupId, this.group});
 

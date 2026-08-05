@@ -13,9 +13,10 @@ import 'package:splittr/features/auth/presentation/pages/sign_up/sign_up_page.da
 import 'package:splittr/features/dashboard/presentation/ui/animated_branch_container.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_shell.dart';
+import 'package:splittr/features/friends/presentation/ui/friends_page.dart';
 import 'package:splittr/features/groups/presentation/ui/group_details/group_details_page.dart';
 import 'package:splittr/features/groups/presentation/ui/groups_page.dart';
-import 'package:splittr/features/groups/presentation/ui/widgets/join_group_bottom_sheet.dart';
+import 'package:splittr/features/groups/presentation/ui/widgets/accept_invite_bottom_sheet.dart';
 import 'package:splittr/features/notifications/presentation/ui/notifications_page.dart';
 import 'package:splittr/features/profile/presentation/ui/profile_page.dart';
 import 'package:splittr/features/quick_settle/presentation/ui/quick_settle_page.dart';
@@ -210,12 +211,21 @@ final List<RouteBase> _routes = [
                   return AppBottomSheetPage<void>(
                     key: state.pageKey,
                     title: 'Join Group',
-                    description: 'Enter code to join group',
-                    child: JoinGroupBottomSheet(inviteCode: route.code),
+                    child: AcceptInviteBottomSheet(code: route.code),
                   );
                 },
               ),
             ],
+          ),
+        ],
+      ),
+      StatefulShellBranch(
+        routes: [
+          GoRoute(
+            path: FriendsRoute.pathTemplate,
+            builder: (context, state) => const _TabBackRedirectGuard(
+              child: FriendsPage(),
+            ),
           ),
         ],
       ),
