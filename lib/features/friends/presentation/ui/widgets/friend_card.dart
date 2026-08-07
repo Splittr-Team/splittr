@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 
@@ -26,7 +24,7 @@ class FriendCard extends StatelessWidget {
     return AppCard.outlined(
       color: context.colorScheme.surfaceContainer,
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppBorderRadius.lg,
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -35,16 +33,8 @@ class FriendCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 22,
-                backgroundColor: context.colorScheme.onSurface.withValues(
-                  alpha: 0.08,
-                ),
-                foregroundColor: context.colorScheme.onSurfaceVariant,
-                child: AppText.titleMedium(
-                  initials,
-                  color: context.colorScheme.onSurfaceVariant,
-                ),
+              AppAvatar(
+                initials: initials,
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
@@ -55,14 +45,12 @@ class FriendCard extends StatelessWidget {
                     AppText.titleMedium(
                       name,
                       color: context.colorScheme.onSurface,
-                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppSpacing.xs),
                     AppText.bodyMedium(
                       email.isNotEmpty ? email : (phone ?? ''),
                       color: context.colorScheme.onSurfaceVariant,
-                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -95,100 +83,32 @@ class FriendCardShimmer extends StatelessWidget {
         ),
         child: Row(
           children: [
-            SkeletonPlaceholder(
-              width: 44,
-              height: 44,
-              borderRadius: 22,
-            ),
+            AppShimmer.circle(size: AppRadius.lgIncreased * 2),
             SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SkeletonPlaceholder(
+                  AppShimmer(
                     width: 120,
                     height: 16,
-                    borderRadius: 4,
+                    borderRadius: AppBorderRadius.xs,
                   ),
-                  SizedBox(height: 8),
-                  SkeletonPlaceholder(
+                  SizedBox(height: AppSpacing.sm),
+                  AppShimmer(
                     width: 160,
                     height: 12,
-                    borderRadius: 4,
+                    borderRadius: AppBorderRadius.xs,
                   ),
                 ],
               ),
             ),
             SizedBox(width: AppSpacing.md),
-            SkeletonPlaceholder(
-              width: 24,
-              height: 24,
-              borderRadius: 12,
-            ),
+            AppShimmer.circle(size: AppSpacing.lg),
           ],
         ),
       ),
-    );
-  }
-}
-
-class SkeletonPlaceholder extends StatefulWidget {
-  const SkeletonPlaceholder({
-    required this.width,
-    required this.height,
-    this.borderRadius = 8,
-    super.key,
-  });
-
-  final double width;
-  final double height;
-  final double borderRadius;
-
-  @override
-  State<SkeletonPlaceholder> createState() => _SkeletonPlaceholderState();
-}
-
-class _SkeletonPlaceholderState extends State<SkeletonPlaceholder>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    unawaited(_controller.repeat(reverse: true));
-    _animation = Tween<double>(begin: 0.05, end: 0.15).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return Container(
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            color: context.colorScheme.onSurface.withValues(
-              alpha: _animation.value,
-            ),
-            borderRadius: BorderRadius.circular(widget.borderRadius),
-          ),
-        );
-      },
     );
   }
 }

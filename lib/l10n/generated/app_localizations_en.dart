@@ -198,7 +198,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String membersCount(int count) {
-    return '$count members';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count members',
+      one: '1 member',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -235,4 +241,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToLoadActivities => 'Failed to load activities';
+
+  @override
+  String get splitHistory => 'Split History';
+
+  @override
+  String get guestMode => 'Guest Mode';
+
+  @override
+  String get failedToLoadHistory => 'Failed to load history';
+
+  @override
+  String get noPreviousSplits => 'No previous splits';
+
+  @override
+  String get createFirstSplitSubtitle =>
+      'Create your first split calculation to get started!';
+
+  @override
+  String get createYourFirstSplit => 'Create Your First Split';
+
+  @override
+  String get newSplit => 'New Split';
+
+  @override
+  String get splitsHistoryEmptyStateSubtitle =>
+      'Your splits history will show up here once you save them.';
+
+  @override
+  String get individualShares => 'Individual Shares';
 }

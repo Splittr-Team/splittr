@@ -14,21 +14,21 @@ class MaintenancePage extends StatelessWidget {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Icon(Icons.build_circle, size: 80, color: Colors.amber),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.lg),
             const AppText.headlineMedium(
               'Under Maintenance',
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.md),
             AppText.bodyMedium(message, textAlign: TextAlign.center),
             if (estimatedEndTime != null) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.sm + AppSpacing.xs),
               AppText.bodySmall(
                 'Estimated completion: $estimatedEndTime',
                 textAlign: TextAlign.center,

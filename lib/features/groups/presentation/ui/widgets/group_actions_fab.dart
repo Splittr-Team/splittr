@@ -81,7 +81,7 @@ class _GroupActionsFabState extends State<GroupActionsFab>
             widget.onCreateTapped();
           },
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.md),
         FloatingActionButton(
           onPressed: _toggle,
           child: AnimatedIcon(
@@ -124,15 +124,15 @@ class _ActionItem extends StatelessWidget {
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
+                  horizontal: AppSpacing.sm + AppSpacing.xs,
+                  vertical: AppSpacing.sm,
                 ),
                 child: AppText.labelLarge(
                   label,
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSpacing.sm + AppSpacing.xs),
             FloatingActionButton.small(
               heroTag: label,
               onPressed: onPressed,

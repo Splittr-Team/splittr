@@ -9,7 +9,7 @@ import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/groups/presentation/blocs/join_group/join_group_cubit.dart';
 import 'package:splittr/utils/extensions/extensions.dart';
 
-class AcceptInviteBottomSheet extends StatefulWidget {
+class AcceptInviteBottomSheet extends StatelessWidget {
   const AcceptInviteBottomSheet({
     required this.code,
     super.key,
@@ -18,17 +18,11 @@ class AcceptInviteBottomSheet extends StatefulWidget {
   final String code;
 
   @override
-  State<AcceptInviteBottomSheet> createState() =>
-      _AcceptInviteBottomSheetState();
-}
-
-class _AcceptInviteBottomSheetState extends State<AcceptInviteBottomSheet> {
-  @override
   Widget build(BuildContext context) {
     return BlocProvider<JoinGroupCubit>(
       create: (context) {
         final cubit = getIt<JoinGroupCubit>();
-        unawaited(cubit.fetchGroupPreview(widget.code));
+        unawaited(cubit.fetchGroupPreview(code));
         return cubit;
       },
       child: BlocListener<JoinGroupCubit, JoinGroupState>(
@@ -39,7 +33,7 @@ class _AcceptInviteBottomSheetState extends State<AcceptInviteBottomSheet> {
               GroupDetailsRoute(
                 groupId: group.id ?? '',
                 group: group,
-              ).pushReplacement(context);
+              ).go(context);
             case JoinGroupFailure(:final failure):
               AppSnackBar.show(context, message: failure.message);
             case JoinGroupPreviewFailure(:final failure):
@@ -75,7 +69,7 @@ class _AcceptInviteBottomSheetState extends State<AcceptInviteBottomSheet> {
                           text: context.strings.retry,
                           onPressed: () => context
                               .read<JoinGroupCubit>()
-                              .fetchGroupPreview(widget.code),
+                              .fetchGroupPreview(code),
                         ),
                       ],
                     ),
@@ -110,9 +104,8 @@ class _AcceptInviteBottomSheetState extends State<AcceptInviteBottomSheet> {
                         const SizedBox(width: AppSpacing.md),
                         AppButton.primary(
                           text: context.strings.acceptInvite,
-                          onPressed: () => context
-                              .read<JoinGroupCubit>()
-                              .joinGroup(widget.code),
+                          onPressed: () =>
+                              context.read<JoinGroupCubit>().joinGroup(code),
                         ),
                       ],
                     ),

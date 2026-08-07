@@ -6,6 +6,7 @@ import 'package:sky_design_system/sky_design_system.dart'
         AppListTile,
         AppNavigationBar,
         AppNavigationDrawer,
+        AppSpacing,
         AppText,
         AppTopBar,
         SkyDesignSystemContextExtension;
@@ -30,7 +31,7 @@ class DashboardShell extends StatelessWidget {
         title: _resolveTitle(context),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 4),
+            padding: const EdgeInsets.only(right: AppSpacing.xs),
             child: AppIconButton(
               icon: Icons.notifications_outlined,
               onPressed: () => const NotificationsRoute().push<void>(context),

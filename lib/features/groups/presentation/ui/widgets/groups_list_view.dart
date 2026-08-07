@@ -35,7 +35,9 @@ class GroupsListView extends StatelessWidget {
       isLoadingMore: isLoadingMore,
       onLoadMore: () => context.read<GroupsBloc>().fetchNextPage(),
       padding: const EdgeInsets.all(AppSpacing.md),
-      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      separatorBuilder: (context, index) => const SizedBox(
+        height: AppSpacing.sm + AppSpacing.xs,
+      ),
       itemBuilder: (context, group, index) {
         final icon = groupIcons[index % groupIcons.length];
         final balanceState =

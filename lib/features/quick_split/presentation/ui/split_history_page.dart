@@ -10,6 +10,7 @@ import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart'
     hide OnFailure;
 import 'package:splittr/features/quick_split/presentation/blocs/quick_split_bloc.dart';
 import 'package:splittr/features/quick_split/presentation/ui/components/split_history_list.dart';
+import 'package:splittr/utils/extensions/extensions.dart';
 
 class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
   const SplitHistoryPage({super.key});
@@ -24,7 +25,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: const Text('Split History'),
+            title: Text(context.strings.splitHistory),
           ),
           drawer: Drawer(
             child: ListView(
@@ -40,7 +41,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'Splittr',
+                        context.strings.appName,
                         style: Theme.of(context).textTheme.headlineMedium
                             ?.copyWith(
                               color: Theme.of(
@@ -49,9 +50,9 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.sm),
                       Text(
-                        'Guest Mode',
+                        context.strings.guestMode,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(
                             context,
@@ -63,7 +64,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout_rounded),
-                  title: const Text('Logout'),
+                  title: Text(context.strings.logout),
                   onTap: () {
                     Navigator.pop(context); // Close the drawer first
                     context.read<AuthBloc>().loggedOut();
@@ -78,7 +79,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
             ),
             OnFailure(:final failure) => Center(
               child: Padding(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -87,14 +88,14 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                       size: 64,
                       color: Theme.of(context).colorScheme.error,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.md),
                     Text(
-                      'Failed to load history',
+                      context.strings.failedToLoadHistory,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.sm),
                     Text(
                       failure.message,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -102,7 +103,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.lg),
                     ElevatedButton.icon(
                       onPressed: () {
                         getBloc<QuickSplitBloc>(context).add(
@@ -110,7 +111,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                         );
                       },
                       icon: const Icon(Icons.refresh_rounded),
-                      label: const Text('Retry'),
+                      label: Text(context.strings.retry),
                     ),
                   ],
                 ),
@@ -120,7 +121,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
               history.isEmpty
                   ? Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(AppSpacing.lg),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -131,9 +132,9 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                                 context,
                               ).colorScheme.outline.withAlpha(128),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: AppSpacing.md),
                             Text(
-                              'No previous splits',
+                              context.strings.noPreviousSplits,
                               style: Theme.of(context).textTheme.titleLarge
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -142,10 +143,9 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                                     ).colorScheme.onSurface,
                                   ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: AppSpacing.sm),
                             Text(
-                              'Create your first split calculation '
-                              'to get started!',
+                              context.strings.createFirstSplitSubtitle,
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
@@ -154,7 +154,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                                     ).colorScheme.onSurfaceVariant,
                                   ),
                             ),
-                            const SizedBox(height: 24),
+                            const SizedBox(height: AppSpacing.lg),
                             ElevatedButton.icon(
                               onPressed: () {
                                 unawaited(
@@ -162,7 +162,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                                 );
                               },
                               icon: const Icon(Icons.add_rounded),
-                              label: const Text('Create Your First Split'),
+                              label: Text(context.strings.createYourFirstSplit),
                             ),
                           ],
                         ),
@@ -190,7 +190,7 @@ class SplitHistoryPage extends BasePage<QuickSplitBloc, QuickSplitState> {
               );
             },
             icon: const Icon(Icons.add_rounded),
-            label: const Text('New Split'),
+            label: Text(context.strings.newSplit),
           ),
         );
       },

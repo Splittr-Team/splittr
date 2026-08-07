@@ -26,7 +26,9 @@ class FriendsListView extends StatelessWidget {
       isLoadingMore: isLoadingMore,
       onLoadMore: () => context.read<FriendsBloc>().fetchNextPage(),
       padding: const EdgeInsets.all(AppSpacing.md),
-      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      separatorBuilder: (context, index) => const SizedBox(
+        height: AppSpacing.sm + AppSpacing.xs,
+      ),
       itemBuilder: (context, friend, index) {
         return FriendCard(
           key: ValueKey(friend.id ?? friend.email ?? index.toString()),

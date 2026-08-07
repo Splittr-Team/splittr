@@ -68,7 +68,7 @@
       }
     }
   },
-  "membersCount": "{count} members",
+  "membersCount": "{count, plural, =1{1 member} other{{count} members}}",
   "@membersCount": {
     "placeholders": {
       "count": {
@@ -86,5 +86,14 @@
   "activity": "Activity",
   "noRecentActivity": "No recent activity",
   "noRecentActivitySubtitle": "Activities in your groups will appear here.",
-  "failedToLoadActivities": "Failed to load activities"
+  "failedToLoadActivities": "Failed to load activities",
+  "splitHistory": "Split History",
+  "guestMode": "Guest Mode",
+  "failedToLoadHistory": "Failed to load history",
+  "noPreviousSplits": "No previous splits",
+  "createFirstSplitSubtitle": "Create your first split calculation to get started!",
+  "createYourFirstSplit": "Create Your First Split",
+  "newSplit": "New Split",
+  "splitsHistoryEmptyStateSubtitle": "Your splits history will show up here once you save them.",
+  "individualShares": "Individual Shares"
 }

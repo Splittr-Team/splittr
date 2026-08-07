@@ -463,7 +463,7 @@ abstract class AppLocalizations {
   /// No description provided for @membersCount.
   ///
   /// In en, this message translates to:
-  /// **'{count} members'**
+  /// **'{count, plural, =1{1 member} other{{count} members}}'**
   String membersCount(int count);
 
   /// No description provided for @decline.
@@ -531,6 +531,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load activities'**
   String get failedToLoadActivities;
+
+  /// No description provided for @splitHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Split History'**
+  String get splitHistory;
+
+  /// No description provided for @guestMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest Mode'**
+  String get guestMode;
+
+  /// No description provided for @failedToLoadHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load history'**
+  String get failedToLoadHistory;
+
+  /// No description provided for @noPreviousSplits.
+  ///
+  /// In en, this message translates to:
+  /// **'No previous splits'**
+  String get noPreviousSplits;
+
+  /// No description provided for @createFirstSplitSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first split calculation to get started!'**
+  String get createFirstSplitSubtitle;
+
+  /// No description provided for @createYourFirstSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Your First Split'**
+  String get createYourFirstSplit;
+
+  /// No description provided for @newSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'New Split'**
+  String get newSplit;
+
+  /// No description provided for @splitsHistoryEmptyStateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your splits history will show up here once you save them.'**
+  String get splitsHistoryEmptyStateSubtitle;
+
+  /// No description provided for @individualShares.
+  ///
+  /// In en, this message translates to:
+  /// **'Individual Shares'**
+  String get individualShares;
 }
 
 class _AppLocalizationsDelegate
