@@ -19,7 +19,7 @@ class FriendCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final initials = name.isNotEmpty
         ? name.trim().split(' ').map((l) => l[0]).take(2).join().toUpperCase()
-        : '?';
+        : null;
 
     return AppCard.outlined(
       color: context.colorScheme.surfaceContainer,
@@ -35,6 +35,12 @@ class FriendCard extends StatelessWidget {
             children: [
               AppAvatar(
                 initials: initials,
+                backgroundImage: initials == null
+                    ? const NetworkImage(
+                        'https://www.gravatar.com/avatar/'
+                        '00000000000000000000000000000000?d=mp&f=y',
+                      )
+                    : null,
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
@@ -48,27 +54,11 @@ class FriendCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: AppSpacing.xs),
-                    if (email.isNotEmpty &&
-                        phone != null &&
-                        phone!.isNotEmpty) ...[
-                      AppText.bodyMedium(
-                        email,
-                        color: context.colorScheme.onSurfaceVariant,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: AppSpacing.xs),
-                      AppText.bodyMedium(
-                        phone!,
-                        color: context.colorScheme.onSurfaceVariant,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ] else ...[
-                      AppText.bodyMedium(
-                        email.isNotEmpty ? email : (phone ?? ''),
-                        color: context.colorScheme.onSurfaceVariant,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                    AppText.bodyMedium(
+                      email.isNotEmpty ? email : (phone ?? ''),
+                      color: context.colorScheme.onSurfaceVariant,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ],
                 ),
               ),

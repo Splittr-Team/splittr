@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sky_design_system/sky_design_system.dart';
+// TODO(Chaitanya): Use reusable error state
 
 class FriendsErrorState extends StatelessWidget {
   const FriendsErrorState({

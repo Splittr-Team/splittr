@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:splittr/utils/extensions/extensions.dart';
+// TODO(Chaitanya): Use reusable empty state
 
 class FriendsEmptyState extends StatelessWidget {
   const FriendsEmptyState({super.key});
