@@ -13,7 +13,7 @@ part 'join_group_cubit.freezed.dart';
 part 'join_group_state.dart';
 
 @injectable
-final class JoinGroupCubit extends BaseCubit<JoinGroupState, NoParams> {
+final class JoinGroupCubit extends BaseCubit<JoinGroupState, String> {
   JoinGroupCubit(
     this._getGroupPreviewUseCase,
     this._joinGroupUseCase,
@@ -23,9 +23,7 @@ final class JoinGroupCubit extends BaseCubit<JoinGroupState, NoParams> {
   final JoinGroupUseCase _joinGroupUseCase;
 
   @override
-  void started(NoParams params) {}
-
-  Future<void> fetchGroupPreview(String code) async {
+  Future<void> started(String code) async {
     emit(const JoinGroupState.joinGroupPreviewLoading());
 
     final result = await _getGroupPreviewUseCase.call(

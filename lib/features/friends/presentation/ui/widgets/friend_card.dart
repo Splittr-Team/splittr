@@ -48,11 +48,27 @@ class FriendCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: AppSpacing.xs),
-                    AppText.bodyMedium(
-                      email.isNotEmpty ? email : (phone ?? ''),
-                      color: context.colorScheme.onSurfaceVariant,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (email.isNotEmpty &&
+                        phone != null &&
+                        phone!.isNotEmpty) ...[
+                      AppText.bodyMedium(
+                        email,
+                        color: context.colorScheme.onSurfaceVariant,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      AppText.bodyMedium(
+                        phone!,
+                        color: context.colorScheme.onSurfaceVariant,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ] else ...[
+                      AppText.bodyMedium(
+                        email.isNotEmpty ? email : (phone ?? ''),
+                        color: context.colorScheme.onSurfaceVariant,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ],
                 ),
               ),

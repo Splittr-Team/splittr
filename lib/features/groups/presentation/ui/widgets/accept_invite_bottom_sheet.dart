@@ -22,7 +22,7 @@ class AcceptInviteBottomSheet extends StatelessWidget {
     return BlocProvider<JoinGroupCubit>(
       create: (context) {
         final cubit = getIt<JoinGroupCubit>();
-        unawaited(cubit.fetchGroupPreview(code));
+        unawaited(cubit.started(code));
         return cubit;
       },
       child: BlocListener<JoinGroupCubit, JoinGroupState>(
@@ -69,7 +69,7 @@ class AcceptInviteBottomSheet extends StatelessWidget {
                           text: context.strings.retry,
                           onPressed: () => context
                               .read<JoinGroupCubit>()
-                              .fetchGroupPreview(code),
+                              .started(code),
                         ),
                       ],
                     ),
