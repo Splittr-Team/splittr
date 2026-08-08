@@ -270,4 +270,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get individualShares => 'Individual Shares';
+
+  @override
+  String get noNotificationsYet => 'No notifications yet!';
 }

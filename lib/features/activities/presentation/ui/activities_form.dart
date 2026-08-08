@@ -12,8 +12,8 @@ class _ActivitiesForm extends StatelessWidget {
               when state.store.activities.isEmpty =>
             const ActivitiesShimmerList(),
           OnFailure(:final failure) when state.store.activities.isEmpty =>
-            ActivitiesErrorState(
-              message: failure.message,
+            AppErrorState(
+              failure: failure,
               onRetry: () => getBloc<ActivitiesBloc>(context).started(noParams),
             ),
           _ =>
@@ -22,12 +22,10 @@ class _ActivitiesForm extends StatelessWidget {
                     onRefresh: () async {
                       getBloc<ActivitiesBloc>(context).started(noParams);
                     },
-                    child: ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: const [
-                        SizedBox(height: AppSpacing.xxl),
-                        ActivitiesEmptyState(),
-                      ],
+                    child: AppEmptyState(
+                      icon: Icons.history_rounded,
+                      title: context.strings.noRecentActivity,
+                      subtitle: context.strings.noRecentActivitySubtitle,
                     ),
                   )
                 : AppRefreshIndicator(

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
+import 'package:splittr/core/presentation/widgets/widgets.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/activities/presentation/blocs/activities/activities_bloc.dart';
-import 'package:splittr/features/activities/presentation/ui/widgets/activities_empty_state.dart';
-import 'package:splittr/features/activities/presentation/ui/widgets/activities_error_state.dart';
 import 'package:splittr/features/activities/presentation/ui/widgets/activities_list_view.dart';
 import 'package:splittr/features/activities/presentation/ui/widgets/activities_shimmer_list.dart';
+import 'package:splittr/utils/extensions/l10n_extensions.dart';
 
 part 'activities_form.dart';
 
