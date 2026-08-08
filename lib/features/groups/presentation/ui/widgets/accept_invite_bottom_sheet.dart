@@ -67,9 +67,8 @@ class AcceptInviteBottomSheet extends StatelessWidget {
                         ),
                         AppButton.primary(
                           text: context.strings.retry,
-                          onPressed: () => context
-                              .read<JoinGroupCubit>()
-                              .started(code),
+                          onPressed: () =>
+                              context.read<JoinGroupCubit>().started(code),
                         ),
                       ],
                     ),
