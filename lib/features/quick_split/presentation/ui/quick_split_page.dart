@@ -40,7 +40,10 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
               centerTitle: true,
               title: Text(isHistoryView ? 'Split History' : 'Quick Split'),
               leading: Container(
-                margin: const EdgeInsets.only(left: 15, top: 10),
+                margin: const EdgeInsets.only(
+                  left: AppSpacing.md,
+                  top: AppSpacing.sm,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                 ),
@@ -74,7 +77,7 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                       getBloc<QuickSplitBloc>(context).clearData();
                     },
                   ),
-                const SizedBox(width: 8),
+                const SizedBox(width: AppSpacing.sm),
               ],
             ),
             body: switch (state) {
@@ -84,7 +87,7 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                 ),
               OnFailure(:final failure) => Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -93,7 +96,7 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                         size: 64,
                         color: Theme.of(context).colorScheme.error,
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.md),
                       Text(
                         'Failed to load history',
                         style: Theme.of(context).textTheme.titleMedium
@@ -101,7 +104,7 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.sm),
                       Text(
                         failure.message,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -109,7 +112,7 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: AppSpacing.lg),
                       ElevatedButton.icon(
                         onPressed: () {
                           getBloc<QuickSplitBloc>(context).add(
@@ -119,7 +122,7 @@ class QuickSplitPage extends BasePage<QuickSplitBloc, QuickSplitState> {
                         icon: const Icon(Icons.refresh_rounded),
                         label: const Text('Retry'),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.sm),
                       TextButton(
                         onPressed: () {
                           getBloc<QuickSplitBloc>(context).clearData();

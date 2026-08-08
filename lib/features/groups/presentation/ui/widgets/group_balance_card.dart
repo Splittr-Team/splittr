@@ -86,7 +86,7 @@ class GroupBalanceCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppSpacing.xs),
                     AppText.bodyMedium(
                       subtitle,
                       color: context.colorScheme.onSurfaceVariant,
@@ -107,7 +107,7 @@ class GroupBalanceCard extends StatelessWidget {
                     color: statusColor,
                   ),
                   if (balanceState != BalanceState.settled) ...[
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppSpacing.xs),
                     AppText.titleMedium(
                       amountText,
                       color: statusColor,
@@ -155,7 +155,7 @@ class GroupBalanceCardShimmer extends StatelessWidget {
                     height: 16,
                     borderRadius: 4,
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: AppSpacing.sm),
                   SkeletonPlaceholder(
                     width: 160,
                     height: 12,
@@ -175,7 +175,7 @@ class GroupBalanceCardShimmer extends StatelessWidget {
                   height: 12,
                   borderRadius: 4,
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: AppSpacing.sm),
                 SkeletonPlaceholder(
                   width: 60,
                   height: 16,

@@ -6,6 +6,7 @@ import 'package:sky_design_system/sky_design_system.dart'
         AppListTile,
         AppNavigationBar,
         AppNavigationDrawer,
+        AppSpacing,
         AppText,
         AppTopBar,
         SkyDesignSystemContextExtension;
@@ -30,7 +31,7 @@ class DashboardShell extends StatelessWidget {
         title: _resolveTitle(context),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 4),
+            padding: const EdgeInsets.only(right: AppSpacing.xs),
             child: AppIconButton(
               icon: Icons.notifications_outlined,
               onPressed: () => const NotificationsRoute().push<void>(context),
@@ -98,10 +99,17 @@ class DashboardShell extends StatelessWidget {
     ),
     ShellTab(
       pathPrefix: GroupsRoute.pathTemplate,
-      icon: const Icon(Icons.group_outlined),
-      selectedIcon: const Icon(Icons.group),
+      icon: const Icon(Icons.groups_outlined),
+      selectedIcon: const Icon(Icons.groups),
       getLabel: (context) => context.strings.groups,
       defaultRoute: const GroupsRoute(),
+    ),
+    ShellTab(
+      pathPrefix: FriendsRoute.pathTemplate,
+      icon: const Icon(Icons.people_outline_rounded),
+      selectedIcon: const Icon(Icons.people_rounded),
+      getLabel: (context) => context.strings.friends,
+      defaultRoute: const FriendsRoute(),
     ),
     ShellTab(
       pathPrefix: ProfileRoute.pathTemplate,
@@ -128,6 +136,8 @@ class DashboardShell extends StatelessWidget {
         }
         return context.strings.myGroups;
       case 2:
+        return context.strings.myFriends;
+      case 3:
         return context.strings.profile;
       default:
         return context.strings.dashboard;

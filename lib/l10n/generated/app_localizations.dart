@@ -436,6 +436,72 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// No description provided for @failedToLoadPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load group preview.'**
+  String get failedToLoadPreview;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @invitedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Invited by {creatorName}'**
+  String invitedBy(String creatorName);
+
+  /// No description provided for @membersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 member} other{{count} members}}'**
+  String membersCount(int count);
+
+  /// No description provided for @decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get decline;
+
+  /// No description provided for @acceptInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Invite'**
+  String get acceptInvite;
+
+  /// No description provided for @friends.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends'**
+  String get friends;
+
+  /// No description provided for @myFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'My Friends'**
+  String get myFriends;
+
+  /// No description provided for @noFriendsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No friends yet'**
+  String get noFriendsYet;
+
+  /// No description provided for @addFriendsEmptyStateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add friends to start splitting expenses with them.'**
+  String get addFriendsEmptyStateSubtitle;
+
   /// No description provided for @cancel.
   ///
   /// In en, this message translates to:
@@ -466,11 +532,59 @@ abstract class AppLocalizations {
   /// **'Failed to load activities'**
   String get failedToLoadActivities;
 
-  /// No description provided for @retry.
+  /// No description provided for @splitHistory.
   ///
   /// In en, this message translates to:
-  /// **'Retry'**
-  String get retry;
+  /// **'Split History'**
+  String get splitHistory;
+
+  /// No description provided for @guestMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest Mode'**
+  String get guestMode;
+
+  /// No description provided for @failedToLoadHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load history'**
+  String get failedToLoadHistory;
+
+  /// No description provided for @noPreviousSplits.
+  ///
+  /// In en, this message translates to:
+  /// **'No previous splits'**
+  String get noPreviousSplits;
+
+  /// No description provided for @createFirstSplitSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first split calculation to get started!'**
+  String get createFirstSplitSubtitle;
+
+  /// No description provided for @createYourFirstSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Your First Split'**
+  String get createYourFirstSplit;
+
+  /// No description provided for @newSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'New Split'**
+  String get newSplit;
+
+  /// No description provided for @splitsHistoryEmptyStateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your splits history will show up here once you save them.'**
+  String get splitsHistoryEmptyStateSubtitle;
+
+  /// No description provided for @individualShares.
+  ///
+  /// In en, this message translates to:
+  /// **'Individual Shares'**
+  String get individualShares;
 }
 
 class _AppLocalizationsDelegate

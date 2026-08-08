@@ -57,10 +57,43 @@
   "deleteGroup": "Delete Group",
   "deleteGroupConfirmation": "Are you sure you want to delete this group? This action cannot be undone.",
   "delete": "Delete",
+  "failedToLoadPreview": "Failed to load group preview.",
+  "close": "Close",
+  "retry": "Retry",
+  "invitedBy": "Invited by {creatorName}",
+  "@invitedBy": {
+    "placeholders": {
+      "creatorName": {
+        "type": "String"
+      }
+    }
+  },
+  "membersCount": "{count, plural, =1{1 member} other{{count} members}}",
+  "@membersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "decline": "Decline",
+  "acceptInvite": "Accept Invite",
+  "friends": "Friends",
+  "myFriends": "My Friends",
+  "noFriendsYet": "No friends yet",
+  "addFriendsEmptyStateSubtitle": "Add friends to start splitting expenses with them.",
   "cancel": "Cancel",
   "activity": "Activity",
   "noRecentActivity": "No recent activity",
   "noRecentActivitySubtitle": "Activities in your groups will appear here.",
   "failedToLoadActivities": "Failed to load activities",
-  "retry": "Retry"
+  "splitHistory": "Split History",
+  "guestMode": "Guest Mode",
+  "failedToLoadHistory": "Failed to load history",
+  "noPreviousSplits": "No previous splits",
+  "createFirstSplitSubtitle": "Create your first split calculation to get started!",
+  "createYourFirstSplit": "Create Your First Split",
+  "newSplit": "New Split",
+  "splitsHistoryEmptyStateSubtitle": "Your splits history will show up here once you save them.",
+  "individualShares": "Individual Shares"
 }

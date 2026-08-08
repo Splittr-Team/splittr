@@ -30,15 +30,15 @@ class RouteErrorPage extends StatelessWidget {
                 Icons.error_outline_rounded,
                 color: context.colorScheme.error,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.lg),
               AppText.titleLarge(context.strings.navigationError),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.sm + AppSpacing.xs),
               AppText.bodyMedium(
                 errorMessage,
                 textAlign: TextAlign.center,
                 color: context.colorScheme.onSurfaceVariant,
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: AppSpacing.xl),
               AppButton.primary(
                 onPressed: () => const DashboardRoute().go(context),
                 text: context.strings.backToDashboard,

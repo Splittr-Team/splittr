@@ -16,8 +16,8 @@ class QuickSplitInputCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       decoration: BoxDecoration(
         color: Colors.grey.shade700,
         borderRadius: BorderRadius.circular(10),
@@ -38,7 +38,7 @@ class QuickSplitInputCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +55,7 @@ class QuickSplitInputCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.sm),
           AppIconButton.secondary(icon: Icons.delete, onPressed: onDelete),
         ],
       ),

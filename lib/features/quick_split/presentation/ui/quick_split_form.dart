@@ -8,9 +8,11 @@ class _QuickSplitForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 20),
+        const SizedBox(height: AppSpacing.md + AppSpacing.xs),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 36),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl + AppSpacing.xs,
+          ),
           child: AppTextField(
             labelText: 'Split Title',
             hintText: 'e.g. Dinner at Koramangala',
@@ -21,9 +23,11 @@ class _QuickSplitForm extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: AppSpacing.md + AppSpacing.xs),
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 36),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl + AppSpacing.xs,
+          ),
           child: Text(
             'Add Name & Amount',
             style: TextStyle(
@@ -33,7 +37,7 @@ class _QuickSplitForm extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 33),
+          padding: const EdgeInsets.only(right: AppSpacing.xl),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -54,7 +58,7 @@ class _QuickSplitForm extends StatelessWidget {
                         // color: AppColors.blackColor,
                         size: 16,
                       ),
-                      SizedBox(width: 4),
+                      SizedBox(width: AppSpacing.xs),
                       Text(
                         'Add',
                         style: TextStyle(
@@ -66,7 +70,7 @@ class _QuickSplitForm extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: AppSpacing.sm),
               GestureDetector(
                 onTap: getBloc<QuickSplitBloc>(context).clearData,
                 child: Container(
@@ -84,7 +88,7 @@ class _QuickSplitForm extends StatelessWidget {
                         // color: AppColors.blackColor,
                         size: 16,
                       ),
-                      SizedBox(width: 4),
+                      SizedBox(width: AppSpacing.xs),
                       Text(
                         'Clear',
                         style: TextStyle(
@@ -99,12 +103,12 @@ class _QuickSplitForm extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: AppSpacing.md),
         Expanded(
           child: BlocBuilder<QuickSplitBloc, QuickSplitState>(
             builder: (context, state) {
               return ListView.builder(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(AppSpacing.sm),
                 physics: const BouncingScrollPhysics(),
                 itemCount: state.store.peopleRecords.length,
                 itemBuilder: (context, index) {
@@ -130,19 +134,21 @@ class _QuickSplitForm extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: AppSpacing.md),
         Container(
           width: 325,
           height: 70,
-          margin: const EdgeInsets.symmetric(horizontal: 20),
+          margin: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md + AppSpacing.xs,
+          ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
           ),
           child: ListTile(
             onTap: getBloc<QuickSplitBloc>(context).quickSettleClicked,
             contentPadding: const EdgeInsets.symmetric(
-              vertical: 8,
-              horizontal: 16,
+              vertical: AppSpacing.sm,
+              horizontal: AppSpacing.md,
             ),
             leading: const Text(
               'Check Split',
@@ -154,7 +160,7 @@ class _QuickSplitForm extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 25),
+        const SizedBox(height: AppSpacing.lg),
       ],
     );
   }

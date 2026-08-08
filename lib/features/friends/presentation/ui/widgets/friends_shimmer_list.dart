@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sky_design_system/sky_design_system.dart' show AppSpacing;
-import 'package:splittr/features/groups/presentation/ui/widgets/group_balance_card.dart';
+import 'package:splittr/features/friends/presentation/ui/widgets/friend_card.dart';
 
-class GroupsShimmerList extends StatelessWidget {
-  const GroupsShimmerList({super.key});
+class FriendsShimmerList extends StatelessWidget {
+  const FriendsShimmerList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class GroupsShimmerList extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(
         height: AppSpacing.sm + AppSpacing.xs,
       ),
-      itemBuilder: (context, index) => const GroupBalanceCardShimmer(),
+      itemBuilder: (context, index) => const FriendCardShimmer(),
     );
   }
 }

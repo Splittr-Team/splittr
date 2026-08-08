@@ -183,6 +183,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get failedToLoadPreview => 'Failed to load group preview.';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String invitedBy(String creatorName) {
+    return 'Invited by $creatorName';
+  }
+
+  @override
+  String membersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count members',
+      one: '1 member',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get decline => 'Decline';
+
+  @override
+  String get acceptInvite => 'Accept Invite';
+
+  @override
+  String get friends => 'Friends';
+
+  @override
+  String get myFriends => 'My Friends';
+
+  @override
+  String get noFriendsYet => 'No friends yet';
+
+  @override
+  String get addFriendsEmptyStateSubtitle =>
+      'Add friends to start splitting expenses with them.';
+
+  @override
   String get cancel => 'Cancel';
 
   @override
@@ -199,5 +243,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToLoadActivities => 'Failed to load activities';
 
   @override
-  String get retry => 'Retry';
+  String get splitHistory => 'Split History';
+
+  @override
+  String get guestMode => 'Guest Mode';
+
+  @override
+  String get failedToLoadHistory => 'Failed to load history';
+
+  @override
+  String get noPreviousSplits => 'No previous splits';
+
+  @override
+  String get createFirstSplitSubtitle =>
+      'Create your first split calculation to get started!';
+
+  @override
+  String get createYourFirstSplit => 'Create Your First Split';
+
+  @override
+  String get newSplit => 'New Split';
+
+  @override
+  String get splitsHistoryEmptyStateSubtitle =>
+      'Your splits history will show up here once you save them.';
+
+  @override
+  String get individualShares => 'Individual Shares';
 }

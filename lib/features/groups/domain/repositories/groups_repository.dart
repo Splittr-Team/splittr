@@ -1,6 +1,7 @@
 import 'package:sky_architecture/sky_architecture.dart' hide Group;
 import 'package:splittr/core/network/pagination.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
+import 'package:splittr/features/groups/domain/entities/group_preview.dart';
 
 abstract interface class GroupsRepository {
   Stream<EitherFailure<List<Group>>> get watchGroups;
@@ -11,6 +12,10 @@ abstract interface class GroupsRepository {
   });
 
   FutureEitherFailure<Group> joinGroup({
+    required String inviteCode,
+  });
+
+  FutureEitherFailure<GroupPreview> getGroupPreview({
     required String inviteCode,
   });
 
