@@ -17,34 +17,18 @@ class _NotificationsForm extends StatelessWidget {
             Initial _ ||
             ChangeLoaderState _ => const NotificationsShimmerLoader(),
 
-            OnFailure(:final failure) => Center(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                child: AppText.bodyMedium(
-                  failure.message,
-                  color: context.colorScheme.error,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+            OnFailure(:final failure) => AppErrorState(
+              failure: failure,
+              onRetry: () {
+                getBloc<NotificationsBloc>(context).refreshNotifications();
+              },
             ),
 
             OnNotificationsUpdate _ =>
               state.store.notifications.isEmpty
-                  ? const AppSliverScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      slivers: [
-                        SliverFillRemaining(
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(AppSpacing.lg),
-                              child: AppText.bodyMedium(
-                                'No notifications yet!',
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                  ? AppEmptyState(
+                      icon: Icons.notifications_off_outlined,
+                      title: context.strings.noNotificationsYet,
                     )
                   : PaginatedListView<Notification>(
                       items: state.store.notifications,

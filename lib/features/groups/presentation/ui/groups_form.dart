@@ -12,15 +12,19 @@ class _GroupsForm extends StatelessWidget {
       child: BlocBuilder<GroupsBloc, GroupsState>(
         builder: (context, state) {
           return switch (state) {
-            // TODO(Saurabh): Generic error page
-            OnFailure(:final failure) => GroupsErrorState(
-              message: failure.message,
+            OnFailure(:final failure) => AppErrorState(
+              failure: failure,
+              onRetry: () => getBloc<GroupsBloc>(context).started(noParams),
             ),
             _ =>
               state.store.loading && state.store.groups.isEmpty
                   ? const GroupsShimmerList()
                   : state.store.groups.isEmpty
-                  ? const GroupsEmptyState()
+                  ? AppEmptyState(
+                      icon: Icons.group_off_outlined,
+                      title: context.strings.noGroupsYet,
+                      subtitle: context.strings.createGroupEmptyStateSubtitle,
+                    )
                   : GroupsListView(
                       groups: state.store.groups,
                       hasMore: state.store.hasMore,

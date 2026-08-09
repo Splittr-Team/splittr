@@ -95,5 +95,7 @@
   "createYourFirstSplit": "Create Your First Split",
   "newSplit": "New Split",
   "splitsHistoryEmptyStateSubtitle": "Your splits history will show up here once you save them.",
-  "individualShares": "Individual Shares"
+  "individualShares": "Individual Shares",
+  "noNotificationsYet": "No notifications yet!",
+  "retry": "Retry"
 }

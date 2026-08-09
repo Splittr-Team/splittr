@@ -8,8 +8,8 @@ class _FriendsForm extends StatelessWidget {
     return BlocBuilder<FriendsBloc, FriendsState>(
       builder: (context, state) {
         return switch (state) {
-          OnFailure(:final failure) => FriendsErrorState(
-            message: failure.message,
+          OnFailure(:final failure) => AppErrorState(
+            failure: failure,
           ),
           _ =>
             state.store.loading && state.store.friends.isEmpty
@@ -19,7 +19,12 @@ class _FriendsForm extends StatelessWidget {
                       getBloc<FriendsBloc>(context).started(noParams);
                     },
                     child: state.store.friends.isEmpty
-                        ? const Center(child: FriendsEmptyState())
+                        ? AppEmptyState(
+                            icon: Icons.people_outline_rounded,
+                            title: context.strings.noFriendsYet,
+                            subtitle:
+                                context.strings.addFriendsEmptyStateSubtitle,
+                          )
                         : FriendsListView(
                             friends: state.store.friends,
                             hasMore: state.store.hasMore,

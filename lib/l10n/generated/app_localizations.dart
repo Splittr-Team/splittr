@@ -585,6 +585,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Individual Shares'**
   String get individualShares;
+
+  /// No description provided for @noNotificationsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet!'**
+  String get noNotificationsYet;
 }
 
 class _AppLocalizationsDelegate
