@@ -18,11 +18,15 @@ final class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
     String? cursor,
     int? limit,
     String? groupId,
+    bool? personal,
+    String? friendId,
   }) {
     return _apiClient.getExpenses(
       cursor: cursor,
       limit: limit,
       groupId: groupId,
+      personal: personal,
+      friendId: friendId,
     );
   }
 
@@ -39,6 +43,11 @@ final class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
   @override
   Future<ExpenseDetailsModel> settleExpense(SettleExpensePayload payload) {
     return _apiClient.settleExpense(payload);
+  }
+
+  @override
+  Future<void> deleteExpense(String id) {
+    return _apiClient.deleteExpense(id);
   }
 
   @override

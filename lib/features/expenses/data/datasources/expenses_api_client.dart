@@ -20,6 +20,8 @@ abstract class ExpensesApiClient {
     @Query('cursor') String? cursor,
     @Query('limit') int? limit,
     @Query('groupId') String? groupId,
+    @Query('personal') bool? personal,
+    @Query('friendId') String? friendId,
   });
 
   @POST('/expenses')
@@ -29,6 +31,11 @@ abstract class ExpensesApiClient {
 
   @GET('/expenses/{id}')
   Future<ExpenseDetailsModel> getExpenseDetails(
+    @Path('id') String id,
+  );
+
+  @DELETE('/expenses/{id}')
+  Future<void> deleteExpense(
     @Path('id') String id,
   );
 
