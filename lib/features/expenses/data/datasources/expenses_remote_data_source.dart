@@ -9,6 +9,8 @@ abstract interface class ExpensesRemoteDataSource {
     String? cursor,
     int? limit,
     String? groupId,
+    bool? personal,
+    String? friendId,
   });
 
   Future<ExpenseDetailsModel> createExpense(CreateExpensePayload payload);
@@ -16,6 +18,8 @@ abstract interface class ExpensesRemoteDataSource {
   Future<ExpenseDetailsModel> getExpenseDetails(String id);
 
   Future<ExpenseDetailsModel> settleExpense(SettleExpensePayload payload);
+
+  Future<void> deleteExpense(String id);
 
   Future<BalancesModel> getBalances({String? groupId, bool? simplified});
 }

@@ -6,12 +6,18 @@ import 'package:splittr/features/expenses/domain/entities/input_split.dart';
 import 'package:splittr/features/expenses/domain/entities/split_type.dart';
 
 abstract interface class ExpensesRepository {
-  Stream<EitherFailure<List<Expense>>> watchExpenses({String? groupId});
+  Stream<EitherFailure<List<Expense>>> watchExpenses({
+    String? groupId,
+    bool? personal,
+    String? friendId,
+  });
 
   FutureEitherFailure<PaginatedList<Expense>> getExpenses({
     String? cursor,
     int? limit,
     String? groupId,
+    bool? personal,
+    String? friendId,
   });
 
   FutureEitherFailure<Expense> createExpense({
@@ -26,6 +32,8 @@ abstract interface class ExpensesRepository {
   });
 
   FutureEitherFailure<Expense> getExpenseDetails(String id);
+
+  FutureEitherFailureUnit deleteExpense(String id);
 
   FutureEitherFailure<Expense> settleExpense({
     required num amount,

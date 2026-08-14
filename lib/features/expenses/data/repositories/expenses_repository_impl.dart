@@ -30,16 +30,21 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
   final Mutex _syncLock = Mutex();
 
   @override
-  Stream<EitherFailure<List<Expense>>> watchExpenses({String? groupId}) =>
-      _expensesLocalDataSource
-          .watchExpenses(groupId: groupId)
-          .map((models) => Right(models.toDomain()));
+  Stream<EitherFailure<List<Expense>>> watchExpenses({
+    String? groupId,
+    bool? personal,
+    String? friendId,
+  }) => _expensesLocalDataSource
+      .watchExpenses(groupId: groupId, personal: personal, friendId: friendId)
+      .map((models) => Right(models.toDomain()));
 
   @override
   FutureEitherFailure<PaginatedList<Expense>> getExpenses({
     String? cursor,
     int? limit,
     String? groupId,
+    bool? personal,
+    String? friendId,
   }) async {
     return _syncLock.protect(() async {
       var effectiveCursor = cursor;
@@ -64,6 +69,8 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
           cursor: effectiveCursor,
           limit: limit,
           groupId: groupId,
+          personal: personal,
+          friendId: friendId,
         ),
       );
 
@@ -121,6 +128,21 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
       () => _expensesRemoteDataSource.getExpenseDetails(id),
     );
     return result.map((details) => details.toDomain());
+  }
+
+  @override
+  FutureEitherFailureUnit deleteExpense(String id) async {
+    final result = await _apiCallHandler.handle(
+      () => _expensesRemoteDataSource.deleteExpense(id),
+    );
+
+    return result.fold(
+      Left.new,
+      (_) async {
+        await _expensesLocalDataSource.deleteExpense(id);
+        return const Right(unit);
+      },
+    );
   }
 
   @override
