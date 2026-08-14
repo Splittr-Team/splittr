@@ -3,10 +3,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
 import 'package:splittr/core/network/pagination_model.dart';
-import 'package:splittr/features/auth/data/models/user_model.dart';
 import 'package:splittr/features/friends/data/datasources/friends_local_data_source.dart';
 import 'package:splittr/features/friends/data/datasources/friends_remote_data_source.dart';
-import 'package:splittr/features/friends/data/models/friends_response_model.dart';
+import 'package:splittr/features/friends/data/models/friend_model.dart';
+import 'package:splittr/features/friends/data/models/friends_model.dart';
 import 'package:splittr/features/friends/data/repositories/friends_repository_impl.dart';
 import 'package:splittr/features/friends/domain/repositories/friends_repository.dart';
 
@@ -46,20 +46,19 @@ void main() {
   });
 
   group('FriendsRepositoryImpl', () {
-    const userModel = UserModel(
+    const friendModel = FriendModel(
       id: 'user-123',
-      firebaseUid: 'fb-123',
       name: 'John Doe',
       email: 'john@example.com',
       phone: '123456',
     );
 
-    test('getFriends returns paginated domain Users', () async {
+    test('getFriends returns paginated domain Friends', () async {
       when(
         () => mockRemoteDataSource.getFriends(),
       ).thenAnswer(
-        (_) async => const FriendsResponseModel(
-          data: [userModel],
+        (_) async => const FriendsModel(
+          data: [friendModel],
           pagination: PaginationModel(hasMore: false),
         ),
       );
@@ -84,13 +83,13 @@ void main() {
       );
     });
 
-    test('addFriend returns domain User', () async {
+    test('addFriend returns domain Friend', () async {
       when(
         () => mockRemoteDataSource.addFriend(
           friendEmail: 'john@example.com',
           friendPhone: '123456',
         ),
-      ).thenAnswer((_) async => userModel);
+      ).thenAnswer((_) async => friendModel);
 
       final result = await repository.addFriend(
         friendEmail: 'john@example.com',
@@ -100,7 +99,7 @@ void main() {
       expect(result.isRight(), true);
       result.fold(
         (failure) => fail('Should succeed'),
-        (user) => expect(user.id, 'user-123'),
+        (friend) => expect(friend.id, 'user-123'),
       );
     });
 

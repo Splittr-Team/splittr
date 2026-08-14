@@ -9,7 +9,7 @@ class FriendsEvent extends BaseEvent with _$FriendsEvent {
   const factory FriendsEvent.friendsFailed({required Failure failure}) =
       _FriendsFailed;
 
-  const factory FriendsEvent.friendsUpdated({required List<User> friends}) =
+  const factory FriendsEvent.friendsUpdated({required List<Friend> friends}) =
       _FriendsUpdated;
 
   const factory FriendsEvent.fetchNextPage() = _FetchNextPage;

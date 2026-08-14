@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart' show AppSpacing;
 import 'package:splittr/core/presentation/widgets/paginated_list_view.dart';
-import 'package:splittr/features/auth/domain/entities/user.dart';
+import 'package:splittr/features/friends/domain/entities/friend.dart';
 import 'package:splittr/features/friends/presentation/blocs/friends_bloc.dart';
 import 'package:splittr/features/friends/presentation/ui/widgets/friend_card.dart';
 
@@ -14,13 +14,13 @@ class FriendsListView extends StatelessWidget {
     super.key,
   });
 
-  final List<User> friends;
+  final List<Friend> friends;
   final bool hasMore;
   final bool isLoadingMore;
 
   @override
   Widget build(BuildContext context) {
-    return PaginatedListView<User>(
+    return PaginatedListView<Friend>(
       items: friends,
       hasMore: hasMore,
       isLoadingMore: isLoadingMore,

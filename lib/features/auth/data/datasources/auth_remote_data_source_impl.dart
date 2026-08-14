@@ -84,7 +84,6 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final user = _firebaseAuth.currentUser!;
       return UserModel(
         id: user.uid,
-        firebaseUid: user.uid,
         name: 'Guest',
       );
     } on FirebaseException catch (e) {
