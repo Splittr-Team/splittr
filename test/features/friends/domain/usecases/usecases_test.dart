@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/core/network/pagination.dart';
-import 'package:splittr/features/auth/domain/entities/user.dart';
+import 'package:splittr/features/friends/domain/entities/friend.dart';
 import 'package:splittr/features/friends/domain/repositories/friends_repository.dart';
 import 'package:splittr/features/friends/domain/usecases/add_friend_usecase.dart';
 import 'package:splittr/features/friends/domain/usecases/get_friends_usecase.dart';
@@ -24,17 +24,16 @@ void main() {
   });
 
   group('Friends Usecases', () {
-    const user = User(
+    const friend = Friend(
       id: 'user-123',
-      firebaseUid: 'fb-123',
       name: 'John Doe',
       email: 'john@example.com',
       phone: '123456',
     );
 
     test('GetFriendsUseCase calls repository.getFriends', () async {
-      const expectedList = PaginatedList<User>(
-        items: [user],
+      const expectedList = PaginatedList<Friend>(
+        items: [friend],
         pagination: Pagination(hasMore: false),
       );
 
@@ -60,7 +59,7 @@ void main() {
           friendEmail: 'john@example.com',
           friendPhone: '123456',
         ),
-      ).thenAnswer((_) async => const Right(user));
+      ).thenAnswer((_) async => const Right(friend));
 
       final result = await addFriendUseCase.call(
         const AddFriendParams(
@@ -72,7 +71,7 @@ void main() {
       expect(result.isRight(), true);
       result.fold(
         (failure) => fail('Should succeed'),
-        (resUser) => expect(resUser, user),
+        (resFriend) => expect(resFriend, friend),
       );
       verify(
         () => mockRepository.addFriend(

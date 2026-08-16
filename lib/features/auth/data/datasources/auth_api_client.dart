@@ -3,6 +3,9 @@ import 'package:retrofit/retrofit.dart';
 import 'package:sky_network/sky_network.dart';
 import 'package:splittr/features/auth/data/models/create_user_payload.dart';
 import 'package:splittr/features/auth/data/models/user_model.dart';
+import 'package:splittr/features/profile/data/models/update_user_payload.dart';
+import 'package:splittr/features/profile/data/models/update_user_settings_payload.dart';
+import 'package:splittr/features/profile/data/models/user_settings_model.dart';
 
 part 'auth_api_client.g.dart';
 
@@ -17,4 +20,15 @@ abstract class AuthApiClient {
 
   @GET('/me')
   Future<UserModel> getMe();
+
+  @PUT('/me')
+  Future<UserModel> updateMe(@Body() UpdateUserPayload body);
+
+  @GET('/me/settings')
+  Future<UserSettingsModel> getSettings();
+
+  @PUT('/me/settings')
+  Future<UserSettingsModel> updateSettings(
+    @Body() UpdateUserSettingsPayload body,
+  );
 }

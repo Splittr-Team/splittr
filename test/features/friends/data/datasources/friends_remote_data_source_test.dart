@@ -2,12 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/core/network/pagination_model.dart';
-import 'package:splittr/features/auth/data/models/user_model.dart';
 import 'package:splittr/features/friends/data/datasources/friends_api_client.dart';
 import 'package:splittr/features/friends/data/datasources/friends_remote_data_source.dart';
 import 'package:splittr/features/friends/data/datasources/friends_remote_data_source_impl.dart';
 import 'package:splittr/features/friends/data/models/add_friend_payload.dart';
-import 'package:splittr/features/friends/data/models/friends_response_model.dart';
+import 'package:splittr/features/friends/data/models/friend_model.dart';
+import 'package:splittr/features/friends/data/models/friends_model.dart';
 
 class MockFriendsApiClient extends Mock implements FriendsApiClient {}
 
@@ -22,17 +22,16 @@ void main() {
   });
 
   group('FriendsRemoteDataSource', () {
-    const userModel = UserModel(
+    const friendModel = FriendModel(
       id: 'user-123',
-      firebaseUid: 'fb-123',
       name: 'John Doe',
       email: 'john@example.com',
       phone: '123456',
     );
 
     test('getFriends calls apiClient.getFriends', () async {
-      const responseModel = FriendsResponseModel(
-        data: [userModel],
+      const responseModel = FriendsModel(
+        data: [friendModel],
         pagination: PaginationModel(hasMore: false),
       );
 
@@ -49,14 +48,14 @@ void main() {
     test('addFriend calls apiClient.addFriend with payload', () async {
       when(
         () => mockApiClient.addFriend(any()),
-      ).thenAnswer((_) async => userModel);
+      ).thenAnswer((_) async => friendModel);
 
       final result = await dataSource.addFriend(
         friendEmail: 'john@example.com',
         friendPhone: '123456',
       );
 
-      expect(result, userModel);
+      expect(result, friendModel);
       verify(
         () => mockApiClient.addFriend(
           any(

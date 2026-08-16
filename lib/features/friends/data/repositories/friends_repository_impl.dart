@@ -4,11 +4,10 @@ import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
 import 'package:splittr/core/network/pagination.dart';
 import 'package:splittr/core/storage/models/pagination_metadata_isar_model.dart';
-import 'package:splittr/features/auth/data/mappers/user.dart';
-import 'package:splittr/features/auth/domain/entities/user.dart';
 import 'package:splittr/features/friends/data/datasources/friends_local_data_source.dart';
 import 'package:splittr/features/friends/data/datasources/friends_remote_data_source.dart';
 import 'package:splittr/features/friends/data/mappers/friend_mappers.dart';
+import 'package:splittr/features/friends/domain/entities/friend.dart';
 import 'package:splittr/features/friends/domain/repositories/friends_repository.dart';
 
 @LazySingleton(as: FriendsRepository)
@@ -25,14 +24,15 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   final Mutex _syncLock = Mutex();
 
   @override
-  Stream<EitherFailure<List<User>>> watchFriends() => _friendsLocalDataSource
+  Stream<EitherFailure<List<Friend>>> watchFriends() => _friendsLocalDataSource
       .watchFriends()
       .map((models) => Right(models.toDomain()));
 
   @override
-  FutureEitherFailure<PaginatedList<User>> getFriends({
+  FutureEitherFailure<PaginatedList<Friend>> getFriends({
     String? cursor,
     int? limit,
+    FriendshipStatus? status,
   }) async {
     return _syncLock.protect(() async {
       var effectiveCursor = cursor;
@@ -56,6 +56,7 @@ final class FriendsRepositoryImpl implements FriendsRepository {
         () => _friendsRemoteDataSource.getFriends(
           cursor: effectiveCursor,
           limit: limit,
+          status: status,
         ),
       );
 
@@ -80,7 +81,7 @@ final class FriendsRepositoryImpl implements FriendsRepository {
   }
 
   @override
-  FutureEitherFailure<User> addFriend({
+  FutureEitherFailure<Friend> addFriend({
     String? friendEmail,
     String? friendPhone,
   }) async {
@@ -88,6 +89,20 @@ final class FriendsRepositoryImpl implements FriendsRepository {
       () => _friendsRemoteDataSource.addFriend(
         friendEmail: friendEmail,
         friendPhone: friendPhone,
+      ),
+    );
+    return result.map((model) => model.toDomain());
+  }
+
+  @override
+  FutureEitherFailure<Friend> updateFriendshipStatus({
+    required String friendId,
+    required FriendshipStatus status,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _friendsRemoteDataSource.updateFriendshipStatus(
+        friendId: friendId,
+        status: status,
       ),
     );
     return result.map((model) => model.toDomain());

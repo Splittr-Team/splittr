@@ -69,13 +69,9 @@ final class AuthRepositoryImpl implements AuthRepository {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null && user.isAnonymous) {
-        final guestUser = User(
-          id: 'guest',
-          firebaseUid: user.uid,
-          name: 'Guest',
-        );
-        _authStateStreamController.add(Some(guestUser));
-        return Right(guestUser);
+        const guestUser = User(id: 'guest', name: 'Guest');
+        _authStateStreamController.add(const Some(guestUser));
+        return const Right(guestUser);
       }
     } on Exception catch (e) {
       return Left(e.toFailure());
@@ -109,9 +105,8 @@ final class AuthRepositoryImpl implements AuthRepository {
       _authRemoteDataSource.signInAnonymously,
     );
     return result.map((_) {
-      final user = FirebaseAuth.instance.currentUser!;
       _authStateStreamController.add(
-        Some(User(id: 'guest', firebaseUid: user.uid, name: 'Guest')),
+        const Some(User(id: 'guest', name: 'Guest')),
       );
       return unit;
     });

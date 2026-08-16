@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
-import 'package:splittr/features/auth/domain/entities/user.dart';
+import 'package:splittr/features/friends/domain/entities/friend.dart';
 import 'package:splittr/features/friends/domain/usecases/get_friends_usecase.dart';
 import 'package:splittr/features/friends/domain/usecases/watch_friends_usecase.dart';
 
@@ -29,7 +29,7 @@ class FriendsBloc extends BaseBloc<FriendsEvent, FriendsState, NoParams> {
   final GetFriendsUseCase _getFriendsUseCase;
   final WatchFriendsUseCase _watchFriendsUseCase;
 
-  StreamSubscription<EitherFailure<List<User>>>? _friendsSubscription;
+  StreamSubscription<EitherFailure<List<Friend>>>? _friendsSubscription;
 
   @override
   void handleEvents() {
@@ -127,7 +127,7 @@ class FriendsBloc extends BaseBloc<FriendsEvent, FriendsState, NoParams> {
     add(FriendsEvent.friendsFailed(failure: failure));
   }
 
-  void friendsUpdated({required List<User> friends}) {
+  void friendsUpdated({required List<Friend> friends}) {
     add(FriendsEvent.friendsUpdated(friends: friends));
   }
 

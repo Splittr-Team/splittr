@@ -44,7 +44,7 @@ class FriendsStateStore with _$FriendsStateStore {
   @override
   final bool loading;
   @override
-  final List<User> friends;
+  final List<Friend> friends;
   @override
   final bool hasMore;
   @override

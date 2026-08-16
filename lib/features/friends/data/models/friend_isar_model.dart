@@ -13,6 +13,11 @@ class FriendIsarModel with IsarCacheable {
   String? email;
   String? phone;
   String? avatarUrl;
+  String? defaultCurrency;
+  String? status;
+  String? actionUserId;
+  DateTime? updatedAt;
+
   @Index()
   DateTime? createdAt;
 }
