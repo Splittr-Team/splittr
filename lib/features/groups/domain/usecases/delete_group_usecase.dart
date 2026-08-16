@@ -3,13 +3,13 @@ import 'package:sky_architecture/sky_architecture.dart' hide Group;
 import 'package:splittr/features/groups/domain/repositories/groups_repository.dart';
 
 @lazySingleton
-final class DeleteGroupUseCase implements UseCase<Unit, DeleteGroupParams> {
+final class DeleteGroupUseCase implements UseCase<void, DeleteGroupParams> {
   const DeleteGroupUseCase(this._groupsRepository);
 
   final GroupsRepository _groupsRepository;
 
   @override
-  Future<Either<Failure, Unit>> call(DeleteGroupParams params) {
+  Future<Either<Failure, void>> call(DeleteGroupParams params) {
     return _groupsRepository.deleteGroup(groupId: params.groupId);
   }
 }

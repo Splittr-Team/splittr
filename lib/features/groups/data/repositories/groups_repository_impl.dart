@@ -134,7 +134,7 @@ final class GroupsRepositoryImpl implements GroupsRepository {
   }
 
   @override
-  FutureEitherFailureUnit deleteGroup({required String groupId}) async {
+  Future<Either<Failure, void>> deleteGroup({required String groupId}) async {
     final result = await _apiCallHandler.handle(
       () => _groupsRemoteDataSource.deleteGroup(groupId: groupId),
     );
@@ -144,7 +144,43 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       (_) async {
         await _groupsLocalDataSource.deleteGroup(groupId);
         unawaited(getGroups());
-        return const Right(unit);
+        return const Right(null);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> addMembersToGroup({
+    required String groupId,
+    required List<String> userIds,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.addMembersToGroup(
+        groupId: groupId,
+        userIds: userIds,
+      ),
+    );
+    return result.map((_) {});
+  }
+
+  @override
+  Future<Either<Failure, void>> leaveGroup({
+    required String groupId,
+    required String userId,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.leaveGroup(
+        groupId: groupId,
+        userId: userId,
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (_) async {
+        await _groupsLocalDataSource.deleteGroup(groupId);
+        unawaited(getGroups());
+        return const Right(null);
       },
     );
   }

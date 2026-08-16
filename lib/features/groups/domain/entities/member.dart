@@ -18,10 +18,8 @@ class Member with _$Member {
   final String? groupId;
   @override
   final String? userId;
-
-  // TODO(SKY): add enum
   @override
-  final String? role;
+  final Role? role;
   @override
   final String? joinedAt;
   @override
@@ -31,3 +29,5 @@ class Member with _$Member {
   @override
   final String? phone;
 }
+
+enum Role { admin, member }

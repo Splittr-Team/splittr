@@ -51,9 +51,8 @@ class GroupsListView extends StatelessWidget {
           balanceState: balanceState,
           amountText: '1000',
           onTap: () async {
-            await GroupDetailsRoute(
+            await GroupRoute(
               groupId: group.id ?? '',
-              group: group,
             ).push<void>(context);
           },
         );

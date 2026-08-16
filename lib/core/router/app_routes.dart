@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:sky_router/sky_router.dart';
 import 'package:splittr/core/app_config/i_app_config.dart';
-import 'package:splittr/features/groups/domain/entities/group.dart';
 
 sealed class AppRoute {
   const AppRoute();
@@ -114,27 +113,62 @@ class FriendsRoute extends AppRoute {
   String get path => pathTemplate;
 }
 
-class GroupDetailsRoute extends AppRoute {
-  const GroupDetailsRoute({required this.groupId, this.group});
+class GroupRoute extends AppRoute {
+  const GroupRoute({required this.groupId});
 
   final String groupId;
-  final Group? group;
 
   static const String relativePathTemplate = ':groupId';
 
   @override
   String get path => '${GroupsRoute.pathTemplate}/$groupId';
 
-  @override
-  Object? get extra => group;
-
-  static GroupDetailsRoute? fromState(GoRouterState state) {
+  static GroupRoute? fromState(GoRouterState state) {
     final groupId = state.pathParameters['groupId'];
     if (groupId == null || groupId.isEmpty) {
       return null;
     }
-    final group = state.extra is Group ? state.extra! as Group : null;
-    return GroupDetailsRoute(groupId: groupId, group: group);
+    return GroupRoute(groupId: groupId);
+  }
+}
+
+class AddMembersRoute extends AppRoute {
+  const AddMembersRoute({required this.groupId});
+
+  final String groupId;
+
+  static const String relativePathTemplate = 'add-members';
+  static const String pathTemplate = '/groups/:groupId/add-members';
+
+  @override
+  String get path => '${GroupsRoute.pathTemplate}/$groupId/add-members';
+
+  static AddMembersRoute? fromState(GoRouterState state) {
+    final groupId = state.pathParameters['groupId'];
+    if (groupId == null || groupId.isEmpty) {
+      return null;
+    }
+    return AddMembersRoute(groupId: groupId);
+  }
+}
+
+class GroupSettingsRoute extends AppRoute {
+  const GroupSettingsRoute({required this.groupId});
+
+  final String groupId;
+
+  static const String relativePathTemplate = 'group-settings';
+  static const String pathTemplate = '/groups/:groupId/group-settings';
+
+  @override
+  String get path => '${GroupsRoute.pathTemplate}/$groupId/group-settings';
+
+  static GroupSettingsRoute? fromState(GoRouterState state) {
+    final groupId = state.pathParameters['groupId'];
+    if (groupId == null || groupId.isEmpty) {
+      return null;
+    }
+    return GroupSettingsRoute(groupId: groupId);
   }
 }
 

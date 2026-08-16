@@ -586,11 +586,131 @@ abstract class AppLocalizations {
   /// **'Individual Shares'**
   String get individualShares;
 
+  /// No description provided for @addFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Friend'**
+  String get addFriend;
+
+  /// No description provided for @emailOrPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Email or Phone Number'**
+  String get emailOrPhone;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @friendAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend added successfully!'**
+  String get friendAddedSuccessfully;
+
+  /// No description provided for @failedToAddFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add friend'**
+  String get failedToAddFriend;
+
+  /// No description provided for @pleaseEnterEmailOrPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter email or phone number'**
+  String get pleaseEnterEmailOrPhone;
+
+  /// No description provided for @enterEmailOrPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter email or phone number'**
+  String get enterEmailOrPhone;
+
+  /// No description provided for @addMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Members'**
+  String get addMembers;
+
+  /// No description provided for @sendInvites.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Invites'**
+  String get sendInvites;
+
+  /// No description provided for @noFriendsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No friends found'**
+  String get noFriendsFound;
+
+  /// No description provided for @invitesSentSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Invites sent successfully!'**
+  String get invitesSentSuccessfully;
+
+  /// No description provided for @leaveGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Group'**
+  String get leaveGroup;
+
+  /// No description provided for @leaveGroupConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to leave this group? You will not be able to see its expenses.'**
+  String get leaveGroupConfirmation;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @groupDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Group deleted successfully!'**
+  String get groupDeletedSuccessfully;
+
+  /// No description provided for @groupLeftSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Group left successfully!'**
+  String get groupLeftSuccessfully;
+
+  /// No description provided for @shareInviteLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Invite Link'**
+  String get shareInviteLink;
+
+  /// No description provided for @groupSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Group Settings'**
+  String get groupSettings;
+
   /// No description provided for @noNotificationsYet.
   ///
   /// In en, this message translates to:
   /// **'No notifications yet!'**
   String get noNotificationsYet;
+
+  /// No description provided for @noMembersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No members found'**
+  String get noMembersFound;
+
+  /// No description provided for @dangerZone.
+  ///
+  /// In en, this message translates to:
+  /// **'DANGER ZONE'**
+  String get dangerZone;
 }
 
 class _AppLocalizationsDelegate

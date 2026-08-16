@@ -24,7 +24,17 @@ abstract interface class GroupsRepository {
     required String description,
   });
 
-  FutureEitherFailureUnit deleteGroup({
+  Future<Either<Failure, void>> deleteGroup({
     required String groupId,
+  });
+
+  Future<Either<Failure, void>> addMembersToGroup({
+    required String groupId,
+    required List<String> userIds,
+  });
+
+  Future<Either<Failure, void>> leaveGroup({
+    required String groupId,
+    required String userId,
   });
 }

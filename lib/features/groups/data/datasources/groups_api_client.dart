@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:sky_network/sky_network.dart';
+import 'package:splittr/features/groups/data/models/add_members_payload.dart';
 import 'package:splittr/features/groups/data/models/create_group_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
@@ -34,4 +35,16 @@ abstract class GroupsApiClient {
 
   @DELETE('/{id}')
   Future<void> deleteGroup(@Path('id') String id);
+
+  @POST('/{id}/members')
+  Future<void> addMembersToGroup(
+    @Path('id') String id,
+    @Body() AddMembersPayload body,
+  );
+
+  @DELETE('/{id}/members/{userId}')
+  Future<void> leaveGroup(
+    @Path('id') String id,
+    @Path('userId') String userId,
+  );
 }

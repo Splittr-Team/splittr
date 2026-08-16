@@ -272,5 +272,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String get individualShares => 'Individual Shares';
 
   @override
+  String get addFriend => 'Add Friend';
+
+  @override
+  String get emailOrPhone => 'Email or Phone Number';
+
+  @override
+  String get submit => 'Submit';
+
+  @override
+  String get friendAddedSuccessfully => 'Friend added successfully!';
+
+  @override
+  String get failedToAddFriend => 'Failed to add friend';
+
+  @override
+  String get pleaseEnterEmailOrPhone => 'Please enter email or phone number';
+
+  @override
+  String get enterEmailOrPhone => 'Enter email or phone number';
+
+  @override
+  String get addMembers => 'Add Members';
+
+  @override
+  String get sendInvites => 'Send Invites';
+
+  @override
+  String get noFriendsFound => 'No friends found';
+
+  @override
+  String get invitesSentSuccessfully => 'Invites sent successfully!';
+
+  @override
+  String get leaveGroup => 'Leave Group';
+
+  @override
+  String get leaveGroupConfirmation =>
+      'Are you sure you want to leave this group? You will not be able to see its expenses.';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get groupDeletedSuccessfully => 'Group deleted successfully!';
+
+  @override
+  String get groupLeftSuccessfully => 'Group left successfully!';
+
+  @override
+  String get shareInviteLink => 'Share Invite Link';
+
+  @override
+  String get groupSettings => 'Group Settings';
+
+  @override
   String get noNotificationsYet => 'No notifications yet!';
+
+  @override
+  String get noMembersFound => 'No members found';
+
+  @override
+  String get dangerZone => 'DANGER ZONE';
 }

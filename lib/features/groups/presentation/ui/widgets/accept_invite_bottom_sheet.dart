@@ -30,9 +30,8 @@ class AcceptInviteBottomSheet extends StatelessWidget {
           switch (state) {
             case JoinGroupSuccess(:final group):
               RouteHandler.pop<void>(context);
-              GroupDetailsRoute(
+              GroupRoute(
                 groupId: group.id ?? '',
-                group: group,
               ).go(context);
             case JoinGroupFailure(:final failure):
               AppSnackBar.show(context, message: failure.message);
