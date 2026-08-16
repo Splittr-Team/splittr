@@ -16,4 +16,14 @@ abstract interface class GroupsRemoteDataSource {
   });
 
   Future<Unit> deleteGroup({required String groupId});
+
+  Future<Unit> addMembersToGroup({
+    required String groupId,
+    required List<String> userIds,
+  });
+
+  Future<Unit> leaveGroup({
+    required String groupId,
+    required String userId,
+  });
 }
