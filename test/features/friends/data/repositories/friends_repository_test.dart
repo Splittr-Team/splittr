@@ -5,6 +5,7 @@ import 'package:sky_network/sky_network.dart';
 import 'package:splittr/core/network/pagination_model.dart';
 import 'package:splittr/features/friends/data/datasources/friends_local_data_source.dart';
 import 'package:splittr/features/friends/data/datasources/friends_remote_data_source.dart';
+import 'package:splittr/features/friends/data/models/friend_isar_model.dart';
 import 'package:splittr/features/friends/data/models/friend_model.dart';
 import 'package:splittr/features/friends/data/models/friends_model.dart';
 import 'package:splittr/features/friends/data/repositories/friends_repository_impl.dart';
@@ -15,6 +16,8 @@ class MockFriendsRemoteDataSource extends Mock
 
 class MockFriendsLocalDataSource extends Mock
     implements FriendsLocalDataSource {}
+
+class FakeFriendIsarModel extends Fake implements FriendIsarModel {}
 
 class MockApiCallHandler extends Mock implements ApiCallHandler {
   @override
@@ -29,6 +32,10 @@ class MockApiCallHandler extends Mock implements ApiCallHandler {
 }
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(FakeFriendIsarModel());
+  });
+
   late MockFriendsRemoteDataSource mockRemoteDataSource;
   late MockFriendsLocalDataSource mockLocalDataSource;
   late MockApiCallHandler mockHandler;
@@ -90,6 +97,10 @@ void main() {
           friendPhone: '123456',
         ),
       ).thenAnswer((_) async => friendModel);
+
+      when(
+        () => mockLocalDataSource.saveFriend(any()),
+      ).thenAnswer((_) async {});
 
       final result = await repository.addFriend(
         friendEmail: 'john@example.com',
