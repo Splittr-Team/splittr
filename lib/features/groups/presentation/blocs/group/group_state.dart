@@ -30,11 +30,10 @@ sealed class GroupState extends BaseState with _$GroupState {
   }) = ChangeLoaderState;
 
   @override
-  BaseState getFailureState({required Failure failure}) =>
-      GroupState.onFailure(
-        store: store.copyWith(loading: false),
-        failure: failure,
-      );
+  BaseState getFailureState({required Failure failure}) => GroupState.onFailure(
+    store: store.copyWith(loading: false),
+    failure: failure,
+  );
 
   @override
   BaseState getLoadingState({required bool loading}) =>

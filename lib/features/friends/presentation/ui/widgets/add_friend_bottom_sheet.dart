@@ -54,17 +54,17 @@ class AddFriendBottomSheetBody extends StatelessWidget {
               labelText: context.strings.emailOrPhone,
               hintText: context.strings.enterEmailOrPhone,
               enabled: !isLoading,
-              onChanged: (value) => getBloc<AddFriendBloc>(context)
-                  .emailOrPhoneChanged(emailOrPhone: value),
+              onChanged: (value) => getBloc<AddFriendBloc>(
+                context,
+              ).emailOrPhoneChanged(emailOrPhone: value),
             ),
             const SizedBox(height: AppSpacing.lg),
             AppButton.primary(
               text: context.strings.submit,
               onPressed:
                   state.store.emailOrPhone.trim().isNotEmpty && !isLoading
-                      ? () => getBloc<AddFriendBloc>(context)
-                          .submitButtonClicked()
-                      : null,
+                  ? () => getBloc<AddFriendBloc>(context).submitButtonClicked()
+                  : null,
             ),
             if (isLoading) ...[
               const SizedBox(height: AppSpacing.md),
