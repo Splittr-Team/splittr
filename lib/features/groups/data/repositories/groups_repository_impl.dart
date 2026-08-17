@@ -35,6 +35,29 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       .map((models) => Right(models.toDomain()));
 
   @override
+  Stream<EitherFailure<Group>> watchGroupById(String id) {
+    unawaited(
+      _apiCallHandler
+          .handle(() => _groupsRemoteDataSource.getGroupById(id))
+          .then(
+            (result) => result.fold(
+              (failure) => null,
+              (groupModel) =>
+                  _groupsLocalDataSource.saveGroup(groupModel.toIsar()),
+            ),
+          ),
+    );
+
+    return _groupsLocalDataSource.watchGroupById(id).map((model) {
+      if (model != null) {
+        return Right(model.toDomain());
+      } else {
+        return const Left(ServerFailure(message: 'Group not found'));
+      }
+    });
+  }
+
+  @override
   FutureEitherFailure<PaginatedList<Group>> getGroups({
     String? cursor,
     int? limit,
@@ -134,7 +157,7 @@ final class GroupsRepositoryImpl implements GroupsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteGroup({required String groupId}) async {
+  FutureEitherFailureUnit deleteGroup({required String groupId}) async {
     final result = await _apiCallHandler.handle(
       () => _groupsRemoteDataSource.deleteGroup(groupId: groupId),
     );
@@ -144,32 +167,33 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       (_) async {
         await _groupsLocalDataSource.deleteGroup(groupId);
         unawaited(getGroups());
-        return const Right(null);
+        return const Right(unit);
       },
     );
   }
 
+  // TODO(Chaitanya): Update caching
   @override
-  Future<Either<Failure, void>> addMembersToGroup({
+  FutureEitherFailureUnit addMembers({
     required String groupId,
     required List<String> userIds,
   }) async {
     final result = await _apiCallHandler.handle(
-      () => _groupsRemoteDataSource.addMembersToGroup(
+      () => _groupsRemoteDataSource.addMembers(
         groupId: groupId,
         userIds: userIds,
       ),
     );
-    return result.map((_) {});
+    return result;
   }
 
   @override
-  Future<Either<Failure, void>> leaveGroup({
+  FutureEitherFailureUnit leaveOrRemoveGroup({
     required String groupId,
     required String userId,
   }) async {
     final result = await _apiCallHandler.handle(
-      () => _groupsRemoteDataSource.leaveGroup(
+      () => _groupsRemoteDataSource.leaveOrRemoveGroup(
         groupId: groupId,
         userId: userId,
       ),
@@ -180,7 +204,7 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       (_) async {
         await _groupsLocalDataSource.deleteGroup(groupId);
         unawaited(getGroups());
-        return const Right(null);
+        return const Right(unit);
       },
     );
   }

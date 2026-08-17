@@ -157,11 +157,11 @@ class GroupSettingsRoute extends AppRoute {
 
   final String groupId;
 
-  static const String relativePathTemplate = 'group-settings';
-  static const String pathTemplate = '/groups/:groupId/group-settings';
+  static const String relativePathTemplate = 'settings';
+  static const String pathTemplate = '/groups/:groupId/settings';
 
   @override
-  String get path => '${GroupsRoute.pathTemplate}/$groupId/group-settings';
+  String get path => '${GroupsRoute.pathTemplate}/$groupId/settings';
 
   static GroupSettingsRoute? fromState(GoRouterState state) {
     final groupId = state.pathParameters['groupId'];

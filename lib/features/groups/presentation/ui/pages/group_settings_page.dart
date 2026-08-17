@@ -92,7 +92,7 @@ class GroupSettingsPage extends StatelessWidget {
                           const SizedBox(height: AppSpacing.md),
                         ],
                         _DangerZone(
-                          onLeaveGroup: () => _confirmLeave(context),
+                          onleaveOrRemoveGroup: () => _confirmLeave(context),
                           onDeleteGroup: () => _confirmDelete(context),
                         ),
                       ],
@@ -160,8 +160,8 @@ class GroupSettingsPage extends StatelessWidget {
     unawaited(
       AppDialog.show<void>(
         context: context,
-        title: context.strings.leaveGroup,
-        description: context.strings.leaveGroupConfirmation,
+        title: context.strings.leaveOrRemoveGroup,
+        description: context.strings.leaveOrRemoveGroupConfirmation,
         actions: [
           AppButton.text(
             onPressed: () => RouteHandler.pop<void>(context),
@@ -172,7 +172,7 @@ class GroupSettingsPage extends StatelessWidget {
               RouteHandler.pop<void>(context);
               final userId = context.read<AuthBloc>().state.user?.id;
               if (userId != null) {
-                context.read<GroupBloc>().leaveGroup(userId);
+                context.read<GroupBloc>().leaveOrRemoveGroup(userId: userId);
               }
             },
             text: context.strings.confirm,
@@ -197,7 +197,7 @@ class GroupSettingsPage extends StatelessWidget {
           AppButton.text(
             onPressed: () {
               RouteHandler.pop<void>(context);
-              context.read<GroupBloc>().deleteGroup(groupId);
+              context.read<GroupBloc>().deleteGroup(groupId: groupId);
             },
             text: context.strings.delete,
             color: context.colorScheme.error,
@@ -462,11 +462,11 @@ class _MemberTile extends StatelessWidget {
 
 class _DangerZone extends StatelessWidget {
   const _DangerZone({
-    required this.onLeaveGroup,
+    required this.onleaveOrRemoveGroup,
     required this.onDeleteGroup,
   });
 
-  final VoidCallback onLeaveGroup;
+  final VoidCallback onleaveOrRemoveGroup;
   final VoidCallback onDeleteGroup;
 
   @override
@@ -485,14 +485,14 @@ class _DangerZone extends StatelessWidget {
             children: [
               ListTile(
                 title: AppText.bodyLarge(
-                  context.strings.leaveGroup,
+                  context.strings.leaveOrRemoveGroup,
                   color: context.colorScheme.error,
                 ),
                 leading: Icon(
                   Icons.exit_to_app_rounded,
                   color: context.colorScheme.error,
                 ),
-                onTap: onLeaveGroup,
+                onTap: onleaveOrRemoveGroup,
               ),
               const Divider(height: 1),
               ListTile(

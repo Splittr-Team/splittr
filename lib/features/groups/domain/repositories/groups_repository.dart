@@ -6,6 +6,8 @@ import 'package:splittr/features/groups/domain/entities/group_preview.dart';
 abstract interface class GroupsRepository {
   Stream<EitherFailure<List<Group>>> get watchGroups;
 
+  Stream<EitherFailure<Group>> watchGroupById(String id);
+
   FutureEitherFailure<PaginatedList<Group>> getGroups({
     String? cursor,
     int? limit,
@@ -24,16 +26,16 @@ abstract interface class GroupsRepository {
     required String description,
   });
 
-  Future<Either<Failure, void>> deleteGroup({
+  FutureEitherFailureUnit deleteGroup({
     required String groupId,
   });
 
-  Future<Either<Failure, void>> addMembersToGroup({
+  FutureEitherFailureUnit addMembers({
     required String groupId,
     required List<String> userIds,
   });
 
-  Future<Either<Failure, void>> leaveGroup({
+  FutureEitherFailureUnit leaveOrRemoveGroup({
     required String groupId,
     required String userId,
   });

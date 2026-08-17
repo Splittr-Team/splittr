@@ -24,6 +24,11 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   }
 
   @override
+  Future<GroupModel> getGroupById(String id) {
+    return _groupsApiClient.getGroupById(id);
+  }
+
+  @override
   Future<GroupModel> createGroup({
     required String name,
     required String description,
@@ -53,11 +58,11 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   }
 
   @override
-  Future<Unit> addMembersToGroup({
+  Future<Unit> addMembers({
     required String groupId,
     required List<String> userIds,
   }) async {
-    await _groupsApiClient.addMembersToGroup(
+    await _groupsApiClient.addMembers(
       groupId,
       AddMembersPayload(userIds: userIds),
     );
@@ -65,11 +70,11 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   }
 
   @override
-  Future<Unit> leaveGroup({
+  Future<Unit> leaveOrRemoveGroup({
     required String groupId,
     required String userId,
   }) async {
-    await _groupsApiClient.leaveGroup(groupId, userId);
+    await _groupsApiClient.leaveOrRemoveGroup(groupId, userId);
     return unit;
   }
 }

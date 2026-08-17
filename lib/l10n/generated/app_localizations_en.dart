@@ -305,10 +305,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invitesSentSuccessfully => 'Invites sent successfully!';
 
   @override
-  String get leaveGroup => 'Leave Group';
+  String get leaveOrRemoveGroup => 'Leave Group';
 
   @override
-  String get leaveGroupConfirmation =>
+  String get leaveOrRemoveGroupConfirmation =>
       'Are you sure you want to leave this group? You will not be able to see its expenses.';
 
   @override

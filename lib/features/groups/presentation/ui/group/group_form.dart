@@ -68,7 +68,7 @@ class _GroupForm extends StatelessWidget {
         Expanded(
           child: AppRefreshIndicator(
             onRefresh: () async {
-              context.read<GroupBloc>().started(groupId);
+              getBloc<GroupBloc>(context).started(groupId);
             },
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -76,6 +76,7 @@ class _GroupForm extends StatelessWidget {
                 SizedBox(
                   height: 300,
                   child: Center(
+                    // TODO(Chaitanya): Add expenses
                     child: AppText.bodyMedium(
                       'Expenses will appear here', // Add to app_en.arb later
                       color: context.colorScheme.onSurfaceVariant,

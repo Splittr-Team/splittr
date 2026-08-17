@@ -59,7 +59,6 @@
   "delete": "Delete",
   "failedToLoadPreview": "Failed to load group preview.",
   "close": "Close",
-  "retry": "Retry",
   "invitedBy": "Invited by {creatorName}",
   "@invitedBy": {
     "placeholders": {
@@ -95,7 +94,6 @@
   "createYourFirstSplit": "Create Your First Split",
   "newSplit": "New Split",
   "splitsHistoryEmptyStateSubtitle": "Your splits history will show up here once you save them.",
-  "individualShares": "Individual Shares",
   "addFriend": "Add Friend",
   "emailOrPhone": "Email or Phone Number",
   "submit": "Submit",
@@ -107,8 +105,8 @@
   "sendInvites": "Send Invites",
   "noFriendsFound": "No friends found",
   "invitesSentSuccessfully": "Invites sent successfully!",
-  "leaveGroup": "Leave Group",
-  "leaveGroupConfirmation": "Are you sure you want to leave this group? You will not be able to see its expenses.",
+  "leaveOrRemoveGroup": "Leave Group",
+  "leaveOrRemoveGroupConfirmation": "Are you sure you want to leave this group? You will not be able to see its expenses.",
   "confirm": "Confirm",
   "groupDeletedSuccessfully": "Group deleted successfully!",
   "groupLeftSuccessfully": "Group left successfully!",

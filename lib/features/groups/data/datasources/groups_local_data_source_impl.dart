@@ -2,7 +2,9 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_storage_isar/sky_storage_isar.dart';
 import 'package:splittr/core/storage/models/pagination_metadata_isar_model.dart';
 import 'package:splittr/features/groups/data/datasources/groups_local_data_source.dart';
+import 'package:splittr/features/groups/data/mappers/group_model_to_isar.dart';
 import 'package:splittr/features/groups/data/models/group_isar_model.dart';
+import 'package:splittr/features/groups/data/models/group_model.dart';
 
 @LazySingleton(as: GroupsLocalDataSource)
 class GroupsLocalDataSourceImpl implements GroupsLocalDataSource {
@@ -15,6 +17,15 @@ class GroupsLocalDataSourceImpl implements GroupsLocalDataSource {
     return _isar.groupIsarModels.where().sortByCreatedAtDesc().watch(
       fireImmediately: true,
     );
+  }
+
+  @override
+  Stream<GroupIsarModel?> watchGroupById(String id) {
+    return _isar.groupIsarModels
+        .filter()
+        .idEqualTo(id)
+        .watch(fireImmediately: true)
+        .map((groups) => groups.firstOrNull);
   }
 
   @override
@@ -31,6 +42,11 @@ class GroupsLocalDataSourceImpl implements GroupsLocalDataSource {
     await _isar.writeTxn(() async {
       await _isar.groupIsarModels.put(group);
     });
+  }
+
+  @override
+  Future<void> saveGroupModel(GroupModel group) async {
+    await saveGroup(group.toIsar());
   }
 
   @override

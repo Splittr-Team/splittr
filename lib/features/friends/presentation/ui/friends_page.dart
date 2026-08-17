@@ -23,9 +23,9 @@ class FriendsPage extends BasePage<FriendsBloc, FriendsState> {
   @override
   Widget buildPage(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: AppButton.fab(
         onPressed: () => _showAddFriendSheet(context),
-        child: const AppIcon.md(Icons.person_add_rounded),
+        icon: Icons.person_add_rounded,
       ),
       body: const _FriendsForm(),
     );

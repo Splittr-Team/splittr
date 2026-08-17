@@ -33,17 +33,20 @@ abstract class GroupsApiClient {
   @POST('/')
   Future<GroupModel> createGroup(@Body() CreateGroupPayload body);
 
+  @GET('/{id}')
+  Future<GroupModel> getGroupById(@Path('id') String id);
+
   @DELETE('/{id}')
   Future<void> deleteGroup(@Path('id') String id);
 
   @POST('/{id}/members')
-  Future<void> addMembersToGroup(
+  Future<void> addMembers(
     @Path('id') String id,
     @Body() AddMembersPayload body,
   );
 
   @DELETE('/{id}/members/{userId}')
-  Future<void> leaveGroup(
+  Future<void> leaveOrRemoveGroup(
     @Path('id') String id,
     @Path('userId') String userId,
   );

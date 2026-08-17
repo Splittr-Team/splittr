@@ -46,11 +46,14 @@ sealed class GroupState extends BaseState with _$GroupState {
 class GroupStateStore with _$GroupStateStore {
   const GroupStateStore({
     this.loading = false,
+    this.groupId = '',
     this.group,
   });
 
   @override
   final bool loading;
+  @override
+  final String groupId;
   @override
   final Group? group;
 }

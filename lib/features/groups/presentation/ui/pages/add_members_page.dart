@@ -198,8 +198,8 @@ class AddMembersPage extends StatelessWidget {
                               text: context.strings.sendInvites,
                               onPressed: selectedFriendIds.isNotEmpty
                                   ? () {
-                                      context.read<GroupBloc>().addMembers(
-                                        selectedFriendIds.toList(),
+                                      getBloc<GroupBloc>(context).addMembers(
+                                        userIds: selectedFriendIds.toList(),
                                       );
                                     }
                                   : null,

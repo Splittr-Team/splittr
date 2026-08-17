@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:sky_architecture/sky_architecture.dart' hide Group, State;
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:sky_router/sky_router.dart';
@@ -9,8 +8,6 @@ import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/presentation/blocs/group/group_bloc.dart';
-import 'package:splittr/features/groups/presentation/blocs/groups_bloc.dart'
-    hide OnFailure;
 import 'package:splittr/utils/extensions/extensions.dart';
 
 part 'group_form.dart';
@@ -29,19 +26,20 @@ class GroupPage extends BasePage<GroupBloc, GroupState> {
   GroupBloc createBloc() => getIt<GroupBloc>()..started(groupId);
 
   @override
+  bool showLoading(GroupState state) => state.store.loading;
+
+  @override
   Widget buildPage(BuildContext context) {
     return BlocListener<GroupBloc, GroupState>(
       listener: (context, state) {
         switch (state) {
           case OnGroupDeleted():
-            getIt<GroupsBloc>().started(noParams);
             AppSnackBar.show(
               context,
               message: context.strings.groupDeletedSuccessfully,
             );
             RouteHandler.pop<void>(context);
           case OnGroupLeft():
-            getIt<GroupsBloc>().started(noParams);
             AppSnackBar.show(
               context,
               message: context.strings.groupLeftSuccessfully,
@@ -76,23 +74,10 @@ class GroupPage extends BasePage<GroupBloc, GroupState> {
                 ),
               ],
             ),
-            body: Stack(
-              children: [
-                _GroupForm(
-                  groupId: groupId,
-                  group: state.store.group,
-                  isLoading: isLoading,
-                ),
-                if (isLoading)
-                  const Positioned.fill(
-                    child: ColoredBox(
-                      color: Colors.black54,
-                      child: Center(
-                        child: AppProgressIndicator.circular(),
-                      ),
-                    ),
-                  ),
-              ],
+            body: _GroupForm(
+              groupId: groupId,
+              group: state.store.group,
+              isLoading: isLoading,
             ),
           );
         },

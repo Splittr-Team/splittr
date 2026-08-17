@@ -50,6 +50,7 @@ final class AddFriendBloc
 
     changeLoadingState(emit: emit, loading: true);
 
+    // TODO(Chaitanya): Add/use value objects
     final isEmail = value.contains('@');
     final friendEmail = isEmail ? value : null;
     final friendPhone = isEmail ? null : value;

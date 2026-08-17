@@ -652,17 +652,17 @@ abstract class AppLocalizations {
   /// **'Invites sent successfully!'**
   String get invitesSentSuccessfully;
 
-  /// No description provided for @leaveGroup.
+  /// No description provided for @leaveOrRemoveGroup.
   ///
   /// In en, this message translates to:
   /// **'Leave Group'**
-  String get leaveGroup;
+  String get leaveOrRemoveGroup;
 
-  /// No description provided for @leaveGroupConfirmation.
+  /// No description provided for @leaveOrRemoveGroupConfirmation.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to leave this group? You will not be able to see its expenses.'**
-  String get leaveGroupConfirmation;
+  String get leaveOrRemoveGroupConfirmation;
 
   /// No description provided for @confirm.
   ///
