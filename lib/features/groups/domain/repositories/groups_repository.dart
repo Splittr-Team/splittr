@@ -8,6 +8,8 @@ abstract interface class GroupsRepository {
 
   Stream<EitherFailure<Group>> watchGroupById(String id);
 
+  FutureEitherFailure<Group> getGroupById(String id);
+
   FutureEitherFailure<PaginatedList<Group>> getGroups({
     String? cursor,
     int? limit,

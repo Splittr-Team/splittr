@@ -448,12 +448,6 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get close;
 
-  /// No description provided for @retry.
-  ///
-  /// In en, this message translates to:
-  /// **'Retry'**
-  String get retry;
-
   /// No description provided for @invitedBy.
   ///
   /// In en, this message translates to:
@@ -580,12 +574,6 @@ abstract class AppLocalizations {
   /// **'Your splits history will show up here once you save them.'**
   String get splitsHistoryEmptyStateSubtitle;
 
-  /// No description provided for @individualShares.
-  ///
-  /// In en, this message translates to:
-  /// **'Individual Shares'**
-  String get individualShares;
-
   /// No description provided for @addFriend.
   ///
   /// In en, this message translates to:
@@ -694,11 +682,23 @@ abstract class AppLocalizations {
   /// **'Group Settings'**
   String get groupSettings;
 
+  /// No description provided for @individualShares.
+  ///
+  /// In en, this message translates to:
+  /// **'Individual Shares'**
+  String get individualShares;
+
   /// No description provided for @noNotificationsYet.
   ///
   /// In en, this message translates to:
   /// **'No notifications yet!'**
   String get noNotificationsYet;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 
   /// No description provided for @noMembersFound.
   ///

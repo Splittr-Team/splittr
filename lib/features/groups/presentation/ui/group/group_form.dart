@@ -4,16 +4,15 @@ class _GroupForm extends StatelessWidget {
   const _GroupForm({
     required this.groupId,
     required this.isLoading,
-    this.group,
+    required this.group,
   });
 
   final String groupId;
-  final Group? group;
+  final Group group;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
-    final displayGroup = group ?? Group(id: groupId, name: 'Group $groupId');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -47,12 +46,12 @@ class _GroupForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText.headlineSmall(
-                        displayGroup.name ?? context.strings.groupDetails,
+                        group.name ?? context.strings.groupDetails,
                       ),
                       const SizedBox(height: AppSpacing.xs),
                       AppText.bodyMedium(
                         context.strings.membersCount(
-                          displayGroup.members.length,
+                          group.members.length,
                         ),
                         color: context.colorScheme.onSurfaceVariant,
                       ),

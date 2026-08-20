@@ -1,6 +1,5 @@
 import 'package:splittr/core/storage/models/pagination_metadata_isar_model.dart';
 import 'package:splittr/features/groups/data/models/group_isar_model.dart';
-import 'package:splittr/features/groups/data/models/group_model.dart';
 
 abstract interface class GroupsLocalDataSource {
   Stream<List<GroupIsarModel>> watchGroups();
@@ -10,8 +9,6 @@ abstract interface class GroupsLocalDataSource {
   Future<List<GroupIsarModel>> getGroups({int? limit});
 
   Future<void> saveGroup(GroupIsarModel group);
-
-  Future<void> saveGroupModel(GroupModel group);
 
   Future<void> saveGroups({
     required List<GroupIsarModel> groups,

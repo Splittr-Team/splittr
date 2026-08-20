@@ -189,9 +189,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get close => 'Close';
 
   @override
-  String get retry => 'Retry';
-
-  @override
   String invitedBy(String creatorName) {
     return 'Invited by $creatorName';
   }
@@ -269,9 +266,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your splits history will show up here once you save them.';
 
   @override
-  String get individualShares => 'Individual Shares';
-
-  @override
   String get addFriend => 'Add Friend';
 
   @override
@@ -327,7 +321,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get groupSettings => 'Group Settings';
 
   @override
+  String get individualShares => 'Individual Shares';
+
+  @override
   String get noNotificationsYet => 'No notifications yet!';
+
+  @override
+  String get retry => 'Retry';
 
   @override
   String get noMembersFound => 'No members found';

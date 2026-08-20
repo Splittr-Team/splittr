@@ -36,18 +36,6 @@ final class GroupsRepositoryImpl implements GroupsRepository {
 
   @override
   Stream<EitherFailure<Group>> watchGroupById(String id) {
-    unawaited(
-      _apiCallHandler
-          .handle(() => _groupsRemoteDataSource.getGroupById(id))
-          .then(
-            (result) => result.fold(
-              (failure) => null,
-              (groupModel) =>
-                  _groupsLocalDataSource.saveGroup(groupModel.toIsar()),
-            ),
-          ),
-    );
-
     return _groupsLocalDataSource.watchGroupById(id).map((model) {
       if (model != null) {
         return Right(model.toDomain());
@@ -55,6 +43,21 @@ final class GroupsRepositoryImpl implements GroupsRepository {
         return const Left(ServerFailure(message: 'Group not found'));
       }
     });
+  }
+
+  @override
+  FutureEitherFailure<Group> getGroupById(String id) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.getGroupById(id),
+    );
+
+    return result.fold(
+      Left.new,
+      (groupModel) async {
+        await _groupsLocalDataSource.saveGroup(groupModel.toIsar());
+        return Right(groupModel.toDomain());
+      },
+    );
   }
 
   @override

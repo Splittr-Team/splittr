@@ -26,62 +26,70 @@ class GroupPage extends BasePage<GroupBloc, GroupState> {
   GroupBloc createBloc() => getIt<GroupBloc>()..started(groupId);
 
   @override
-  bool showLoading(GroupState state) => state.store.loading;
+  bool showLoading(GroupState state) =>
+      state.store.loading || state.store.group == null;
+
+  @override
+  void handleStateChange(BuildContext context, GroupState state) {
+    return switch (state) {
+      OnGroupDeleted _ => {
+          AppSnackBar.show(
+            context,
+            message: context.strings.groupDeletedSuccessfully,
+          ),
+          RouteHandler.pop<void>(context),
+        },
+      OnGroupLeft _ => {
+          AppSnackBar.show(
+            context,
+            message: context.strings.groupLeftSuccessfully,
+          ),
+          RouteHandler.pop<void>(context),
+        },
+      OnFailure(:final failure) => AppSnackBar.show(
+          context,
+          message: failure.message,
+        ),
+      _ => () {},
+    };
+  }
 
   @override
   Widget buildPage(BuildContext context) {
-    return BlocListener<GroupBloc, GroupState>(
-      listener: (context, state) {
-        switch (state) {
-          case OnGroupDeleted():
-            AppSnackBar.show(
-              context,
-              message: context.strings.groupDeletedSuccessfully,
-            );
-            RouteHandler.pop<void>(context);
-          case OnGroupLeft():
-            AppSnackBar.show(
-              context,
-              message: context.strings.groupLeftSuccessfully,
-            );
-            RouteHandler.pop<void>(context);
-          case OnFailure(:final failure):
-            AppSnackBar.show(context, message: failure.message);
-          case _:
-            break;
+    return BlocBuilder<GroupBloc, GroupState>(
+      builder: (context, state) {
+        final group = state.store.group;
+        if (group == null) {
+          return const SizedBox.shrink();
         }
-      },
-      child: BlocBuilder<GroupBloc, GroupState>(
-        builder: (context, state) {
-          final isLoading = state.store.loading;
+        final isLoading = state.store.loading;
 
-          return Scaffold(
-            appBar: AppTopBar(
-              title: state.store.group?.name ?? context.strings.groupDetails,
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: AppSpacing.xs),
-                  child: AppIconButton(
-                    icon: Icons.settings_outlined,
-                    onPressed: () {
-                      unawaited(
-                        GroupSettingsRoute(
-                          groupId: groupId,
-                        ).push<void>(context),
-                      );
-                    },
-                  ),
+        return Scaffold(
+          appBar: AppTopBar(
+            title: group.name ?? context.strings.groupDetails,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: AppSpacing.xs),
+                child: AppIconButton(
+                  icon: Icons.settings_outlined,
+                  onPressed: () {
+                    unawaited(
+                      GroupSettingsRoute(
+                        groupId: groupId,
+                      ).push<void>(context),
+                    );
+                  },
                 ),
-              ],
-            ),
-            body: _GroupForm(
-              groupId: groupId,
-              group: state.store.group,
-              isLoading: isLoading,
-            ),
-          );
-        },
-      ),
+              ),
+            ],
+          ),
+          body: _GroupForm(
+            groupId: groupId,
+            group: group,
+            isLoading: isLoading,
+          ),
+        );
+      },
     );
   }
 }

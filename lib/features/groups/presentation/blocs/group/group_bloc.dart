@@ -8,6 +8,7 @@ import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/domain/usecases/add_members_to_group_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/delete_group_usecase.dart';
+import 'package:splittr/features/groups/domain/usecases/get_group_by_id_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/leave_group_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/watch_group_by_id_usecase.dart';
 
@@ -22,6 +23,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
     this._leaveOrRemoveGroupUseCase,
     this._addMembersUseCase,
     this._watchGroupByIdUseCase,
+    this._getGroupByIdUseCase,
   ) : super(
         const GroupState.initial(
           store: GroupStateStore(),
@@ -32,6 +34,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
   final LeaveOrRemoveGroupUseCase _leaveOrRemoveGroupUseCase;
   final AddMembersUseCase _addMembersUseCase;
   final WatchGroupByIdUseCase _watchGroupByIdUseCase;
+  final GetGroupByIdUseCase _getGroupByIdUseCase;
 
   StreamSubscription<EitherFailure<Group>>? _groupSubscription;
 
@@ -61,10 +64,23 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
     _groupSubscription = _watchGroupByIdUseCase.call(event.groupId).listen(
       (result) {
         result.fold(
-          (failure) => add(GroupEvent.loadFailed(failure: failure)),
-          (group) => add(GroupEvent.groupUpdated(group: group)),
+          (failure) => loadFailed(failure: failure),
+          (group) => groupUpdated(group: group),
         );
       },
+    );
+
+    final result = await _getGroupByIdUseCase.call(event.groupId);
+
+    result.fold(
+      (failure) => loadFailed(failure: failure),
+      (_) => emit(
+        GroupState.initial(
+          store: state.store.copyWith(
+            loading: false,
+          ),
+        ),
+      ),
     );
   }
 
@@ -167,6 +183,14 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
 
   void addMembers({required List<String> userIds}) {
     add(GroupEvent.addMembers(userIds: userIds));
+  }
+
+  void groupUpdated({required Group group}) {
+    add(GroupEvent.groupUpdated(group: group));
+  }
+
+  void loadFailed({required Failure failure}) {
+    add(GroupEvent.loadFailed(failure: failure));
   }
 
   @override
