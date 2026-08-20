@@ -33,23 +33,23 @@ class GroupPage extends BasePage<GroupBloc, GroupState> {
   void handleStateChange(BuildContext context, GroupState state) {
     return switch (state) {
       OnGroupDeleted _ => {
-          AppSnackBar.show(
-            context,
-            message: context.strings.groupDeletedSuccessfully,
-          ),
-          RouteHandler.pop<void>(context),
-        },
-      OnGroupLeft _ => {
-          AppSnackBar.show(
-            context,
-            message: context.strings.groupLeftSuccessfully,
-          ),
-          RouteHandler.pop<void>(context),
-        },
-      OnFailure(:final failure) => AppSnackBar.show(
+        AppSnackBar.show(
           context,
-          message: failure.message,
+          message: context.strings.groupDeletedSuccessfully,
         ),
+        RouteHandler.pop<void>(context),
+      },
+      OnGroupLeft _ => {
+        AppSnackBar.show(
+          context,
+          message: context.strings.groupLeftSuccessfully,
+        ),
+        RouteHandler.pop<void>(context),
+      },
+      OnFailure(:final failure) => AppSnackBar.show(
+        context,
+        message: failure.message,
+      ),
       _ => () {},
     };
   }
