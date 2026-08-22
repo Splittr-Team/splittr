@@ -63,13 +63,13 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
     _groupSubscription = _watchGroupByIdUseCase
         .call(WatchGroupByIdParams(groupId: event.groupId))
         .listen(
-      (result) {
-        result.fold(
-          (failure) => loadFailed(failure: failure),
-          (group) => groupUpdated(group: group),
+          (result) {
+            result.fold(
+              (failure) => loadFailed(failure: failure),
+              (group) => groupUpdated(group: group),
+            );
+          },
         );
-      },
-    );
 
     final result = await _getGroupByIdUseCase.call(
       GetGroupByIdParams(groupId: event.groupId),
