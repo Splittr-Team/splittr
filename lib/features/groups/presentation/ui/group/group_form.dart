@@ -66,7 +66,9 @@ class _GroupForm extends StatelessWidget {
         Expanded(
           child: AppRefreshIndicator(
             onRefresh: () async {
-              getBloc<GroupBloc>(context).started(groupId);
+              getBloc<GroupBloc>(context).started(
+                GroupParams(groupId: groupId),
+              );
             },
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),

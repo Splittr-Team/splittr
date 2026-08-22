@@ -17,7 +17,7 @@ part 'group_event.dart';
 part 'group_state.dart';
 
 @injectable
-final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
+final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
   GroupBloc(
     this._deleteGroupUseCase,
     this._leaveOrRemoveGroupUseCase,
@@ -56,12 +56,13 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
       GroupState.initial(
         store: state.store.copyWith(
           loading: true,
-          groupId: event.groupId,
         ),
       ),
     );
     await _groupSubscription?.cancel();
-    _groupSubscription = _watchGroupByIdUseCase.call(event.groupId).listen(
+    _groupSubscription = _watchGroupByIdUseCase
+        .call(WatchGroupByIdParams(groupId: event.groupId))
+        .listen(
       (result) {
         result.fold(
           (failure) => loadFailed(failure: failure),
@@ -70,7 +71,9 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
       },
     );
 
-    final result = await _getGroupByIdUseCase.call(event.groupId);
+    final result = await _getGroupByIdUseCase.call(
+      GetGroupByIdParams(groupId: event.groupId),
+    );
 
     result.fold(
       (failure) => loadFailed(failure: failure),
@@ -112,7 +115,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
     changeLoadingState(emit: emit, loading: true);
 
     final result = await _deleteGroupUseCase.call(
-      DeleteGroupParams(groupId: state.store.groupId),
+      DeleteGroupParams(groupId: state.store.group?.id ?? ''),
     );
 
     result.fold(
@@ -133,7 +136,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
 
     final result = await _leaveOrRemoveGroupUseCase.call(
       LeaveOrRemoveGroupParams(
-        groupId: state.store.groupId,
+        groupId: state.store.group?.id ?? '',
         userId: event.userId,
       ),
     );
@@ -155,7 +158,10 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
     changeLoadingState(emit: emit, loading: true);
 
     final result = await _addMembersUseCase.call(
-      AddMembersParams(groupId: state.store.groupId, userIds: event.userIds),
+      AddMembersParams(
+        groupId: state.store.group?.id ?? '',
+        userIds: event.userIds,
+      ),
     );
 
     result.fold(
@@ -169,8 +175,8 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, String> {
   }
 
   @override
-  void started(String groupId) {
-    add(GroupEvent.started(groupId: groupId));
+  void started(GroupParams params) {
+    add(GroupEvent.started(groupId: params.groupId));
   }
 
   void deleteGroup({required String groupId}) {

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sky_architecture/sky_architecture.dart' hide Group, State;
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:sky_router/sky_router.dart';
@@ -13,8 +12,6 @@ import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart'
 import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/domain/entities/member.dart';
 import 'package:splittr/features/groups/presentation/blocs/group/group_bloc.dart';
-import 'package:splittr/features/groups/presentation/blocs/groups_bloc.dart'
-    hide OnFailure;
 import 'package:splittr/utils/extensions/extensions.dart';
 
 class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
@@ -26,7 +23,8 @@ class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
   final String groupId;
 
   @override
-  GroupBloc createBloc() => getIt<GroupBloc>()..started(groupId);
+  GroupBloc createBloc() =>
+      getIt<GroupBloc>()..started(GroupParams(groupId: groupId));
 
   @override
   bool showLoading(GroupState state) =>
@@ -65,40 +63,42 @@ class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
             appBar: AppTopBar(
               title: context.strings.groupDetails,
             ),
-            body: SingleChildScrollView(
+            body: AppScrollView(
               padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _GroupEditSection(group: currentGroup),
-                  const SizedBox(height: AppSpacing.md),
-                  _MemberSection(
-                    members: currentGroup.members,
-                    onAddMembers: () {
-                      unawaited(
-                        AddMembersRoute(
-                          groupId: groupId,
-                        ).push<void>(context),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  if (currentGroup.inviteCode != null) ...[
-                    _InviteCodeCard(
-                      inviteCode: currentGroup.inviteCode!,
-                      onShare: () => _showInviteLinkDialog(
-                        context,
-                        currentGroup.inviteCode!,
-                      ),
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _GroupEditSection(group: currentGroup),
+                    const SizedBox(height: AppSpacing.md),
+                    _MemberSection(
+                      members: currentGroup.members,
+                      onAddMembers: () {
+                        unawaited(
+                          AddMembersRoute(
+                            groupId: groupId,
+                          ).push<void>(context),
+                        );
+                      },
                     ),
                     const SizedBox(height: AppSpacing.md),
+                    if (currentGroup.inviteCode != null) ...[
+                      _InviteCodeCard(
+                        inviteCode: currentGroup.inviteCode!,
+                        onShare: () => _showInviteLinkDialog(
+                          context,
+                          currentGroup.inviteCode!,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                    ],
+                    _DangerZone(
+                      onLeaveOrRemoveGroup: () => _confirmLeave(context),
+                      onDeleteGroup: () => _confirmDelete(context),
+                    ),
                   ],
-                  _DangerZone(
-                    onleaveOrRemoveGroup: () => _confirmLeave(context),
-                    onDeleteGroup: () => _confirmDelete(context),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
@@ -190,7 +190,6 @@ class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
   }
 
   void _popAndShowSnackBar(BuildContext context, String message) {
-    getIt<GroupsBloc>().started(noParams);
     AppSnackBar.show(context, message: message);
     RouteHandler.pushAndRemoveUntil(context, GroupsRoute.pathTemplate);
   }
@@ -210,6 +209,7 @@ class _GroupEditSection extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Row(
           children: [
+            // TODO(Chaitanya): Will remove it later
             CircleAvatar(
               radius: 28,
               backgroundColor: context.colorScheme.primaryContainer,
@@ -222,6 +222,7 @@ class _GroupEditSection extends StatelessWidget {
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
+                spacing: AppSpacing.xs,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppText.headlineSmall(
@@ -230,7 +231,6 @@ class _GroupEditSection extends StatelessWidget {
                   ),
                   if (group.description != null &&
                       group.description!.isNotEmpty) ...[
-                    const SizedBox(height: AppSpacing.xs),
                     AppText.bodyMedium(
                       group.description!,
                       color: context.colorScheme.onSurfaceVariant,
@@ -445,11 +445,11 @@ class _MemberTile extends StatelessWidget {
 
 class _DangerZone extends StatelessWidget {
   const _DangerZone({
-    required this.onleaveOrRemoveGroup,
+    required this.onLeaveOrRemoveGroup,
     required this.onDeleteGroup,
   });
 
-  final VoidCallback onleaveOrRemoveGroup;
+  final VoidCallback onLeaveOrRemoveGroup;
   final VoidCallback onDeleteGroup;
 
   @override
@@ -469,7 +469,7 @@ class _DangerZone extends StatelessWidget {
               AppListTile(
                 title: context.strings.leaveOrRemoveGroup,
                 leadingIcon: Icons.exit_to_app_rounded,
-                onTap: onleaveOrRemoveGroup,
+                onTap: onLeaveOrRemoveGroup,
               ),
               const AppDivider.horizontal(),
               AppListTile(

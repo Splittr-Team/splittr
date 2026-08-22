@@ -20,7 +20,8 @@ class AddMembersPage extends BasePage<GroupBloc, GroupState> {
   final String groupId;
 
   @override
-  GroupBloc createBloc() => getIt<GroupBloc>()..started(groupId);
+  GroupBloc createBloc() =>
+      getIt<GroupBloc>()..started(GroupParams(groupId: groupId));
 
   @override
   bool showLoading(GroupState state) => state.store.loading;
