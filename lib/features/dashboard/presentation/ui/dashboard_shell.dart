@@ -27,18 +27,7 @@ class DashboardShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      appBar: AppTopBar(
-        title: _resolveTitle(context),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: AppSpacing.xs),
-            child: AppIconButton(
-              icon: Icons.notifications_outlined,
-              onPressed: () => const NotificationsRoute().push<void>(context),
-            ),
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(context),
       drawer: AppNavigationDrawer(
         selectedIndex: 0,
         onDestinationSelected: (value) {},
@@ -89,6 +78,29 @@ class DashboardShell extends StatelessWidget {
     );
   }
 
+  PreferredSizeWidget? _buildAppBar(BuildContext context) {
+    final state = navigationShell.shellRouteContext.routerState;
+    final currentPath = state.uri.path;
+    final isTopLevelTab = _tabs.any((tab) => tab.pathPrefix == currentPath);
+
+    if (!isTopLevelTab) {
+      return null;
+    }
+
+    return AppTopBar(
+      title: _resolveTitle(context),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: AppSpacing.xs),
+          child: AppIconButton(
+            icon: Icons.notifications_outlined,
+            onPressed: () => const NotificationsRoute().push<void>(context),
+          ),
+        ),
+      ],
+    );
+  }
+
   static final List<ShellTab> _tabs = [
     ShellTab(
       pathPrefix: DashboardRoute.pathTemplate,
@@ -130,15 +142,12 @@ class DashboardShell extends StatelessWidget {
   String _resolveTitle(BuildContext context) {
     switch (navigationShell.currentIndex) {
       case 1:
-        final state = navigationShell.shellRouteContext.routerState;
-        if (state.pathParameters case {'groupId': _}) {
-          return context.strings.groupDetails;
-        }
         return context.strings.myGroups;
       case 2:
         return context.strings.myFriends;
       case 3:
         return context.strings.profile;
+      case 0:
       default:
         return context.strings.dashboard;
     }

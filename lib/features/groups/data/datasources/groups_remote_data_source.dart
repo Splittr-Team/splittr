@@ -6,6 +6,8 @@ import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 abstract interface class GroupsRemoteDataSource {
   Future<GroupsResponseModel> getGroups({String? cursor, int? limit});
 
+  Future<GroupModel> getGroupById(String id);
+
   Future<GroupModel> joinGroup({required String inviteCode});
 
   Future<GroupPreviewModel> getGroupPreview(String inviteCode);
@@ -16,4 +18,14 @@ abstract interface class GroupsRemoteDataSource {
   });
 
   Future<Unit> deleteGroup({required String groupId});
+
+  Future<Unit> addMembers({
+    required String groupId,
+    required List<String> userIds,
+  });
+
+  Future<Unit> leaveOrRemoveGroup({
+    required String groupId,
+    required String userId,
+  });
 }

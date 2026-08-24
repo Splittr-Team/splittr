@@ -9,7 +9,7 @@ final class DeleteGroupUseCase implements UseCase<Unit, DeleteGroupParams> {
   final GroupsRepository _groupsRepository;
 
   @override
-  Future<Either<Failure, Unit>> call(DeleteGroupParams params) {
+  FutureEitherFailureUnit call(DeleteGroupParams params) {
     return _groupsRepository.deleteGroup(groupId: params.groupId);
   }
 }

@@ -4,6 +4,8 @@ import 'package:splittr/features/groups/data/models/group_isar_model.dart';
 abstract interface class GroupsLocalDataSource {
   Stream<List<GroupIsarModel>> watchGroups();
 
+  Stream<GroupIsarModel?> watchGroupById(String id);
+
   Future<List<GroupIsarModel>> getGroups({int? limit});
 
   Future<void> saveGroup(GroupIsarModel group);

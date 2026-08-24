@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/groups/data/datasources/groups_api_client.dart';
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
+import 'package:splittr/features/groups/data/models/add_members_payload.dart';
 import 'package:splittr/features/groups/data/models/create_group_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
@@ -20,6 +21,11 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
     int? limit,
   }) {
     return _groupsApiClient.getGroups(cursor: cursor, limit: limit);
+  }
+
+  @override
+  Future<GroupModel> getGroupById(String id) {
+    return _groupsApiClient.getGroupById(id);
   }
 
   @override
@@ -49,5 +55,26 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   @override
   Future<GroupPreviewModel> getGroupPreview(String inviteCode) {
     return _groupsApiClient.getGroupPreview(inviteCode);
+  }
+
+  @override
+  Future<Unit> addMembers({
+    required String groupId,
+    required List<String> userIds,
+  }) async {
+    await _groupsApiClient.addMembers(
+      groupId,
+      AddMembersPayload(userIds: userIds),
+    );
+    return unit;
+  }
+
+  @override
+  Future<Unit> leaveOrRemoveGroup({
+    required String groupId,
+    required String userId,
+  }) async {
+    await _groupsApiClient.leaveOrRemoveGroup(groupId, userId);
+    return unit;
   }
 }

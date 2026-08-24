@@ -7,6 +7,7 @@ class FriendCard extends StatelessWidget {
     required this.email,
     this.phone,
     this.onTap,
+    this.trailing,
     super.key,
   });
 
@@ -14,6 +15,7 @@ class FriendCard extends StatelessWidget {
   final String email;
   final String? phone;
   final VoidCallback? onTap;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +76,11 @@ class FriendCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
-              AppIcon.md(
-                Icons.chevron_right_rounded,
-                color: context.colorScheme.onSurfaceVariant,
-              ),
+              trailing ??
+                  AppIcon.md(
+                    Icons.chevron_right_rounded,
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
             ],
           ),
         ),

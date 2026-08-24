@@ -59,7 +59,6 @@
   "delete": "Delete",
   "failedToLoadPreview": "Failed to load group preview.",
   "close": "Close",
-  "retry": "Retry",
   "invitedBy": "Invited by {creatorName}",
   "@invitedBy": {
     "placeholders": {
@@ -95,7 +94,27 @@
   "createYourFirstSplit": "Create Your First Split",
   "newSplit": "New Split",
   "splitsHistoryEmptyStateSubtitle": "Your splits history will show up here once you save them.",
+  "addFriend": "Add Friend",
+  "emailOrPhone": "Email or Phone Number",
+  "submit": "Submit",
+  "friendAddedSuccessfully": "Friend added successfully!",
+  "failedToAddFriend": "Failed to add friend",
+  "pleaseEnterEmailOrPhone": "Please enter email or phone number",
+  "enterEmailOrPhone": "Enter email or phone number",
+  "addMembers": "Add Members",
+  "sendInvites": "Send Invites",
+  "noFriendsFound": "No friends found",
+  "invitesSentSuccessfully": "Invites sent successfully!",
+  "leaveOrRemoveGroup": "Leave Group",
+  "leaveOrRemoveGroupConfirmation": "Are you sure you want to leave this group? You will not be able to see its expenses.",
+  "confirm": "Confirm",
+  "groupDeletedSuccessfully": "Group deleted successfully!",
+  "groupLeftSuccessfully": "Group left successfully!",
+  "shareInviteLink": "Share Invite Link",
+  "groupSettings": "Group Settings",
   "individualShares": "Individual Shares",
   "noNotificationsYet": "No notifications yet!",
-  "retry": "Retry"
+  "retry": "Retry",
+  "noMembersFound": "No members found",
+  "dangerZone": "DANGER ZONE"
 }

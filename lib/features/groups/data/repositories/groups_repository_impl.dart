@@ -35,6 +35,32 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       .map((models) => Right(models.toDomain()));
 
   @override
+  Stream<EitherFailure<Group>> watchGroupById(String id) {
+    return _groupsLocalDataSource.watchGroupById(id).map((model) {
+      if (model != null) {
+        return Right(model.toDomain());
+      } else {
+        return const Left(ServerFailure(message: 'Group not found'));
+      }
+    });
+  }
+
+  @override
+  FutureEitherFailure<Group> getGroupById(String id) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.getGroupById(id),
+    );
+
+    return result.fold(
+      Left.new,
+      (groupModel) async {
+        await _groupsLocalDataSource.saveGroup(groupModel.toIsar());
+        return Right(groupModel.toDomain());
+      },
+    );
+  }
+
+  @override
   FutureEitherFailure<PaginatedList<Group>> getGroups({
     String? cursor,
     int? limit,
@@ -137,6 +163,43 @@ final class GroupsRepositoryImpl implements GroupsRepository {
   FutureEitherFailureUnit deleteGroup({required String groupId}) async {
     final result = await _apiCallHandler.handle(
       () => _groupsRemoteDataSource.deleteGroup(groupId: groupId),
+    );
+
+    return result.fold(
+      Left.new,
+      (_) async {
+        await _groupsLocalDataSource.deleteGroup(groupId);
+        unawaited(getGroups());
+        return const Right(unit);
+      },
+    );
+  }
+
+  // TODO(Chaitanya): Update caching
+  @override
+  FutureEitherFailureUnit addMembers({
+    required String groupId,
+    required List<String> userIds,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.addMembers(
+        groupId: groupId,
+        userIds: userIds,
+      ),
+    );
+    return result;
+  }
+
+  @override
+  FutureEitherFailureUnit leaveOrRemoveGroup({
+    required String groupId,
+    required String userId,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.leaveOrRemoveGroup(
+        groupId: groupId,
+        userId: userId,
+      ),
     );
 
     return result.fold(

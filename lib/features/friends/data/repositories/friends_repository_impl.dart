@@ -91,7 +91,13 @@ final class FriendsRepositoryImpl implements FriendsRepository {
         friendPhone: friendPhone,
       ),
     );
-    return result.map((model) => model.toDomain());
+    return result.fold(
+      Left.new,
+      (model) async {
+        await _friendsLocalDataSource.saveFriend(model.toIsar());
+        return Right(model.toDomain());
+      },
+    );
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:sky_utils/sky_utils.dart';
 import 'package:splittr/features/groups/data/models/member_model.dart';
 import 'package:splittr/features/groups/domain/entities/member.dart';
 
@@ -5,7 +6,7 @@ extension MemberModelX on MemberModel {
   Member toDomain() => Member(
     groupId: groupId,
     userId: userId,
-    role: role,
+    role: Role.values.byNameOrNull(role),
     joinedAt: joinedAt,
     name: name,
     email: email,

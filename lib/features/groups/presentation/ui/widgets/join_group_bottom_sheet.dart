@@ -49,9 +49,8 @@ class _JoinGroupBottomSheetState extends State<JoinGroupBottomSheet> {
             case JoinGroupSuccess():
               RouteHandler.pop<void>(context);
               unawaited(
-                GroupDetailsRoute(
+                GroupRoute(
                   groupId: state.group.id ?? '',
-                  group: state.group,
                 ).push<void>(context),
               );
             case JoinGroupFailure(:final failure):

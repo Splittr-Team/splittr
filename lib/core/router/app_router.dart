@@ -14,8 +14,10 @@ import 'package:splittr/features/dashboard/presentation/ui/animated_branch_conta
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_shell.dart';
 import 'package:splittr/features/friends/presentation/ui/friends_page.dart';
-import 'package:splittr/features/groups/presentation/ui/group_details/group_details_page.dart';
+import 'package:splittr/features/groups/presentation/ui/group/group_page.dart';
 import 'package:splittr/features/groups/presentation/ui/groups_page.dart';
+import 'package:splittr/features/groups/presentation/ui/pages/add_members_page.dart';
+import 'package:splittr/features/groups/presentation/ui/pages/group_settings_page.dart';
 import 'package:splittr/features/groups/presentation/ui/widgets/accept_invite_bottom_sheet.dart';
 import 'package:splittr/features/notifications/presentation/ui/notifications_page.dart';
 import 'package:splittr/features/profile/presentation/ui/profile_page.dart';
@@ -154,6 +156,38 @@ final List<RouteBase> _routes = [
     path: SignUpRoute.pathTemplate,
     builder: (context, state) => const SignUpPage(),
   ),
+  GoRoute(
+    path: AddMembersRoute.pathTemplate,
+    builder: (context, state) {
+      final route = AddMembersRoute.fromState(state);
+
+      if (route == null) {
+        throw GoException(
+          'Invalid or missing group identifier.',
+        );
+      }
+
+      return AddMembersPage(
+        groupId: route.groupId,
+      );
+    },
+  ),
+  GoRoute(
+    path: GroupSettingsRoute.pathTemplate,
+    builder: (context, state) {
+      final route = GroupSettingsRoute.fromState(state);
+
+      if (route == null) {
+        throw GoException(
+          'Invalid or missing group identifier.',
+        );
+      }
+
+      return GroupSettingsPage(
+        groupId: route.groupId,
+      );
+    },
+  ),
   StatefulShellRoute(
     builder: (context, state, navigationShell) => DashboardShell(
       navigationShell: navigationShell,
@@ -184,17 +218,16 @@ final List<RouteBase> _routes = [
             ),
             routes: [
               GoRoute(
-                path: GroupDetailsRoute.relativePathTemplate,
+                path: GroupRoute.relativePathTemplate,
                 builder: (context, state) {
-                  final route = GroupDetailsRoute.fromState(state);
+                  final route = GroupRoute.fromState(state);
 
                   if (route == null) {
                     throw GoException('Invalid or missing group identifier.');
                   }
 
-                  return GroupDetailsPage(
+                  return GroupPage(
                     groupId: route.groupId,
-                    group: route.group,
                   );
                 },
               ),
