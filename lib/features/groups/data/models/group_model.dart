@@ -10,6 +10,8 @@ class GroupModel {
     this.name,
     this.description,
     this.inviteCode,
+    this.inviteCodeExpiresAt,
+    this.requireAdminApproval,
     this.createdBy,
     this.createdAt,
     this.updatedAt,
@@ -23,6 +25,8 @@ class GroupModel {
   final String? name;
   final String? description;
   final String? inviteCode;
+  final DateTime? inviteCodeExpiresAt;
+  final bool? requireAdminApproval;
   final String? createdBy;
   final DateTime? createdAt;
   final DateTime? updatedAt;

@@ -15,6 +15,7 @@ abstract interface class GroupsRemoteDataSource {
   Future<GroupModel> createGroup({
     required String name,
     required String description,
+    bool? requireAdminApproval,
   });
 
   Future<Unit> deleteGroup({required String groupId});

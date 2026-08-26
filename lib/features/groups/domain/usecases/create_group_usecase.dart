@@ -14,6 +14,7 @@ final class CreateGroupUseCase implements UseCase<Group, CreateGroupParams> {
     return _groupsRepository.createGroup(
       description: params.description,
       name: params.name,
+      requireAdminApproval: params.requireAdminApproval,
     );
   }
 }
@@ -22,11 +23,13 @@ class CreateGroupParams extends Equatable {
   const CreateGroupParams({
     required this.name,
     required this.description,
+    this.requireAdminApproval,
   });
 
   final String name;
   final String description;
+  final bool? requireAdminApproval;
 
   @override
-  List<Object?> get props => [name, description];
+  List<Object?> get props => [name, description, requireAdminApproval];
 }

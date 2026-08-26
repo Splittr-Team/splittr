@@ -10,6 +10,8 @@ class Group with _$Group {
     this.name,
     this.description,
     this.inviteCode,
+    this.inviteCodeExpiresAt,
+    this.requireAdminApproval = false,
     this.createdBy,
     this.createdAt,
     this.updatedAt,
@@ -24,6 +26,10 @@ class Group with _$Group {
   final String? description;
   @override
   final String? inviteCode;
+  @override
+  final DateTime? inviteCodeExpiresAt;
+  @override
+  final bool requireAdminApproval;
   @override
   final String? createdBy;
   @override

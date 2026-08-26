@@ -114,11 +114,13 @@ final class GroupsRepositoryImpl implements GroupsRepository {
   FutureEitherFailure<Group> createGroup({
     required String name,
     required String description,
+    bool? requireAdminApproval,
   }) async {
     final result = await _apiCallHandler.handle(
       () => _groupsRemoteDataSource.createGroup(
         name: name,
         description: description,
+        requireAdminApproval: requireAdminApproval,
       ),
     );
 
