@@ -7,6 +7,7 @@ import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 import 'package:splittr/features/groups/data/models/join_group_payload.dart';
+import 'package:splittr/features/groups/data/models/member_model.dart';
 
 part 'groups_api_client.g.dart';
 
@@ -38,6 +39,12 @@ abstract class GroupsApiClient {
 
   @DELETE('/{id}')
   Future<void> deleteGroup(@Path('id') String id);
+
+  @GET('/{id}/members')
+  Future<List<MemberModel>> getMembers(
+    @Path('id') String id, {
+    @Query('status') String? status,
+  });
 
   @POST('/{id}/members')
   Future<void> addMembers(

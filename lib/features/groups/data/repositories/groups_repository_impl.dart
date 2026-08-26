@@ -12,8 +12,10 @@ import 'package:splittr/features/groups/data/mappers/group_isar_to_domain.dart';
 import 'package:splittr/features/groups/data/mappers/group_model_to_domain.dart';
 import 'package:splittr/features/groups/data/mappers/group_model_to_isar.dart';
 import 'package:splittr/features/groups/data/mappers/group_preview.dart';
+import 'package:splittr/features/groups/data/mappers/member.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/domain/entities/group_preview.dart';
+import 'package:splittr/features/groups/domain/entities/member.dart';
 import 'package:splittr/features/groups/domain/repositories/groups_repository.dart';
 
 @LazySingleton(as: GroupsRepository)
@@ -58,6 +60,21 @@ final class GroupsRepositoryImpl implements GroupsRepository {
         return Right(groupModel.toDomain());
       },
     );
+  }
+
+  @override
+  FutureEitherFailure<List<Member>> getMembers({
+    required String groupId,
+    MemberStatus? status,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.getMembers(
+        groupId,
+        status: status,
+      ),
+    );
+
+    return result.map((members) => members.toDomain());
   }
 
   @override

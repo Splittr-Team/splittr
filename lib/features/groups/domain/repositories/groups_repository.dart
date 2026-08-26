@@ -2,6 +2,7 @@ import 'package:sky_architecture/sky_architecture.dart' hide Group;
 import 'package:splittr/core/network/pagination.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/domain/entities/group_preview.dart';
+import 'package:splittr/features/groups/domain/entities/member.dart';
 
 abstract interface class GroupsRepository {
   Stream<EitherFailure<List<Group>>> get watchGroups;
@@ -9,6 +10,11 @@ abstract interface class GroupsRepository {
   Stream<EitherFailure<Group>> watchGroupById(String id);
 
   FutureEitherFailure<Group> getGroupById(String id);
+
+  FutureEitherFailure<List<Member>> getMembers({
+    required String groupId,
+    MemberStatus? status,
+  });
 
   FutureEitherFailure<PaginatedList<Group>> getGroups({
     String? cursor,
