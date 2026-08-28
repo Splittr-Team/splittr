@@ -3,6 +3,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:sky_network/sky_network.dart';
 import 'package:splittr/features/groups/data/models/add_members_payload.dart';
 import 'package:splittr/features/groups/data/models/create_group_payload.dart';
+import 'package:splittr/features/groups/data/models/decide_join_request_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
@@ -64,5 +65,12 @@ abstract class GroupsApiClient {
     @Path('id') String id,
     @Path('userId') String userId,
     @Body() UpdateMemberRolePayload body,
+  );
+
+  @POST('/{id}/members/{userId}/decision')
+  Future<MemberModel> decideJoinRequest(
+    @Path('id') String id,
+    @Path('userId') String userId,
+    @Body() DecideJoinRequestPayload body,
   );
 }
