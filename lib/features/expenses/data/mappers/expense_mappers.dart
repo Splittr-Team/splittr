@@ -1,4 +1,5 @@
 import 'package:sky_utils/sky_utils.dart';
+import 'package:splittr/features/expenses/data/models/balances_isar_model.dart';
 import 'package:splittr/features/expenses/data/models/balances_model.dart';
 import 'package:splittr/features/expenses/data/models/expense_details_model.dart';
 import 'package:splittr/features/expenses/data/models/expense_isar_model.dart';
@@ -165,6 +166,25 @@ extension UserBalanceModelX on UserBalanceModel {
     netBalance: netBalance,
     currency: currency,
   );
+
+  UserBalanceIsarModel toIsar() => UserBalanceIsarModel()
+    ..userId = userId
+    ..userName = userName
+    ..netBalance = netBalance.toDouble()
+    ..currency = currency;
+}
+
+extension UserBalanceIsarModelX on UserBalanceIsarModel {
+  UserBalance toDomain() => UserBalance(
+    userId: userId ?? '',
+    userName: userName ?? '',
+    netBalance: netBalance ?? 0,
+    currency: currency,
+  );
+}
+
+extension UserBalanceIsarModelListX on List<UserBalanceIsarModel> {
+  List<UserBalance> toDomain() => map((b) => b.toDomain()).toList();
 }
 
 extension SettlementModelX on SettlementModel {
@@ -176,12 +196,48 @@ extension SettlementModelX on SettlementModel {
     toUserName: toUserName,
     currency: currency,
   );
+
+  SettlementIsarModel toIsar() => SettlementIsarModel()
+    ..amount = amount.toDouble()
+    ..fromUserId = fromUserId
+    ..fromUserName = fromUserName
+    ..toUserId = toUserId
+    ..toUserName = toUserName
+    ..currency = currency;
+}
+
+extension SettlementIsarModelX on SettlementIsarModel {
+  Settlement toDomain() => Settlement(
+    amount: amount ?? 0,
+    fromUserId: fromUserId ?? '',
+    fromUserName: fromUserName ?? '',
+    toUserId: toUserId ?? '',
+    toUserName: toUserName ?? '',
+    currency: currency,
+  );
+}
+
+extension SettlementIsarModelListX on List<SettlementIsarModel> {
+  List<Settlement> toDomain() => map((s) => s.toDomain()).toList();
 }
 
 extension BalancesModelX on BalancesModel {
   Balances toDomain() => Balances(
     balances: balances.toDomain(),
     settlements: settlements.toDomain(),
+  );
+
+  BalancesIsarModel toIsar([String? groupId]) => BalancesIsarModel()
+    ..groupId = groupId ?? ''
+    ..balances = balances.map((b) => b.toIsar()).toList()
+    ..settlements = settlements.map((s) => s.toIsar()).toList()
+    ..updatedAt = DateTime.now();
+}
+
+extension BalancesIsarModelX on BalancesIsarModel {
+  Balances toDomain() => Balances(
+    balances: balances?.toDomain() ?? const [],
+    settlements: settlements?.toDomain() ?? const [],
   );
 }
 
