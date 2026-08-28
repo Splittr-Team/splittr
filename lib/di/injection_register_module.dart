@@ -20,6 +20,7 @@ import 'package:splittr/features/friends/data/models/friends_isar_schema_provide
 import 'package:splittr/features/groups/data/models/groups_isar_schema_provider.dart';
 import 'package:splittr/features/notifications/data/models/notifications_isar_schema_provider.dart';
 import 'package:splittr/features/quick_split/data/models/quick_split_isar_schema_provider.dart';
+import 'package:splittr/features/sync/data/models/sync_isar_schema_provider.dart';
 
 @module
 abstract class RegisterModule {
@@ -39,6 +40,7 @@ abstract class RegisterModule {
         const ActivitiesIsarSchemaProvider(),
         const ExpensesIsarSchemaProvider(),
         const FriendsIsarSchemaProvider(),
+        const SyncIsarSchemaProvider(),
       ],
       directory: dir.path,
     );
