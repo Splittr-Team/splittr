@@ -45,6 +45,51 @@ extension SplitModelX on SplitModel {
       ),
     };
   }
+
+  SplitIsarModel toIsar() => SplitIsarModel()
+    ..userId = userId
+    ..amount = amount.toDouble()
+    ..splitType = splitType
+    ..splitValue = splitValue?.toDouble()
+    ..name = name
+    ..email = email
+    ..phone = phone;
+}
+
+extension SplitIsarModelX on SplitIsarModel {
+  Split toDomain() {
+    final parsedSplitType = SplitType.values.byNameOrNull(splitType);
+
+    return switch (parsedSplitType) {
+      SplitType.exact => Split.exact(
+        userId: userId ?? '',
+        amount: amount ?? 0,
+        splitValue: splitValue ?? 0,
+        name: name ?? '',
+        email: email,
+        phone: phone,
+      ),
+      SplitType.percentage => Split.percentage(
+        userId: userId ?? '',
+        amount: amount ?? 0,
+        splitValue: splitValue ?? 0,
+        name: name ?? '',
+        email: email,
+        phone: phone,
+      ),
+      SplitType.equal || null => Split.equal(
+        userId: userId ?? '',
+        amount: amount ?? 0,
+        name: name ?? '',
+        email: email,
+        phone: phone,
+      ),
+    };
+  }
+}
+
+extension SplitIsarModelListX on List<SplitIsarModel> {
+  List<Split> toDomain() => map((s) => s.toDomain()).toList();
 }
 
 extension InputSplitX on InputSplit {
@@ -87,11 +132,29 @@ extension ExpenseDetailsModelX on ExpenseDetailsModel {
       splitType: SplitType.values.byNameOrNull(expense.splitType),
     );
   }
+
+  ExpenseIsarModel toIsar() => ExpenseIsarModel()
+    ..id = expense.id
+    ..description = expense.description
+    ..amount = expense.amount.toDouble()
+    ..currency = expense.currency
+    ..paidBy = expense.paidBy
+    ..createdBy = expense.createdBy
+    ..isPayment = expense.isPayment
+    ..spentAt = expense.spentAt
+    ..category = expense.category
+    ..groupId = expense.groupId
+    ..splitType = expense.splitType
+    ..splits = splits.toIsar();
 }
 
 extension SplitModelListX on List<SplitModel> {
   List<Split> toDomain() {
     return map((s) => s.toDomain()).toList();
+  }
+
+  List<SplitIsarModel> toIsar() {
+    return map((s) => s.toIsar()).toList();
   }
 }
 
@@ -180,7 +243,7 @@ extension ExpenseIsarModelX on ExpenseIsarModel {
     createdBy: createdBy ?? '',
     isPayment: isPayment ?? false,
     spentAt: spentAt ?? DateTime.now(),
-    splits: const [],
+    splits: splits?.toDomain() ?? const [],
     category: category,
     groupId: groupId,
     splitType: SplitType.values.byNameOrNull(splitType),

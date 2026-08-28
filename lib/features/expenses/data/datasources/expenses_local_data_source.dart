@@ -15,6 +15,10 @@ abstract interface class ExpensesLocalDataSource {
     int? limit,
   });
 
+  Future<ExpenseIsarModel?> getExpenseById(String id);
+
+  Stream<ExpenseIsarModel?> watchExpenseById(String id);
+
   Future<void> saveExpense(ExpenseIsarModel expense);
 
   Future<void> saveExpenses({

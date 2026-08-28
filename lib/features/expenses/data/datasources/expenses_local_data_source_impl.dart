@@ -70,6 +70,20 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
   }
 
   @override
+  Future<ExpenseIsarModel?> getExpenseById(String id) {
+    return _isar.expenseIsarModels.filter().idEqualTo(id).findFirst();
+  }
+
+  @override
+  Stream<ExpenseIsarModel?> watchExpenseById(String id) {
+    return _isar.expenseIsarModels
+        .filter()
+        .idEqualTo(id)
+        .watch(fireImmediately: true)
+        .map((list) => list.firstOrNull);
+  }
+
+  @override
   Future<void> saveExpense(ExpenseIsarModel expense) async {
     await _isar.writeTxn(() async {
       await _isar.expenseIsarModels.put(expense);

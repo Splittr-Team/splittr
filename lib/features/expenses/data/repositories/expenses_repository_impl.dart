@@ -120,7 +120,14 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
         ),
       ),
     );
-    return result.map((details) => details.toDomain());
+
+    return result.fold(
+      Left.new,
+      (details) async {
+        await _expensesLocalDataSource.saveExpense(details.toIsar());
+        return Right(details.toDomain());
+      },
+    );
   }
 
   @override
@@ -128,7 +135,20 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     final result = await _apiCallHandler.handle(
       () => _expensesRemoteDataSource.getExpenseDetails(id),
     );
-    return result.map((details) => details.toDomain());
+
+    return result.fold(
+      (failure) async {
+        final cached = await _expensesLocalDataSource.getExpenseById(id);
+        if (cached != null) {
+          return Right(cached.toDomain());
+        }
+        return Left(failure);
+      },
+      (details) async {
+        await _expensesLocalDataSource.saveExpense(details.toIsar());
+        return Right(details.toDomain());
+      },
+    );
   }
 
   @override
@@ -158,7 +178,7 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     return result.fold(
       Left.new,
       (details) async {
-        await _expensesLocalDataSource.saveExpense(details.expense.toIsar());
+        await _expensesLocalDataSource.saveExpense(details.toIsar());
         return Right(details.toDomain());
       },
     );
@@ -198,7 +218,14 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
         ),
       ),
     );
-    return result.map((details) => details.toDomain());
+
+    return result.fold(
+      Left.new,
+      (details) async {
+        await _expensesLocalDataSource.saveExpense(details.toIsar());
+        return Right(details.toDomain());
+      },
+    );
   }
 
   @override
