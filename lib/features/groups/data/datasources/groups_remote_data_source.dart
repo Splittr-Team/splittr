@@ -2,11 +2,18 @@ import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
+import 'package:splittr/features/groups/data/models/member_model.dart';
+import 'package:splittr/features/groups/domain/entities/member.dart';
 
 abstract interface class GroupsRemoteDataSource {
   Future<GroupsResponseModel> getGroups({String? cursor, int? limit});
 
   Future<GroupModel> getGroupById(String id);
+
+  Future<List<MemberModel>> getMembers(
+    String id, {
+    MemberStatus? status,
+  });
 
   Future<GroupModel> joinGroup({required String inviteCode});
 

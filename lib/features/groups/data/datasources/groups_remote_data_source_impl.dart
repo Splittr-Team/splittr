@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
+import 'package:sky_utils/sky_utils.dart';
 import 'package:splittr/features/groups/data/datasources/groups_api_client.dart';
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
 import 'package:splittr/features/groups/data/models/add_members_payload.dart';
@@ -8,6 +9,8 @@ import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 import 'package:splittr/features/groups/data/models/join_group_payload.dart';
+import 'package:splittr/features/groups/data/models/member_model.dart';
+import 'package:splittr/features/groups/domain/entities/member.dart';
 
 @LazySingleton(as: GroupsRemoteDataSource)
 final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
@@ -26,6 +29,17 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   @override
   Future<GroupModel> getGroupById(String id) {
     return _groupsApiClient.getGroupById(id);
+  }
+
+  @override
+  Future<List<MemberModel>> getMembers(
+    String id, {
+    MemberStatus? status,
+  }) {
+    return _groupsApiClient.getMembers(
+      id,
+      status: status?.constantCase,
+    );
   }
 
   @override
