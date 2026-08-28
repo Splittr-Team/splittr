@@ -12,6 +12,8 @@ class GroupIsarModel with IsarCacheable {
   String? name;
   String? description;
   String? inviteCode;
+  DateTime? inviteCodeExpiresAt;
+  bool? requireAdminApproval;
   String? createdBy;
   @Index()
   DateTime? createdAt;
@@ -24,6 +26,7 @@ class MemberIsarModel {
   String? groupId;
   String? userId;
   String? role;
+  String? status;
   String? joinedAt;
   String? name;
   String? email;

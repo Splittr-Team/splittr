@@ -32,9 +32,14 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   Future<GroupModel> createGroup({
     required String name,
     required String description,
+    bool? requireAdminApproval,
   }) {
     return _groupsApiClient.createGroup(
-      CreateGroupPayload(description: description, name: name),
+      CreateGroupPayload(
+        description: description,
+        name: name,
+        requireAdminApproval: requireAdminApproval,
+      ),
     );
   }
 

@@ -26,6 +26,7 @@ abstract interface class GroupsRepository {
   FutureEitherFailure<Group> createGroup({
     required String name,
     required String description,
+    bool? requireAdminApproval,
   });
 
   FutureEitherFailureUnit deleteGroup({

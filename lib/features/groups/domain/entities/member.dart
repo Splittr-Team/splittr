@@ -8,6 +8,7 @@ class Member with _$Member {
     this.groupId,
     this.userId,
     this.role,
+    this.status,
     this.joinedAt,
     this.name,
     this.email,
@@ -21,6 +22,8 @@ class Member with _$Member {
   @override
   final Role? role;
   @override
+  final MemberStatus? status;
+  @override
   final String? joinedAt;
   @override
   final String? name;
@@ -31,3 +34,5 @@ class Member with _$Member {
 }
 
 enum Role { admin, member }
+
+enum MemberStatus { active, pending, rejected }
