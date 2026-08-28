@@ -21,4 +21,9 @@ abstract interface class GroupsLocalDataSource {
   );
 
   Future<void> deleteGroup(String id);
+
+  Future<void> updateMember({
+    required String groupId,
+    required MemberIsarModel member,
+  });
 }
