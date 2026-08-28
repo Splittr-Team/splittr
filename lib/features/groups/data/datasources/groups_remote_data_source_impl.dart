@@ -124,4 +124,9 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
       DecideJoinRequestPayload(action: decision.constantCase),
     );
   }
+
+  @override
+  Future<GroupModel> resetInviteCode({required String groupId}) {
+    return _groupsApiClient.resetInviteCode(groupId);
+  }
 }

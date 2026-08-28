@@ -60,4 +60,8 @@ abstract interface class GroupsRepository {
     required String userId,
     required JoinRequestDecision decision,
   });
+
+  FutureEitherFailure<Group> resetInviteCode({
+    required String groupId,
+  });
 }

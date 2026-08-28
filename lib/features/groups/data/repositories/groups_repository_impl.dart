@@ -264,4 +264,23 @@ final class GroupsRepositoryImpl implements GroupsRepository {
 
     return result.map((memberModel) => memberModel.toDomain());
   }
+
+  @override
+  FutureEitherFailure<Group> resetInviteCode({
+    required String groupId,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.resetInviteCode(
+        groupId: groupId,
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (groupModel) async {
+        await _groupsLocalDataSource.saveGroup(groupModel.toIsar());
+        return Right(groupModel.toDomain());
+      },
+    );
+  }
 }
