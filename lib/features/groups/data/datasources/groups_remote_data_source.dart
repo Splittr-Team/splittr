@@ -48,4 +48,6 @@ abstract interface class GroupsRemoteDataSource {
     required String userId,
     required JoinRequestDecision decision,
   });
+
+  Future<GroupModel> resetInviteCode({required String groupId});
 }

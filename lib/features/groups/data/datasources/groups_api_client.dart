@@ -73,4 +73,7 @@ abstract class GroupsApiClient {
     @Path('userId') String userId,
     @Body() DecideJoinRequestPayload body,
   );
+
+  @POST('/{id}/invite-code/reset')
+  Future<GroupModel> resetInviteCode(@Path('id') String id);
 }
