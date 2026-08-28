@@ -8,6 +8,7 @@ import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 import 'package:splittr/features/groups/data/models/join_group_payload.dart';
 import 'package:splittr/features/groups/data/models/member_model.dart';
+import 'package:splittr/features/groups/data/models/update_member_role_payload.dart';
 
 part 'groups_api_client.g.dart';
 
@@ -56,5 +57,12 @@ abstract class GroupsApiClient {
   Future<void> leaveOrRemoveGroup(
     @Path('id') String id,
     @Path('userId') String userId,
+  );
+
+  @PUT('/{id}/members/{userId}/role')
+  Future<MemberModel> updateMemberRole(
+    @Path('id') String id,
+    @Path('userId') String userId,
+    @Body() UpdateMemberRolePayload body,
   );
 }

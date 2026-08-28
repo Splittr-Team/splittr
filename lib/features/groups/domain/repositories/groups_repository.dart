@@ -48,4 +48,10 @@ abstract interface class GroupsRepository {
     required String groupId,
     required String userId,
   });
+
+  FutureEitherFailure<Member> updateMemberRole({
+    required String groupId,
+    required String userId,
+    required Role role,
+  });
 }

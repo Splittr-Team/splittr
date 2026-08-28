@@ -230,4 +230,21 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       },
     );
   }
+
+  @override
+  FutureEitherFailure<Member> updateMemberRole({
+    required String groupId,
+    required String userId,
+    required Role role,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.updateMemberRole(
+        groupId: groupId,
+        userId: userId,
+        role: role,
+      ),
+    );
+
+    return result.map((memberModel) => memberModel.toDomain());
+  }
 }
