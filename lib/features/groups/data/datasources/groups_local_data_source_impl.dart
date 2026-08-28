@@ -77,4 +77,30 @@ class GroupsLocalDataSourceImpl implements GroupsLocalDataSource {
       await _isar.groupIsarModels.filter().idEqualTo(id).deleteAll();
     });
   }
+
+  @override
+  Future<void> updateMember({
+    required String groupId,
+    required MemberIsarModel member,
+  }) async {
+    await _isar.writeTxn(() async {
+      final group = await _isar.groupIsarModels
+          .filter()
+          .idEqualTo(groupId)
+          .findFirst();
+      if (group != null) {
+        final currentMembers = group.members?.toList() ?? [];
+        final index = currentMembers.indexWhere(
+          (m) => m.userId == member.userId,
+        );
+        if (index != -1) {
+          currentMembers[index] = member;
+        } else {
+          currentMembers.add(member);
+        }
+        group.members = currentMembers;
+        await _isar.groupIsarModels.put(group);
+      }
+    });
+  }
 }

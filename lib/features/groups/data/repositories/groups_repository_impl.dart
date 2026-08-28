@@ -245,7 +245,16 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       ),
     );
 
-    return result.map((memberModel) => memberModel.toDomain());
+    return result.fold(
+      Left.new,
+      (memberModel) async {
+        await _groupsLocalDataSource.updateMember(
+          groupId: groupId,
+          member: memberModel.toIsar(),
+        );
+        return Right(memberModel.toDomain());
+      },
+    );
   }
 
   @override
@@ -262,7 +271,16 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       ),
     );
 
-    return result.map((memberModel) => memberModel.toDomain());
+    return result.fold(
+      Left.new,
+      (memberModel) async {
+        await _groupsLocalDataSource.updateMember(
+          groupId: groupId,
+          member: memberModel.toIsar(),
+        );
+        return Right(memberModel.toDomain());
+      },
+    );
   }
 
   @override
