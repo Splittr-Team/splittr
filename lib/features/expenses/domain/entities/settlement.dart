@@ -10,6 +10,7 @@ class Settlement with _$Settlement {
     required this.fromUserName,
     required this.toUserId,
     required this.toUserName,
+    this.currency,
   });
 
   @override
@@ -22,4 +23,6 @@ class Settlement with _$Settlement {
   final String toUserId;
   @override
   final String toUserName;
+  @override
+  final String? currency;
 }
