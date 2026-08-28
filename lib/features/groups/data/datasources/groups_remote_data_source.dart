@@ -36,4 +36,10 @@ abstract interface class GroupsRemoteDataSource {
     required String groupId,
     required String userId,
   });
+
+  Future<MemberModel> updateMemberRole({
+    required String groupId,
+    required String userId,
+    required Role role,
+  });
 }

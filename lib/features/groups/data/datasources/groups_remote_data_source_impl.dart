@@ -10,6 +10,7 @@ import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 import 'package:splittr/features/groups/data/models/join_group_payload.dart';
 import 'package:splittr/features/groups/data/models/member_model.dart';
+import 'package:splittr/features/groups/data/models/update_member_role_payload.dart';
 import 'package:splittr/features/groups/domain/entities/member.dart';
 
 @LazySingleton(as: GroupsRemoteDataSource)
@@ -95,5 +96,18 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   }) async {
     await _groupsApiClient.leaveOrRemoveGroup(groupId, userId);
     return unit;
+  }
+
+  @override
+  Future<MemberModel> updateMemberRole({
+    required String groupId,
+    required String userId,
+    required Role role,
+  }) {
+    return _groupsApiClient.updateMemberRole(
+      groupId,
+      userId,
+      UpdateMemberRolePayload(role: role.constantCase),
+    );
   }
 }
