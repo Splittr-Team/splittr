@@ -54,4 +54,10 @@ abstract interface class GroupsRepository {
     required String userId,
     required Role role,
   });
+
+  FutureEitherFailure<Member> decideJoinRequest({
+    required String groupId,
+    required String userId,
+    required JoinRequestDecision decision,
+  });
 }

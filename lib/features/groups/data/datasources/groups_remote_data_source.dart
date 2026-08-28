@@ -42,4 +42,10 @@ abstract interface class GroupsRemoteDataSource {
     required String userId,
     required Role role,
   });
+
+  Future<MemberModel> decideJoinRequest({
+    required String groupId,
+    required String userId,
+    required JoinRequestDecision decision,
+  });
 }

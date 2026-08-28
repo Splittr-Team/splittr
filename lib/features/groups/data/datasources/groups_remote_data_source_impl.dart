@@ -5,6 +5,7 @@ import 'package:splittr/features/groups/data/datasources/groups_api_client.dart'
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
 import 'package:splittr/features/groups/data/models/add_members_payload.dart';
 import 'package:splittr/features/groups/data/models/create_group_payload.dart';
+import 'package:splittr/features/groups/data/models/decide_join_request_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
@@ -108,6 +109,19 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
       groupId,
       userId,
       UpdateMemberRolePayload(role: role.constantCase),
+    );
+  }
+
+  @override
+  Future<MemberModel> decideJoinRequest({
+    required String groupId,
+    required String userId,
+    required JoinRequestDecision decision,
+  }) {
+    return _groupsApiClient.decideJoinRequest(
+      groupId,
+      userId,
+      DecideJoinRequestPayload(action: decision.constantCase),
     );
   }
 }

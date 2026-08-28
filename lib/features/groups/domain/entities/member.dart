@@ -36,3 +36,5 @@ class Member with _$Member {
 enum Role { admin, member }
 
 enum MemberStatus { active, pending, rejected }
+
+enum JoinRequestDecision { approve, reject }

@@ -247,4 +247,21 @@ final class GroupsRepositoryImpl implements GroupsRepository {
 
     return result.map((memberModel) => memberModel.toDomain());
   }
+
+  @override
+  FutureEitherFailure<Member> decideJoinRequest({
+    required String groupId,
+    required String userId,
+    required JoinRequestDecision decision,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.decideJoinRequest(
+        groupId: groupId,
+        userId: userId,
+        decision: decision,
+      ),
+    );
+
+    return result.map((memberModel) => memberModel.toDomain());
+  }
 }
