@@ -7,6 +7,7 @@ extension UserModelX on UserModel {
     name: name,
     email: email,
     phone: phone,
+    defaultCurrency: defaultCurrency,
   );
 }
 

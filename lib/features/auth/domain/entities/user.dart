@@ -9,6 +9,7 @@ class User with _$User {
     this.name,
     this.email,
     this.phone,
+    this.defaultCurrency,
   });
 
   @override
@@ -19,4 +20,6 @@ class User with _$User {
   final String? email;
   @override
   final String? phone;
+  @override
+  final String? defaultCurrency;
 }
