@@ -8,6 +8,7 @@ class UserBalance with _$UserBalance {
     required this.userId,
     required this.userName,
     required this.netBalance,
+    this.currency,
   });
 
   @override
@@ -16,4 +17,6 @@ class UserBalance with _$UserBalance {
   final String userName;
   @override
   final num netBalance;
+  @override
+  final String? currency;
 }

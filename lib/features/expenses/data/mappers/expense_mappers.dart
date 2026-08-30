@@ -1,4 +1,4 @@
-import 'package:recase/recase.dart';
+import 'package:sky_utils/sky_utils.dart';
 import 'package:splittr/features/expenses/data/models/balances_model.dart';
 import 'package:splittr/features/expenses/data/models/expense_details_model.dart';
 import 'package:splittr/features/expenses/data/models/expense_isar_model.dart';
@@ -17,7 +17,7 @@ import 'package:splittr/features/expenses/domain/entities/user_balance.dart';
 
 extension SplitModelX on SplitModel {
   Split toDomain() {
-    final parsedSplitType = SplitType.values.byName(splitType.camelCase);
+    final parsedSplitType = SplitType.values.byNameOrNull(splitType);
 
     return switch (parsedSplitType) {
       SplitType.exact => Split.exact(
@@ -36,7 +36,7 @@ extension SplitModelX on SplitModel {
         email: email,
         phone: phone,
       ),
-      SplitType.equal => Split.equal(
+      SplitType.equal || null => Split.equal(
         userId: userId,
         amount: amount,
         name: name,
@@ -84,6 +84,7 @@ extension ExpenseDetailsModelX on ExpenseDetailsModel {
       splits: splits.toDomain(),
       category: expense.category,
       groupId: expense.groupId,
+      splitType: SplitType.values.byNameOrNull(expense.splitType),
     );
   }
 }
@@ -99,6 +100,7 @@ extension UserBalanceModelX on UserBalanceModel {
     userId: userId,
     userName: userName,
     netBalance: netBalance,
+    currency: currency,
   );
 }
 
@@ -109,6 +111,7 @@ extension SettlementModelX on SettlementModel {
     fromUserName: fromUserName,
     toUserId: toUserId,
     toUserName: toUserName,
+    currency: currency,
   );
 }
 
@@ -144,6 +147,7 @@ extension ExpenseModelX on ExpenseModel {
     splits: const [],
     category: category,
     groupId: groupId,
+    splitType: SplitType.values.byNameOrNull(splitType),
   );
 
   ExpenseIsarModel toIsar() => ExpenseIsarModel()
@@ -156,7 +160,8 @@ extension ExpenseModelX on ExpenseModel {
     ..isPayment = isPayment
     ..spentAt = spentAt
     ..category = category
-    ..groupId = groupId;
+    ..groupId = groupId
+    ..splitType = splitType;
 }
 
 extension ExpenseModelListX on List<ExpenseModel> {
@@ -178,6 +183,7 @@ extension ExpenseIsarModelX on ExpenseIsarModel {
     splits: const [],
     category: category,
     groupId: groupId,
+    splitType: SplitType.values.byNameOrNull(splitType),
   );
 }
 

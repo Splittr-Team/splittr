@@ -15,6 +15,7 @@ class ExpenseModel {
     required this.spentAt,
     this.category,
     this.groupId,
+    this.splitType,
   });
 
   factory ExpenseModel.fromJson(Map<String, dynamic> json) =>
@@ -30,4 +31,5 @@ class ExpenseModel {
   final DateTime spentAt;
   final String? category;
   final String? groupId;
+  final String? splitType;
 }

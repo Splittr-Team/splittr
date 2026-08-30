@@ -10,6 +10,7 @@ class SettlementModel {
     required this.fromUserName,
     required this.toUserId,
     required this.toUserName,
+    this.currency,
   });
 
   factory SettlementModel.fromJson(Map<String, dynamic> json) =>
@@ -20,4 +21,5 @@ class SettlementModel {
   final String fromUserName;
   final String toUserId;
   final String toUserName;
+  final String? currency;
 }

@@ -8,6 +8,7 @@ class UserBalanceModel {
     required this.userId,
     required this.userName,
     required this.netBalance,
+    this.currency,
   });
 
   factory UserBalanceModel.fromJson(Map<String, dynamic> json) =>
@@ -16,4 +17,5 @@ class UserBalanceModel {
   final String userId;
   final String userName;
   final num netBalance;
+  final String? currency;
 }

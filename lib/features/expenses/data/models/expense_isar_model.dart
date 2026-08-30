@@ -19,4 +19,5 @@ class ExpenseIsarModel with IsarCacheable {
   DateTime? spentAt;
   String? category;
   String? groupId;
+  String? splitType;
 }
