@@ -152,6 +152,32 @@ final class GroupsRepositoryImpl implements GroupsRepository {
   }
 
   @override
+  FutureEitherFailure<Group> updateGroup({
+    required String groupId,
+    String? name,
+    String? description,
+    bool? requireAdminApproval,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.updateGroup(
+        groupId: groupId,
+        name: name,
+        description: description,
+        requireAdminApproval: requireAdminApproval,
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (groupModel) async {
+        await _groupsLocalDataSource.saveGroup(groupModel.toIsar());
+        unawaited(getGroups());
+        return Right(groupModel.toDomain());
+      },
+    );
+  }
+
+  @override
   FutureEitherFailure<Group> joinGroup({required String inviteCode}) async {
     final result = await _apiCallHandler.handle(
       () => _groupsRemoteDataSource.joinGroup(inviteCode: inviteCode),

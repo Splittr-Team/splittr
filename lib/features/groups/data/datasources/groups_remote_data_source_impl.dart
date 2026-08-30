@@ -11,6 +11,7 @@ import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 import 'package:splittr/features/groups/data/models/join_group_payload.dart';
 import 'package:splittr/features/groups/data/models/member_model.dart';
+import 'package:splittr/features/groups/data/models/update_group_payload.dart';
 import 'package:splittr/features/groups/data/models/update_member_role_payload.dart';
 import 'package:splittr/features/groups/domain/entities/member.dart';
 
@@ -54,6 +55,23 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
       CreateGroupPayload(
         description: description,
         name: name,
+        requireAdminApproval: requireAdminApproval,
+      ),
+    );
+  }
+
+  @override
+  Future<GroupModel> updateGroup({
+    required String groupId,
+    String? name,
+    String? description,
+    bool? requireAdminApproval,
+  }) {
+    return _groupsApiClient.updateGroup(
+      groupId,
+      UpdateGroupPayload(
+        name: name,
+        description: description,
         requireAdminApproval: requireAdminApproval,
       ),
     );

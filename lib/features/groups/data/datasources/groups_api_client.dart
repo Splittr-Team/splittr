@@ -9,6 +9,7 @@ import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 import 'package:splittr/features/groups/data/models/join_group_payload.dart';
 import 'package:splittr/features/groups/data/models/member_model.dart';
+import 'package:splittr/features/groups/data/models/update_group_payload.dart';
 import 'package:splittr/features/groups/data/models/update_member_role_payload.dart';
 
 part 'groups_api_client.g.dart';
@@ -39,6 +40,12 @@ abstract class GroupsApiClient {
   @GET('/{id}')
   Future<GroupModel> getGroupById(@Path('id') String id);
 
+  @PATCH('/{id}')
+  Future<GroupModel> updateGroup(
+    @Path('id') String id,
+    @Body() UpdateGroupPayload body,
+  );
+
   @DELETE('/{id}')
   Future<void> deleteGroup(@Path('id') String id);
 
@@ -60,7 +67,7 @@ abstract class GroupsApiClient {
     @Path('userId') String userId,
   );
 
-  @PUT('/{id}/members/{userId}/role')
+  @PATCH('/{id}/members/{userId}/role')
   Future<MemberModel> updateMemberRole(
     @Path('id') String id,
     @Path('userId') String userId,

@@ -35,6 +35,13 @@ abstract interface class GroupsRepository {
     bool? requireAdminApproval,
   });
 
+  FutureEitherFailure<Group> updateGroup({
+    required String groupId,
+    String? name,
+    String? description,
+    bool? requireAdminApproval,
+  });
+
   FutureEitherFailureUnit deleteGroup({
     required String groupId,
   });
