@@ -20,4 +20,16 @@ class ExpenseIsarModel with IsarCacheable {
   String? category;
   String? groupId;
   String? splitType;
+  List<SplitIsarModel>? splits;
+}
+
+@embedded
+class SplitIsarModel {
+  String? userId;
+  double? amount;
+  String? splitType;
+  double? splitValue;
+  String? name;
+  String? email;
+  String? phone;
 }
