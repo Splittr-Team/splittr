@@ -2,10 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sky_network/sky_network.dart';
 import 'package:sky_storage_isar/sky_storage_isar.dart';
+import 'package:splittr/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:splittr/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:splittr/features/auth/data/repositories/auth_repository_impl.dart';
 
 class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+
+class MockAuthLocalDataSource extends Mock implements AuthLocalDataSource {}
 
 class MockApiCallHandler extends Mock implements ApiCallHandler {}
 
@@ -13,16 +16,19 @@ class MockIsar extends Mock implements Isar {}
 
 void main() {
   late MockAuthRemoteDataSource mockRemoteDataSource;
+  late MockAuthLocalDataSource mockLocalDataSource;
   late MockApiCallHandler mockApiCallHandler;
   late MockIsar mockIsar;
   late AuthRepositoryImpl repository;
 
   setUp(() {
     mockRemoteDataSource = MockAuthRemoteDataSource();
+    mockLocalDataSource = MockAuthLocalDataSource();
     mockApiCallHandler = MockApiCallHandler();
     mockIsar = MockIsar();
     repository = AuthRepositoryImpl(
       mockRemoteDataSource,
+      mockLocalDataSource,
       mockApiCallHandler,
       mockIsar,
     );

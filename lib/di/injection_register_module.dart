@@ -13,6 +13,7 @@ import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/activities/data/models/activities_isar_schema_provider.dart';
 import 'package:splittr/features/app_config/data/models/app_config_isar_schema_provider.dart';
 import 'package:splittr/features/app_config/domain/stores/app_config_store.dart';
+import 'package:splittr/features/auth/data/models/auth_isar_schema_provider.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:splittr/features/expenses/data/models/expenses_isar_schema_provider.dart';
 import 'package:splittr/features/friends/data/models/friends_isar_schema_provider.dart';
@@ -30,6 +31,7 @@ abstract class RegisterModule {
     final isarInit = IsarDatabaseInitializer(
       providers: [
         const CoreIsarSchemaProvider(),
+        const AuthIsarSchemaProvider(),
         const QuickSplitIsarSchemaProvider(),
         const GroupsIsarSchemaProvider(),
         const AppConfigIsarSchemaProvider(),
