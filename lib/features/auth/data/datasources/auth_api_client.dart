@@ -21,13 +21,13 @@ abstract class AuthApiClient {
   @GET('/me')
   Future<UserModel> getMe();
 
-  @PUT('/me')
+  @PATCH('/me')
   Future<UserModel> updateMe(@Body() UpdateUserPayload body);
 
   @GET('/me/settings')
   Future<UserSettingsModel> getSettings();
 
-  @PUT('/me/settings')
+  @PATCH('/me/settings')
   Future<UserSettingsModel> updateSettings(
     @Body() UpdateUserSettingsPayload body,
   );
