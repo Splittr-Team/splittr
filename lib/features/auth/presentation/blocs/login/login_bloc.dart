@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/features/auth/domain/usecases/login_with_email_usecase.dart';
+import 'package:splittr/features/auth/domain/usecases/login_with_google_usecase.dart';
 
 part 'login_bloc.freezed.dart';
 part 'login_event.dart';
@@ -12,10 +13,11 @@ part 'login_state.dart';
 
 @injectable
 class LoginBloc extends BaseBloc<LoginEvent, LoginState, NoParams> {
-  LoginBloc(this._loginWithEmailUseCase)
+  LoginBloc(this._loginWithEmailUseCase, this._loginWithGoogleUseCase)
     : super(const LoginState.initial(store: LoginStateStore()));
 
   final LoginWithEmailUseCase _loginWithEmailUseCase;
+  final LoginWithGoogleUseCase _loginWithGoogleUseCase;
 
   @override
   void handleEvents() {
@@ -23,6 +25,7 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState, NoParams> {
     on<_EmailChanged>(_onEmailChanged);
     on<_PasswordChanged>(_onPasswordChanged);
     on<_LoginClicked>(_onLoginClicked);
+    on<_GoogleSignInClicked>(_onGoogleSignInClicked);
   }
 
   FutureOr<void> _onStarted(_Started event, Emitter<LoginState> emit) {}
@@ -72,6 +75,24 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState, NoParams> {
     );
   }
 
+  FutureOr<void> _onGoogleSignInClicked(
+    _GoogleSignInClicked event,
+    Emitter<LoginState> emit,
+  ) async {
+    changeLoadingState(emit: emit, loading: true);
+
+    final result = await _loginWithGoogleUseCase.call(noParams);
+
+    result.fold(
+      (failure) => handleFailure(emit: emit, failure: failure),
+      (_) => emit(
+        LoginState.onLoginSuccess(
+          store: state.store.copyWith(loading: false),
+        ),
+      ),
+    );
+  }
+
   @override
   void started(NoParams params) {
     add(const LoginEvent.started());
@@ -87,5 +108,9 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState, NoParams> {
 
   void loginClicked() {
     add(const LoginEvent.loginClicked());
+  }
+
+  void loginWithGoogleClicked() {
+    add(const LoginEvent.googleSignInClicked());
   }
 }

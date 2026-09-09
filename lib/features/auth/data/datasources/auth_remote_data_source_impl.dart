@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/auth/data/datasources/auth_api_client.dart';
@@ -9,10 +10,15 @@ import 'package:splittr/utils/extensions/firebase_extensions.dart';
 
 @LazySingleton(as: AuthRemoteDataSource)
 final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  const AuthRemoteDataSourceImpl(this._firebaseAuth, this._authApiClient);
+  const AuthRemoteDataSourceImpl(
+    this._firebaseAuth,
+    this._authApiClient,
+    this._googleSignIn,
+  );
 
   final FirebaseAuth _firebaseAuth;
   final AuthApiClient _authApiClient;
+  final GoogleSignIn _googleSignIn;
 
   @override
   Future<UserModel> loginWithEmail({
@@ -86,6 +92,65 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         id: user.uid,
         name: 'Guest',
       );
+    } on FirebaseException catch (e) {
+      throw e.toServerException();
+    }
+  }
+
+  @override
+  Future<UserModel> loginWithGoogle() async {
+    try {
+      OAuthCredential? credential;
+      try {
+        final googleUser = await _googleSignIn.signIn();
+        if (googleUser == null) {
+          throw const ServerException(
+            message: 'Google sign-in was cancelled',
+            code: 'SIGN_IN_CANCELLED',
+          );
+        }
+        final googleAuth = await googleUser.authentication;
+        credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+      } on ServerException {
+        rethrow;
+      } on Exception catch (_) {
+        // Fallback to signInWithProvider if native sign-in is not
+        // supported on platform.
+      }
+
+      if (credential != null) {
+        final currentUser = _firebaseAuth.currentUser;
+        if (currentUser != null && currentUser.isAnonymous) {
+          await currentUser.linkWithCredential(credential);
+        } else {
+          await _firebaseAuth.signInWithCredential(credential);
+        }
+      } else {
+        final provider = GoogleAuthProvider();
+        final currentUser = _firebaseAuth.currentUser;
+        if (currentUser != null && currentUser.isAnonymous) {
+          await currentUser.linkWithProvider(provider);
+        } else {
+          await _firebaseAuth.signInWithProvider(provider);
+        }
+      }
+
+      final firebaseUser = _firebaseAuth.currentUser;
+      UserModel userModel;
+      try {
+        userModel = await _authApiClient.getMe();
+      } on Exception catch (_) {
+        userModel = await _authApiClient.createUser(
+          CreateUserPayload(
+            name: firebaseUser?.displayName ?? 'User',
+            email: firebaseUser?.email ?? '',
+          ),
+        );
+      }
+      return userModel;
     } on FirebaseException catch (e) {
       throw e.toServerException();
     }
