@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_devtools/sky_devtools.dart';
 import 'package:sky_network/sky_network.dart';
@@ -9,6 +10,9 @@ import 'package:splittr/core/firebase/firebase_auth_interceptor.dart';
 @module
 abstract class NetworkModule {
   static const _vercelBypassHeaderKey = 'x-vercel-protection-bypass';
+
+  @lazySingleton
+  Connectivity get connectivity => Connectivity();
 
   @lazySingleton
   DioFactory get dioFactory => const DioFactoryImpl();
