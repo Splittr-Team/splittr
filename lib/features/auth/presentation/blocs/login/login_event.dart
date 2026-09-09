@@ -15,4 +15,6 @@ class LoginEvent extends BaseEvent with _$LoginEvent {
   }) = _PasswordChanged;
 
   const factory LoginEvent.loginClicked() = _LoginClicked;
+
+  const factory LoginEvent.googleSignInClicked() = _GoogleSignInClicked;
 }

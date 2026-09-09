@@ -23,4 +23,6 @@ class SignUpEvent extends BaseEvent with _$SignUpEvent {
   }) = _ConfirmPasswordChanged;
 
   const factory SignUpEvent.signUpClicked() = _SignUpClicked;
+
+  const factory SignUpEvent.googleSignInClicked() = _GoogleSignInClicked;
 }

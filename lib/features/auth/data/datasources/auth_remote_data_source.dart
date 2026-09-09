@@ -16,5 +16,7 @@ abstract interface class AuthRemoteDataSource {
 
   Future<UserModel> signInAnonymously();
 
+  Future<UserModel> loginWithGoogle();
+
   Future<void> logout();
 }

@@ -15,6 +15,8 @@ abstract interface class AuthRepository {
     required String name,
   });
 
+  FutureEitherFailure<User> loginWithGoogle();
+
   FutureEitherFailure<User> checkAuthStatus();
 
   FutureEitherFailure<Unit> logout();

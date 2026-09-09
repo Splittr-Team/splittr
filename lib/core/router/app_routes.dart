@@ -255,6 +255,15 @@ class SplitHistoryRoute extends AppRoute {
   String get path => pathTemplate;
 }
 
+class ActivitiesRoute extends AppRoute {
+  const ActivitiesRoute();
+
+  static const String pathTemplate = '/activities';
+
+  @override
+  String get path => pathTemplate;
+}
+
 class NotificationsRoute extends AppRoute {
   const NotificationsRoute();
 

@@ -711,6 +711,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'DANGER ZONE'**
   String get dangerZone;
+
+  /// No description provided for @socialSignInComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Social sign-in is coming soon.'**
+  String get socialSignInComingSoon;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password?'**
+  String get forgotPassword;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset is currently unavailable. Please contact support or check back in a future update.'**
+  String get forgotPasswordDescription;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
 }
 
 class _AppLocalizationsDelegate

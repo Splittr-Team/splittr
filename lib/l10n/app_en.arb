@@ -116,5 +116,10 @@
   "noNotificationsYet": "No notifications yet!",
   "retry": "Retry",
   "noMembersFound": "No members found",
-  "dangerZone": "DANGER ZONE"
+  "dangerZone": "DANGER ZONE",
+  "socialSignInComingSoon": "Social sign-in is coming soon.",
+  "forgotPassword": "Forgot Password?",
+  "forgotPasswordTitle": "Reset Password",
+  "forgotPasswordDescription": "Password reset is currently unavailable. Please contact support or check back in a future update.",
+  "ok": "OK"
 }

@@ -70,8 +70,16 @@ class _SignUpForm extends StatelessWidget {
           alignment: .center,
           spacing: AppSpacing.md,
           children: [
-            GoogleSignInButton(onPressed: () {}),
-            AppleSignInButton(onPressed: () {}),
+            GoogleSignInButton(
+              onPressed: () =>
+                  getBloc<SignUpBloc>(context).signUpWithGoogleClicked(),
+            ),
+            AppleSignInButton(
+              onPressed: () => AppSnackBar.show(
+                context,
+                message: context.strings.socialSignInComingSoon,
+              ),
+            ),
           ],
         ),
       ],

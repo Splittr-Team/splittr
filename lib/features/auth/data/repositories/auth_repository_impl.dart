@@ -78,6 +78,22 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  FutureEitherFailure<User> loginWithGoogle() async {
+    final result = await _apiCallHandler.handle(
+      _authRemoteDataSource.loginWithGoogle,
+    );
+    return result.fold(
+      Left.new,
+      (userModel) async {
+        await _authLocalDataSource.saveUser(userModel.toIsar());
+        final domainUser = userModel.toDomain();
+        _authStateStreamController.add(Some(domainUser));
+        return Right(domainUser);
+      },
+    );
+  }
+
+  @override
   FutureEitherFailure<User> checkAuthStatus() async {
     try {
       final user = FirebaseAuth.instance.currentUser;

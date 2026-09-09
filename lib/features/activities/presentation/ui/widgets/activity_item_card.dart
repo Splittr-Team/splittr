@@ -1,15 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sky_design_system/sky_design_system.dart';
+import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/features/activities/domain/entities/activity.dart';
 
 class ActivityItemCard extends StatelessWidget {
   const ActivityItemCard({
     required this.activity,
+    this.onTap,
     super.key,
   });
 
   final Activity activity;
+  final VoidCallback? onTap;
 
   IconData _getIconForAction(String actionType) {
     return switch (actionType) {
@@ -29,46 +34,57 @@ class ActivityItemCard extends StatelessWidget {
     final dateFormat = DateFormat.yMMMd().add_jm();
     final formattedDate = dateFormat.format(activity.createdAt);
 
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: context.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: context.colorScheme.outlineVariant,
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap:
+          onTap ??
+          () {
+            final groupId = activity.groupId;
+            if (groupId != null && groupId.isNotEmpty) {
+              unawaited(GroupRoute(groupId: groupId).push<void>(context));
+            }
+          },
+      child: Ink(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        decoration: BoxDecoration(
+          color: context.colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: context.colorScheme.outlineVariant,
+          ),
         ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(AppSpacing.sm),
-            decoration: BoxDecoration(
-              color: context.colorScheme.primaryContainer,
-              shape: BoxShape.circle,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.sm),
+              decoration: BoxDecoration(
+                color: context.colorScheme.primaryContainer,
+                shape: BoxShape.circle,
+              ),
+              child: AppIcon.md(
+                _getIconForAction(activity.actionType),
+                color: context.colorScheme.onPrimaryContainer,
+              ),
             ),
-            child: AppIcon.md(
-              _getIconForAction(activity.actionType),
-              color: context.colorScheme.onPrimaryContainer,
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppText.bodyMedium(
+                    activity.description,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  AppText.labelSmall(
+                    formattedDate,
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText.bodyMedium(
-                  activity.description,
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                AppText.labelSmall(
-                  formattedDate,
-                  color: context.colorScheme.onSurfaceVariant,
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
