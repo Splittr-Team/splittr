@@ -68,14 +68,26 @@ final class SyncLocalDataSourceImpl implements SyncLocalDataSource {
       // --- Watermark update ---
       final meta =
           await _isar.syncMetadataIsarModels
-                    .filter()
-                    .keyEqualTo('sync_watermark')
-                    .findFirst() ??
-                (SyncMetadataIsarModel()..key = 'sync_watermark')
-            ..friendsVersion = delta.friends.newVersion
-            ..groupsVersion = delta.groups.newVersion
-            ..expensesVersion = delta.expenses.newVersion
-            ..lastSyncedAt = DateTime.now();
+              .filter()
+              .keyEqualTo('sync_watermark')
+              .findFirst() ??
+          (SyncMetadataIsarModel()..key = 'sync_watermark');
+
+      final friendsTarget = meta.friendsVersion == 0
+          ? (delta.friends.currentServerVersion ?? delta.friends.newVersion)
+          : delta.friends.newVersion;
+      final groupsTarget = meta.groupsVersion == 0
+          ? (delta.groups.currentServerVersion ?? delta.groups.newVersion)
+          : delta.groups.newVersion;
+      final expensesTarget = meta.expensesVersion == 0
+          ? (delta.expenses.currentServerVersion ?? delta.expenses.newVersion)
+          : delta.expenses.newVersion;
+
+      meta
+        ..friendsVersion = friendsTarget
+        ..groupsVersion = groupsTarget
+        ..expensesVersion = expensesTarget
+        ..lastSyncedAt = DateTime.now();
 
       await _isar.syncMetadataIsarModels.put(meta);
     });

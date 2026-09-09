@@ -12,6 +12,7 @@ import 'package:splittr/core/bloc/app_bloc_observer.dart';
 import 'package:splittr/core/router/app_router.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
+import 'package:splittr/features/sync/data/services/sync_dispatchers_registrar.dart';
 import 'package:splittr/l10n/generated/app_localizations.dart';
 
 Future<void> mainCommon(Env env) async {
@@ -22,6 +23,8 @@ Future<void> mainCommon(Env env) async {
   await Firebase.initializeApp(options: appConfig.firebaseOptions);
 
   await configureDependencies(env);
+
+  getIt<SyncDispatchersRegistrar>().registerAll();
 
   // Setup uncaught error logging
   FlutterError.onError = (details) {

@@ -3,7 +3,7 @@ import 'package:splittr/features/expenses/data/models/input_split_payload.dart';
 
 part 'update_expense_payload.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createFactory: true)
 class UpdateExpensePayload {
   const UpdateExpensePayload({
     this.description,
@@ -13,6 +13,9 @@ class UpdateExpensePayload {
     this.splitType,
     this.splits,
   });
+
+  factory UpdateExpensePayload.fromJson(Map<String, dynamic> json) =>
+      _$UpdateExpensePayloadFromJson(json);
 
   final String? description;
   final num? amount;

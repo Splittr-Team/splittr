@@ -2,13 +2,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'input_split_payload.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createFactory: true)
 class InputSplitPayload {
   const InputSplitPayload({
     required this.userId,
     this.amount,
     this.percentage,
   });
+
+  factory InputSplitPayload.fromJson(Map<String, dynamic> json) =>
+      _$InputSplitPayloadFromJson(json);
 
   final String userId;
   final num? amount;

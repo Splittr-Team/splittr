@@ -8,15 +8,6 @@ import 'package:splittr/features/sync/data/datasources/outbox_local_data_source.
 import 'package:splittr/features/sync/data/models/outbox_action_isar_model.dart';
 import 'package:splittr/features/sync/domain/services/outbox_worker.dart';
 
-/// Type alias for a dispatcher callback: receives the decoded payload JSON and
-/// the idempotency key header value, and must return the server-assigned ID
-/// (or null for non-create operations).
-typedef ActionDispatcher =
-    Future<String?> Function(
-      Map<String, dynamic> payload,
-      String idempotencyKey,
-    );
-
 @LazySingleton(as: OutboxWorker)
 final class OutboxWorkerImpl implements OutboxWorker {
   OutboxWorkerImpl(
@@ -33,7 +24,7 @@ final class OutboxWorkerImpl implements OutboxWorker {
   /// [registerDispatcher].
   final Map<String, ActionDispatcher> _dispatchers = {};
 
-  /// Register a dispatcher for a given [actionType].
+  @override
   void registerDispatcher(String actionType, ActionDispatcher dispatcher) {
     _dispatchers[actionType] = dispatcher;
   }

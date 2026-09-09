@@ -11,6 +11,7 @@ import 'package:splittr/features/auth/domain/usecases/check_auth_status_usecase.
 import 'package:splittr/features/auth/domain/usecases/login_as_guest_usecase.dart';
 import 'package:splittr/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:splittr/features/auth/domain/usecases/watch_auth_state_usecase.dart';
+import 'package:splittr/features/sync/domain/services/sync_coordinator.dart';
 
 part 'auth_bloc.freezed.dart';
 part 'auth_event.dart';
@@ -25,6 +26,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
     this._loginAsGuestUseCase,
     this._getAppConfigUseCase,
     this._appConfigStore,
+    this._syncCoordinator,
   ) : super(const AuthState.loading()) {
     _authStateStreamSubscription = _watchAuthStateUseCase
         .call(noParams)
@@ -37,6 +39,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
   final LoginAsGuestUseCase _loginAsGuestUseCase;
   final GetAppConfigUseCase _getAppConfigUseCase;
   final AppConfigStore _appConfigStore;
+  final SyncCoordinator _syncCoordinator;
 
   StreamSubscription<Option<User>>? _authStateStreamSubscription;
 
@@ -58,6 +61,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
   }
 
   FutureOr<void> _onLoggedOut(_LoggedOut event, Emitter<AuthState> emit) async {
+    _syncCoordinator.stop();
     await _logoutUseCase.call(noParams);
   }
 
@@ -77,10 +81,20 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
     Emitter<AuthState> emit,
   ) {
     event.userOption.fold(
-      () => emit(const AuthState.onUserUnauthenticated()),
-      (user) => user.id == 'guest'
-          ? emit(const AuthState.guest())
-          : emit(AuthState.onUserAuthenticated(user: user)),
+      () {
+        _syncCoordinator.stop();
+        emit(const AuthState.onUserUnauthenticated());
+      },
+      (user) {
+        if (user.id == 'guest') {
+          _syncCoordinator.stop();
+          emit(const AuthState.guest());
+        } else {
+          _syncCoordinator.start();
+          _syncCoordinator.syncNow().ignore();
+          emit(AuthState.onUserAuthenticated(user: user));
+        }
+      },
     );
   }
 
@@ -91,6 +105,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
 
   @override
   Future<void> close() async {
+    _syncCoordinator.stop();
     await _authStateStreamSubscription?.cancel();
     return super.close();
   }
