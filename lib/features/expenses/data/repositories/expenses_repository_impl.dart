@@ -421,7 +421,6 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
   @override
   FutureEitherFailure<Balances> getBalances({
     String? groupId,
-    bool? simplified,
   }) async {
     if (groupId != null) {
       final group = await _groupsLocalDataSource.getGroupById(groupId);
@@ -432,7 +431,8 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
               ))?.toDomain() ??
               const Balances(
                 balances: [],
-                settlements: [],
+                directSettlements: [],
+                simplifiedSettlements: [],
               ),
         );
       }
@@ -441,7 +441,6 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     final result = await _apiCallHandler.handle(
       () => _expensesRemoteDataSource.getBalances(
         groupId: groupId,
-        simplified: simplified,
       ),
     );
 

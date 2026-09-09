@@ -27,5 +27,5 @@ abstract interface class ExpensesRemoteDataSource {
 
   Future<void> deleteExpense(String id);
 
-  Future<BalancesModel> getBalances({String? groupId, bool? simplified});
+  Future<BalancesModel> getBalances({String? groupId});
 }
