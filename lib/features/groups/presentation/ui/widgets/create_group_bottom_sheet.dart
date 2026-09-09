@@ -64,20 +64,29 @@ class _BottomSheetBody extends StatelessWidget {
           },
         ),
         const SizedBox(height: AppSpacing.lg),
-        BlocSelector<CreateGroupBloc, CreateGroupState, bool>(
-          selector: (state) =>
-              state.store.groupName.trim().isNotEmpty &&
-              state.store.groupDescription.trim().isNotEmpty,
-          builder: (context, isValid) {
-            return AppButton.primary(
-              text: context.strings.createGroup,
-              // TODO(Chaitanya): add loading condition
-              onPressed: isValid
-                  ? () => getBloc<CreateGroupBloc>(
-                      context,
-                    ).createGroupButtonClicked()
-                  : null,
-            );
+        BlocSelector<CreateGroupBloc, CreateGroupState, (bool, bool)>(
+          selector: (state) => (
+            state.store.groupName.trim().isNotEmpty &&
+                state.store.groupDescription.trim().isNotEmpty,
+            state.store.loading,
+          ),
+          builder: (context, record) {
+            final (isValid, isLoading) = record;
+            return isLoading
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                      child: AppProgressIndicator.circular(),
+                    ),
+                  )
+                : AppButton.primary(
+                    text: context.strings.createGroup,
+                    onPressed: isValid
+                        ? () => getBloc<CreateGroupBloc>(
+                            context,
+                          ).createGroupButtonClicked()
+                        : null,
+                  );
           },
         ),
         const SizedBox(height: AppSpacing.md),
