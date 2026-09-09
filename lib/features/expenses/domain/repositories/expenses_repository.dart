@@ -55,6 +55,5 @@ abstract interface class ExpensesRepository {
 
   FutureEitherFailure<Balances> getBalances({
     String? groupId,
-    bool? simplified,
   });
 }

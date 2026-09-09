@@ -10,7 +10,8 @@ class BalancesIsarModel with IsarCacheable {
   String? groupId;
 
   List<UserBalanceIsarModel>? balances;
-  List<SettlementIsarModel>? settlements;
+  List<SettlementIsarModel>? directSettlements;
+  List<SettlementIsarModel>? simplifiedSettlements;
   DateTime? updatedAt;
 }
 

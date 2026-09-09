@@ -54,6 +54,5 @@ abstract class ExpensesApiClient {
   @GET('/balances')
   Future<BalancesModel> getBalances({
     @Query('groupId') String? groupId,
-    @Query('simplified') bool? simplified,
   });
 }

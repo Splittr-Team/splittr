@@ -300,12 +300,10 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
   @override
   FutureEitherFailure<Balances> getBalances({
     String? groupId,
-    bool? simplified,
   }) async {
     final result = await _apiCallHandler.handle(
       () => _expensesRemoteDataSource.getBalances(
         groupId: groupId,
-        simplified: simplified,
       ),
     );
 
