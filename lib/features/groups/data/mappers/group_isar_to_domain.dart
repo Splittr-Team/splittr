@@ -15,6 +15,7 @@ extension GroupIsarModelX on GroupIsarModel {
     createdAt: createdAt,
     updatedAt: updatedAt,
     members: members?.toDomain() ?? [],
+    isSynced: isSynced,
   );
 }
 

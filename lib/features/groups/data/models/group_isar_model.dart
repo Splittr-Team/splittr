@@ -9,6 +9,8 @@ class GroupIsarModel with IsarCacheable {
   @Index(unique: true, replace: true)
   String? id;
 
+  bool isSynced = true;
+
   String? name;
   String? description;
   String? inviteCode;

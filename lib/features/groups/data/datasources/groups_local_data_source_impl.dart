@@ -27,6 +27,11 @@ class GroupsLocalDataSourceImpl implements GroupsLocalDataSource {
   }
 
   @override
+  Future<GroupIsarModel?> getGroupById(String id) {
+    return _isar.groupIsarModels.filter().idEqualTo(id).findFirst();
+  }
+
+  @override
   Future<List<GroupIsarModel>> getGroups({int? limit}) async {
     final query = _isar.groupIsarModels.where().sortByCreatedAtDesc();
     if (limit != null) {

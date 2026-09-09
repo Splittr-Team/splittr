@@ -6,6 +6,8 @@ abstract interface class GroupsLocalDataSource {
 
   Stream<GroupIsarModel?> watchGroupById(String id);
 
+  Future<GroupIsarModel?> getGroupById(String id);
+
   Future<List<GroupIsarModel>> getGroups({int? limit});
 
   Future<void> saveGroup(GroupIsarModel group);

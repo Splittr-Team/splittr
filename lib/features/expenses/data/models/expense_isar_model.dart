@@ -9,6 +9,8 @@ class ExpenseIsarModel with IsarCacheable {
   @Index(unique: true, replace: true)
   String? id;
 
+  bool isSynced = true;
+
   String? description;
   double? amount;
   String? currency;

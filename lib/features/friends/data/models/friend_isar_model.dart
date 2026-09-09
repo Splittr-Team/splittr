@@ -9,6 +9,8 @@ class FriendIsarModel with IsarCacheable {
   @Index(unique: true, replace: true)
   String? id;
 
+  bool isSynced = true;
+
   String? name;
   String? email;
   String? phone;

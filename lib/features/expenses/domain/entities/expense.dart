@@ -19,6 +19,7 @@ class Expense with _$Expense {
     this.category,
     this.groupId,
     this.splitType,
+    this.isSynced = true,
   });
 
   @override
@@ -45,4 +46,6 @@ class Expense with _$Expense {
   final String? groupId;
   @override
   final SplitType? splitType;
+  @override
+  final bool isSynced;
 }

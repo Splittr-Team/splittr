@@ -4,6 +4,8 @@ import 'package:splittr/features/friends/data/models/friend_isar_model.dart';
 abstract interface class FriendsLocalDataSource {
   Stream<List<FriendIsarModel>> watchFriends();
 
+  Future<FriendIsarModel?> getFriendById(String id);
+
   Future<List<FriendIsarModel>> getFriends({int? limit});
 
   Future<void> saveFriend(FriendIsarModel friend);

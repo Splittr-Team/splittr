@@ -45,6 +45,7 @@ extension FriendIsarModelX on FriendIsarModel {
     updatedAt: updatedAt,
     status: FriendshipStatus.values.byNameOrNull(status),
     actionUserId: actionUserId,
+    isSynced: isSynced,
   );
 }
 

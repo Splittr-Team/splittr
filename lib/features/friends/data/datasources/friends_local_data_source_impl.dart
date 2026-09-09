@@ -18,6 +18,11 @@ class FriendsLocalDataSourceImpl implements FriendsLocalDataSource {
   }
 
   @override
+  Future<FriendIsarModel?> getFriendById(String id) {
+    return _isar.friendIsarModels.filter().idEqualTo(id).findFirst();
+  }
+
+  @override
   Future<List<FriendIsarModel>> getFriends({int? limit}) async {
     final query = _isar.friendIsarModels.where().sortByCreatedAtDesc();
     if (limit != null) {
