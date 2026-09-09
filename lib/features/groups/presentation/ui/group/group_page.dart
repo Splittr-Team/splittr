@@ -6,8 +6,14 @@ import 'package:sky_design_system/sky_design_system.dart';
 import 'package:sky_router/sky_router.dart';
 import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/di/injection.dart';
+import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart'
+    hide OnFailure;
+import 'package:splittr/features/expenses/presentation/blocs/expenses/expenses_bloc.dart'
+    hide OnFailure;
+import 'package:splittr/features/expenses/presentation/ui/widgets/expenses_list_view.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/presentation/blocs/group/group_bloc.dart';
+import 'package:splittr/features/groups/presentation/ui/widgets/group_balance_summary_header.dart';
 import 'package:splittr/utils/extensions/extensions.dart';
 
 part 'group_form.dart';
@@ -57,40 +63,62 @@ class GroupPage extends BasePage<GroupBloc, GroupState> {
 
   @override
   Widget buildPage(BuildContext context) {
-    return BlocBuilder<GroupBloc, GroupState>(
-      builder: (context, state) {
-        final group = state.store.group;
-        if (group == null) {
-          return const SizedBox.shrink();
-        }
-        final isLoading = state.store.loading;
+    return BlocProvider<ExpensesBloc>(
+      create: (context) =>
+          getIt<ExpensesBloc>()..started(ExpensesParams(groupId: groupId)),
+      child: BlocBuilder<GroupBloc, GroupState>(
+        builder: (context, state) {
+          final group = state.store.group;
+          if (group == null) {
+            return const SizedBox.shrink();
+          }
+          final isLoading = state.store.loading;
 
-        return Scaffold(
-          appBar: AppTopBar(
-            title: group.name ?? context.strings.groupDetails,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: AppSpacing.xs),
-                child: AppIconButton(
-                  icon: Icons.settings_outlined,
-                  onPressed: () {
-                    unawaited(
-                      GroupSettingsRoute(
-                        groupId: groupId,
-                      ).push<void>(context),
-                    );
-                  },
+          return Scaffold(
+            appBar: AppTopBar(
+              title: group.name ?? context.strings.groupDetails,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: AppSpacing.xs),
+                  child: AppIconButton(
+                    icon: Icons.settings_outlined,
+                    onPressed: () {
+                      unawaited(
+                        GroupSettingsRoute(
+                          groupId: groupId,
+                        ).push<void>(context),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-          body: _GroupForm(
-            groupId: groupId,
-            group: group,
-            isLoading: isLoading,
-          ),
-        );
-      },
+              ],
+            ),
+            floatingActionButton: FloatingActionButton.extended(
+              heroTag: 'group_page_add_expense_fab',
+              onPressed: () {
+                unawaited(
+                  AddExpenseRoute(
+                    args: AddExpenseArgs(
+                      groupId: groupId,
+                      participantUserIds: group.members
+                          .map((m) => m.userId)
+                          .whereType<String>()
+                          .toList(),
+                    ),
+                  ).push<void>(context),
+                );
+              },
+              icon: const Icon(Icons.add_rounded),
+              label: Text(context.strings.addExpense),
+            ),
+            body: _GroupForm(
+              groupId: groupId,
+              group: group,
+              isLoading: isLoading,
+            ),
+          );
+        },
+      ),
     );
   }
 }
