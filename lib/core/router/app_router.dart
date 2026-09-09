@@ -17,6 +17,7 @@ import 'package:splittr/features/dashboard/presentation/ui/dashboard_shell.dart'
 import 'package:splittr/features/expenses/presentation/ui/pages/add_expense_page.dart';
 import 'package:splittr/features/expenses/presentation/ui/pages/expense_details_page.dart';
 import 'package:splittr/features/expenses/presentation/ui/pages/settle_up_page.dart';
+import 'package:splittr/features/friends/presentation/ui/friend_details/friend_details_page.dart';
 import 'package:splittr/features/friends/presentation/ui/friends_page.dart';
 import 'package:splittr/features/groups/presentation/ui/group/group_page.dart';
 import 'package:splittr/features/groups/presentation/ui/groups_page.dart';
@@ -263,6 +264,23 @@ final List<RouteBase> _routes = [
             builder: (context, state) => const _TabBackRedirectGuard(
               child: FriendsPage(),
             ),
+            routes: [
+              GoRoute(
+                path: FriendDetailsRoute.relativePathTemplate,
+                builder: (context, state) {
+                  final route = FriendDetailsRoute.fromState(state);
+
+                  if (route == null) {
+                    throw GoException('Invalid or missing friend identifier.');
+                  }
+
+                  return FriendDetailsPage(
+                    friendId: route.friendId,
+                    friend: route.friend,
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

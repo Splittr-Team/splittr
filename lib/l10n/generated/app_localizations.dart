@@ -741,6 +741,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'OK'**
   String get ok;
+
+  /// No description provided for @editGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Group'**
+  String get editGroup;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @addExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Expense'**
+  String get addExpense;
+
+  /// No description provided for @groupUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Group updated successfully!'**
+  String get groupUpdatedSuccessfully;
+
+  /// No description provided for @friendDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend Details'**
+  String get friendDetails;
+
+  /// No description provided for @noExpensesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses yet'**
+  String get noExpensesYet;
+
+  /// No description provided for @noExpensesGroupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an expense to start splitting with your group.'**
+  String get noExpensesGroupSubtitle;
+
+  /// No description provided for @noExpensesFriendSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an expense to start splitting with this friend.'**
+  String get noExpensesFriendSubtitle;
+
+  /// No description provided for @allSettledUp.
+  ///
+  /// In en, this message translates to:
+  /// **'All settled up'**
+  String get allSettledUp;
+
+  /// No description provided for @expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get expenses;
+
+  /// No description provided for @owesYou.
+  ///
+  /// In en, this message translates to:
+  /// **'owes you'**
+  String get owesYou;
 }
 
 class _AppLocalizationsDelegate
