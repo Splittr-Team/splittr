@@ -125,9 +125,9 @@ class DashboardShell extends StatelessWidget {
     ),
     ShellTab(
       pathPrefix: ProfileRoute.pathTemplate,
-      icon: const Icon(Icons.notifications_active_outlined),
-      selectedIcon: const Icon(Icons.notifications_active),
-      getLabel: (context) => context.strings.activities,
+      icon: const Icon(Icons.person_outline_rounded),
+      selectedIcon: const Icon(Icons.person_rounded),
+      getLabel: (context) => context.strings.profile,
       defaultRoute: const ProfileRoute(),
     ),
   ];
