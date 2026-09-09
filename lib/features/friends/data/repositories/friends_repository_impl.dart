@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:injectable/injectable.dart';
 import 'package:mutex/mutex.dart';
 import 'package:sky_architecture/sky_architecture.dart';
@@ -7,8 +9,14 @@ import 'package:splittr/core/storage/models/pagination_metadata_isar_model.dart'
 import 'package:splittr/features/friends/data/datasources/friends_local_data_source.dart';
 import 'package:splittr/features/friends/data/datasources/friends_remote_data_source.dart';
 import 'package:splittr/features/friends/data/mappers/friend_mappers.dart';
+import 'package:splittr/features/friends/data/models/friend_isar_model.dart';
 import 'package:splittr/features/friends/domain/entities/friend.dart';
 import 'package:splittr/features/friends/domain/repositories/friends_repository.dart';
+import 'package:splittr/features/sync/data/datasources/outbox_local_data_source.dart';
+import 'package:splittr/features/sync/data/models/outbox_action_isar_model.dart';
+import 'package:splittr/features/sync/domain/models/outbox_action_types.dart';
+import 'package:splittr/features/sync/domain/services/outbox_worker.dart';
+import 'package:uuid/uuid.dart';
 
 @LazySingleton(as: FriendsRepository)
 final class FriendsRepositoryImpl implements FriendsRepository {
@@ -16,11 +24,15 @@ final class FriendsRepositoryImpl implements FriendsRepository {
     this._apiCallHandler,
     this._friendsRemoteDataSource,
     this._friendsLocalDataSource,
+    this._outboxLocalDataSource,
+    this._outboxWorker,
   );
 
   final ApiCallHandler _apiCallHandler;
   final FriendsRemoteDataSource _friendsRemoteDataSource;
   final FriendsLocalDataSource _friendsLocalDataSource;
+  final OutboxLocalDataSource _outboxLocalDataSource;
+  final OutboxWorker _outboxWorker;
   final Mutex _syncLock = Mutex();
 
   @override
@@ -85,19 +97,37 @@ final class FriendsRepositoryImpl implements FriendsRepository {
     String? friendEmail,
     String? friendPhone,
   }) async {
-    final result = await _apiCallHandler.handle(
-      () => _friendsRemoteDataSource.addFriend(
-        friendEmail: friendEmail,
-        friendPhone: friendPhone,
-      ),
-    );
-    return result.fold(
-      Left.new,
-      (model) async {
-        await _friendsLocalDataSource.saveFriend(model.toIsar());
-        return Right(model.toDomain());
-      },
-    );
+    final tempId = 'temp-${const Uuid().v4()}';
+    final idempotencyKey = const Uuid().v4();
+    final now = DateTime.now();
+
+    final optimisticFriend = FriendIsarModel()
+      ..id = tempId
+      ..email = friendEmail
+      ..phone = friendPhone
+      ..name = friendEmail ?? friendPhone ?? 'Friend'
+      ..status = 'pending'
+      ..createdAt = now
+      ..updatedAt = now;
+
+    await _friendsLocalDataSource.saveFriend(optimisticFriend);
+
+    final payload = <String, dynamic>{
+      'friendEmail': ?friendEmail,
+      'friendPhone': ?friendPhone,
+    };
+
+    final action = OutboxActionIsarModel()
+      ..actionType = OutboxActionTypes.addFriend
+      ..idempotencyKey = idempotencyKey
+      ..tempId = tempId
+      ..payloadJson = jsonEncode(payload)
+      ..createdAt = now;
+
+    await _outboxLocalDataSource.enqueue(action);
+    _outboxWorker.flush().ignore();
+
+    return Right(optimisticFriend.toDomain());
   }
 
   @override
@@ -116,8 +146,21 @@ final class FriendsRepositoryImpl implements FriendsRepository {
 
   @override
   FutureEitherFailure<Unit> removeFriend(String friendId) async {
-    return _apiCallHandler.handle(
-      () => _friendsRemoteDataSource.removeFriend(friendId),
-    );
+    final idempotencyKey = const Uuid().v4();
+    final now = DateTime.now();
+
+    await _friendsLocalDataSource.deleteFriend(friendId);
+
+    final action = OutboxActionIsarModel()
+      ..actionType = OutboxActionTypes.removeFriend
+      ..idempotencyKey = idempotencyKey
+      ..tempId = friendId.startsWith('temp-') ? friendId : null
+      ..payloadJson = jsonEncode({'friendId': friendId})
+      ..createdAt = now;
+
+    await _outboxLocalDataSource.enqueue(action);
+    _outboxWorker.flush().ignore();
+
+    return const Right(unit);
   }
 }

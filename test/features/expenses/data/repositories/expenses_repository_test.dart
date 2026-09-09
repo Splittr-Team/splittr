@@ -10,6 +10,9 @@ import 'package:splittr/features/expenses/data/models/expense_model.dart';
 import 'package:splittr/features/expenses/data/repositories/expenses_repository_impl.dart';
 import 'package:splittr/features/expenses/domain/repositories/expenses_repository.dart';
 
+import 'package:splittr/features/sync/data/datasources/outbox_local_data_source.dart';
+import 'package:splittr/features/sync/domain/services/outbox_worker.dart';
+
 class MockExpensesRemoteDataSource extends Mock
     implements ExpensesRemoteDataSource {}
 
@@ -17,6 +20,10 @@ class MockExpensesLocalDataSource extends Mock
     implements ExpensesLocalDataSource {}
 
 class FakeExpenseIsarModel extends Fake implements ExpenseIsarModel {}
+
+class MockOutboxLocalDataSource extends Mock implements OutboxLocalDataSource {}
+
+class MockOutboxWorker extends Mock implements OutboxWorker {}
 
 class MockApiCallHandler extends Mock implements ApiCallHandler {
   @override
@@ -33,6 +40,8 @@ class MockApiCallHandler extends Mock implements ApiCallHandler {
 void main() {
   late MockExpensesRemoteDataSource mockRemoteDataSource;
   late MockExpensesLocalDataSource mockLocalDataSource;
+  late MockOutboxLocalDataSource mockOutboxLocalDataSource;
+  late MockOutboxWorker mockOutboxWorker;
   late MockApiCallHandler mockHandler;
   late ExpensesRepository repository;
 
@@ -43,11 +52,15 @@ void main() {
   setUp(() {
     mockRemoteDataSource = MockExpensesRemoteDataSource();
     mockLocalDataSource = MockExpensesLocalDataSource();
+    mockOutboxLocalDataSource = MockOutboxLocalDataSource();
+    mockOutboxWorker = MockOutboxWorker();
     mockHandler = MockApiCallHandler();
     repository = ExpensesRepositoryImpl(
       mockHandler,
       mockRemoteDataSource,
       mockLocalDataSource,
+      mockOutboxLocalDataSource,
+      mockOutboxWorker,
     );
   });
 
