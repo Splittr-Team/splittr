@@ -11,13 +11,23 @@ import 'package:splittr/features/friends/data/models/friends_model.dart';
 import 'package:splittr/features/friends/data/repositories/friends_repository_impl.dart';
 import 'package:splittr/features/friends/domain/repositories/friends_repository.dart';
 
+import 'package:splittr/features/sync/data/datasources/outbox_local_data_source.dart';
+import 'package:splittr/features/sync/data/models/outbox_action_isar_model.dart';
+import 'package:splittr/features/sync/domain/services/outbox_worker.dart';
+
 class MockFriendsRemoteDataSource extends Mock
     implements FriendsRemoteDataSource {}
 
 class MockFriendsLocalDataSource extends Mock
     implements FriendsLocalDataSource {}
 
+class MockOutboxLocalDataSource extends Mock implements OutboxLocalDataSource {}
+
+class MockOutboxWorker extends Mock implements OutboxWorker {}
+
 class FakeFriendIsarModel extends Fake implements FriendIsarModel {}
+
+class FakeOutboxActionIsarModel extends Fake implements OutboxActionIsarModel {}
 
 class MockApiCallHandler extends Mock implements ApiCallHandler {
   @override
@@ -34,21 +44,37 @@ class MockApiCallHandler extends Mock implements ApiCallHandler {
 void main() {
   setUpAll(() {
     registerFallbackValue(FakeFriendIsarModel());
+    registerFallbackValue(FakeOutboxActionIsarModel());
   });
 
   late MockFriendsRemoteDataSource mockRemoteDataSource;
   late MockFriendsLocalDataSource mockLocalDataSource;
+  late MockOutboxLocalDataSource mockOutboxLocalDataSource;
+  late MockOutboxWorker mockOutboxWorker;
   late MockApiCallHandler mockHandler;
   late FriendsRepository repository;
 
   setUp(() {
     mockRemoteDataSource = MockFriendsRemoteDataSource();
     mockLocalDataSource = MockFriendsLocalDataSource();
+    mockOutboxLocalDataSource = MockOutboxLocalDataSource();
+    mockOutboxWorker = MockOutboxWorker();
     mockHandler = MockApiCallHandler();
+    when(
+      () => mockOutboxLocalDataSource.enqueue(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => mockOutboxWorker.flush(),
+    ).thenAnswer((_) async => const Right(unit));
+    when(
+      () => mockLocalDataSource.deleteFriend(any()),
+    ).thenAnswer((_) async {});
     repository = FriendsRepositoryImpl(
       mockHandler,
       mockRemoteDataSource,
       mockLocalDataSource,
+      mockOutboxLocalDataSource,
+      mockOutboxWorker,
     );
   });
 
@@ -110,7 +136,10 @@ void main() {
       expect(result.isRight(), true);
       result.fold(
         (failure) => fail('Should succeed'),
-        (friend) => expect(friend.id, 'user-123'),
+        (friend) {
+          expect(friend.email, 'john@example.com');
+          expect(friend.id?.startsWith('temp-'), isTrue);
+        },
       );
     });
 

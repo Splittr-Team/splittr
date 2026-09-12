@@ -108,11 +108,34 @@ extension InputSplitX on InputSplit {
         ),
     };
   }
+
+  SplitIsarModel toIsar() {
+    return switch (this) {
+      EqualInputSplit(:final userId) =>
+        SplitIsarModel()
+          ..userId = userId
+          ..splitType = 'equal',
+      ExactInputSplit(:final userId, :final amount) =>
+        SplitIsarModel()
+          ..userId = userId
+          ..amount = amount.toDouble()
+          ..splitType = 'exact',
+      PercentageInputSplit(:final userId, :final percentage) =>
+        SplitIsarModel()
+          ..userId = userId
+          ..splitValue = percentage.toDouble()
+          ..splitType = 'percentage',
+    };
+  }
 }
 
 extension InputSplitListX on List<InputSplit> {
   List<InputSplitPayload> toModel() {
     return map((s) => s.toModel()).toList();
+  }
+
+  List<SplitIsarModel> toIsar() {
+    return map((s) => s.toIsar()).toList();
   }
 }
 
