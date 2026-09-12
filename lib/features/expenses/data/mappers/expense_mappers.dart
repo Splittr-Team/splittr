@@ -247,20 +247,25 @@ extension SettlementIsarModelListX on List<SettlementIsarModel> {
 extension BalancesModelX on BalancesModel {
   Balances toDomain() => Balances(
     balances: balances.toDomain(),
-    settlements: settlements.toDomain(),
+    directSettlements: directSettlements.toDomain(),
+    simplifiedSettlements: simplifiedSettlements.toDomain(),
   );
 
   BalancesIsarModel toIsar([String? groupId]) => BalancesIsarModel()
     ..groupId = groupId ?? ''
     ..balances = balances.map((b) => b.toIsar()).toList()
-    ..settlements = settlements.map((s) => s.toIsar()).toList()
+    ..directSettlements = directSettlements.map((s) => s.toIsar()).toList()
+    ..simplifiedSettlements = simplifiedSettlements
+        .map((s) => s.toIsar())
+        .toList()
     ..updatedAt = DateTime.now();
 }
 
 extension BalancesIsarModelX on BalancesIsarModel {
   Balances toDomain() => Balances(
     balances: balances?.toDomain() ?? const [],
-    settlements: settlements?.toDomain() ?? const [],
+    directSettlements: directSettlements?.toDomain() ?? const [],
+    simplifiedSettlements: simplifiedSettlements?.toDomain() ?? const [],
   );
 }
 

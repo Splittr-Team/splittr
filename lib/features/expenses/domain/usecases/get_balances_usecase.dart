@@ -13,7 +13,6 @@ final class GetBalancesUseCase implements UseCase<Balances, GetBalancesParams> {
   Future<Either<Failure, Balances>> call(GetBalancesParams params) {
     return _repository.getBalances(
       groupId: params.groupId,
-      simplified: params.simplified,
     );
   }
 }
@@ -21,12 +20,10 @@ final class GetBalancesUseCase implements UseCase<Balances, GetBalancesParams> {
 class GetBalancesParams extends Equatable {
   const GetBalancesParams({
     this.groupId,
-    this.simplified,
   });
 
   final String? groupId;
-  final bool? simplified;
 
   @override
-  List<Object?> get props => [groupId, simplified];
+  List<Object?> get props => [groupId];
 }

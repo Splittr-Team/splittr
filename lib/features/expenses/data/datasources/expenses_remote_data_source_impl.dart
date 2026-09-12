@@ -60,7 +60,7 @@ final class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
   }
 
   @override
-  Future<BalancesModel> getBalances({String? groupId, bool? simplified}) {
-    return _apiClient.getBalances(groupId: groupId, simplified: simplified);
+  Future<BalancesModel> getBalances({String? groupId}) {
+    return _apiClient.getBalances(groupId: groupId);
   }
 }
