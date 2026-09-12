@@ -8,6 +8,7 @@ import 'package:sky_storage_isar/sky_storage_isar.dart';
 import 'package:splittr/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:splittr/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:splittr/features/auth/data/mappers/user.dart';
+import 'package:splittr/features/auth/domain/entities/auth_provider_type.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
 import 'package:splittr/features/auth/domain/repositories/auth_repository.dart';
 
@@ -165,6 +166,26 @@ final class AuthRepositoryImpl implements AuthRepository {
     } on Exception catch (_) {
       return false;
     }
+  }
+
+  @override
+  AuthProviderType get currentAuthProvider =>
+      _authRemoteDataSource.currentAuthProvider;
+
+  @override
+  bool get isEmailVerified => _authRemoteDataSource.isEmailVerified;
+
+  @override
+  String get currentUserEmail => _authRemoteDataSource.currentUserEmail;
+
+  @override
+  FutureEitherFailure<void> sendEmailVerification() {
+    return _apiCallHandler.handle(_authRemoteDataSource.sendEmailVerification);
+  }
+
+  @override
+  FutureEitherFailure<bool> checkEmailVerified() {
+    return _apiCallHandler.handle(_authRemoteDataSource.checkEmailVerified);
   }
 
   @disposeMethod

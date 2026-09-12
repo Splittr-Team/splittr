@@ -6,7 +6,6 @@ import 'package:sky_design_system/sky_design_system.dart';
 import 'package:sky_router/sky_router.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/sign_up/sign_up_bloc.dart';
-import 'package:splittr/features/auth/presentation/pages/widgets/apple_sign_in_button.dart';
 import 'package:splittr/features/auth/presentation/pages/widgets/auth_form_card.dart';
 import 'package:splittr/features/auth/presentation/pages/widgets/confirm_password_text_field.dart';
 import 'package:splittr/features/auth/presentation/pages/widgets/email_text_field.dart';

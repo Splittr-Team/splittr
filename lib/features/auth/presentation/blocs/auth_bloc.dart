@@ -7,6 +7,7 @@ import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/features/app_config/domain/stores/app_config_store.dart';
 import 'package:splittr/features/app_config/domain/usecases/get_app_config_use_case.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
+import 'package:splittr/features/auth/domain/repositories/auth_repository.dart';
 import 'package:splittr/features/auth/domain/usecases/check_auth_status_usecase.dart';
 import 'package:splittr/features/auth/domain/usecases/login_as_guest_usecase.dart';
 import 'package:splittr/features/auth/domain/usecases/logout_usecase.dart';
@@ -27,6 +28,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
     this._getAppConfigUseCase,
     this._appConfigStore,
     this._syncCoordinator,
+    this._authRepository,
   ) : super(const AuthState.loading()) {
     _authStateStreamSubscription = _watchAuthStateUseCase
         .call(noParams)
@@ -40,6 +42,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
   final GetAppConfigUseCase _getAppConfigUseCase;
   final AppConfigStore _appConfigStore;
   final SyncCoordinator _syncCoordinator;
+  final AuthRepository _authRepository;
 
   StreamSubscription<Option<User>>? _authStateStreamSubscription;
 
@@ -49,6 +52,8 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
     on<_LoggedOut>(_onLoggedOut);
     on<_LoginAsGuest>(_onLoginAsGuest);
     on<_AuthStateChanged>(_onAuthStateChanged);
+    on<_CheckEmailVerificationRequested>(_onCheckEmailVerificationRequested);
+    on<_ResendEmailVerificationRequested>(_onResendEmailVerificationRequested);
   }
 
   FutureOr<void> _onStarted(_Started event, Emitter<AuthState> emit) async {
@@ -89,6 +94,16 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
         if (user.id == 'guest') {
           _syncCoordinator.stop();
           emit(const AuthState.guest());
+        } else if (_authRepository
+                .currentAuthProvider
+                .requiresEmailVerification &&
+            !_authRepository.isEmailVerified) {
+          _syncCoordinator.stop();
+          emit(
+            AuthState.unverifiedEmail(
+              email: _authRepository.currentUserEmail,
+            ),
+          );
         } else {
           _syncCoordinator.start();
           _syncCoordinator.syncNow().ignore();
@@ -96,6 +111,34 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
         }
       },
     );
+  }
+
+  FutureOr<void> _onCheckEmailVerificationRequested(
+    _CheckEmailVerificationRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    final result = await _authRepository.checkEmailVerified();
+    await result.fold(
+      (failure) async => emit(AuthState.onFailure(failure: failure)),
+      (verified) async {
+        if (verified) {
+          await _checkAuthStatusUseCase.call(noParams);
+        } else {
+          emit(
+            AuthState.unverifiedEmail(
+              email: _authRepository.currentUserEmail,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  FutureOr<void> _onResendEmailVerificationRequested(
+    _ResendEmailVerificationRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    await _authRepository.sendEmailVerification();
   }
 
   @override
@@ -120,5 +163,13 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState, NoParams> {
 
   void authStateChanged(Option<User> userOption) {
     add(AuthEvent.authStateChanged(userOption));
+  }
+
+  void checkEmailVerification() {
+    add(const AuthEvent.checkEmailVerificationRequested());
+  }
+
+  void resendEmailVerification() {
+    add(const AuthEvent.resendEmailVerificationRequested());
   }
 }

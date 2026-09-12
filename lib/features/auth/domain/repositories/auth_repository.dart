@@ -1,4 +1,5 @@
 import 'package:sky_architecture/sky_architecture.dart';
+import 'package:splittr/features/auth/domain/entities/auth_provider_type.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
 
 abstract interface class AuthRepository {
@@ -24,6 +25,16 @@ abstract interface class AuthRepository {
   FutureEitherFailure<Unit> saveGuestSession();
 
   Future<bool> isGuestUser();
+
+  FutureEitherFailure<void> sendEmailVerification();
+
+  FutureEitherFailure<bool> checkEmailVerified();
+
+  bool get isEmailVerified;
+
+  String get currentUserEmail;
+
+  AuthProviderType get currentAuthProvider;
 
   Future<void> dispose();
 }
