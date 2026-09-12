@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:sky_router/sky_router.dart';
 import 'package:splittr/core/app_config/i_app_config.dart';
+import 'package:splittr/features/expenses/domain/entities/expense.dart';
+import 'package:splittr/features/friends/domain/entities/friend.dart';
 
 sealed class AppRoute {
   const AppRoute();
@@ -111,6 +113,37 @@ class FriendsRoute extends AppRoute {
 
   @override
   String get path => pathTemplate;
+}
+
+class FriendDetailsRoute extends AppRoute {
+  const FriendDetailsRoute({
+    required this.friendId,
+    this.friend,
+  });
+
+  final String friendId;
+  final Friend? friend;
+
+  static const String relativePathTemplate = ':friendId';
+  static const String pathTemplate = '/friends/:friendId';
+
+  @override
+  String get path => '${FriendsRoute.pathTemplate}/$friendId';
+
+  @override
+  Object? get extra => friend;
+
+  static FriendDetailsRoute? fromState(GoRouterState state) {
+    final friendId = state.pathParameters['friendId'];
+    if (friendId == null || friendId.isEmpty) {
+      return null;
+    }
+    final friend = state.extra is Friend ? state.extra! as Friend : null;
+    return FriendDetailsRoute(
+      friendId: friendId,
+      friend: friend,
+    );
+  }
 }
 
 class GroupRoute extends AppRoute {
@@ -271,4 +304,127 @@ class NotificationsRoute extends AppRoute {
 
   @override
   String get path => pathTemplate;
+}
+
+class AddExpenseArgs {
+  const AddExpenseArgs({
+    this.expense,
+    this.groupId,
+    this.friendId,
+    this.participantUserIds = const [],
+  });
+
+  final Expense? expense;
+  final String? groupId;
+  final String? friendId;
+  final List<String> participantUserIds;
+}
+
+class AddExpenseRoute extends AppRoute {
+  const AddExpenseRoute({this.args});
+
+  final AddExpenseArgs? args;
+
+  static const String pathTemplate = '/expenses/add';
+
+  @override
+  String get path => pathTemplate;
+
+  @override
+  Object? get extra => args;
+
+  static AddExpenseRoute? fromState(GoRouterState state) {
+    if (state.extra case final AddExpenseArgs args) {
+      return AddExpenseRoute(args: args);
+    }
+    final groupId = state.uri.queryParameters['groupId'];
+    final friendId = state.uri.queryParameters['friendId'];
+    return AddExpenseRoute(
+      args: AddExpenseArgs(groupId: groupId, friendId: friendId),
+    );
+  }
+}
+
+class ExpenseDetailsRoute extends AppRoute {
+  const ExpenseDetailsRoute({
+    required this.expenseId,
+    this.expense,
+  });
+
+  final String expenseId;
+  final Expense? expense;
+
+  static const String pathTemplate = '/expenses/:expenseId';
+
+  @override
+  String get path => '/expenses/$expenseId';
+
+  @override
+  Object? get extra => expense;
+
+  static ExpenseDetailsRoute? fromState(GoRouterState state) {
+    final expenseId = state.pathParameters['expenseId'];
+    if (expenseId == null || expenseId.isEmpty) {
+      return null;
+    }
+    final extra = state.extra;
+    final expense = extra is Expense ? extra : null;
+    return ExpenseDetailsRoute(expenseId: expenseId, expense: expense);
+  }
+}
+
+class SettleUpArgs {
+  const SettleUpArgs({
+    this.groupId,
+    this.payerId,
+    this.receiverId,
+    this.payerName,
+    this.receiverName,
+    this.amount,
+    this.currency,
+  });
+
+  final String? groupId;
+  final String? payerId;
+  final String? receiverId;
+  final String? payerName;
+  final String? receiverName;
+  final num? amount;
+  final String? currency;
+}
+
+class SettleUpRoute extends AppRoute {
+  const SettleUpRoute({this.args});
+
+  final SettleUpArgs? args;
+
+  static const String pathTemplate = '/expenses/settle';
+
+  @override
+  String get path => pathTemplate;
+
+  @override
+  Object? get extra => args;
+
+  static SettleUpRoute? fromState(GoRouterState state) {
+    if (state.extra case final SettleUpArgs args) {
+      return SettleUpRoute(args: args);
+    }
+    final groupId = state.uri.queryParameters['groupId'];
+    final payerId = state.uri.queryParameters['payerId'];
+    final receiverId = state.uri.queryParameters['receiverId'];
+    final amountStr = state.uri.queryParameters['amount'];
+    final amount = amountStr != null ? num.tryParse(amountStr) : null;
+    final currency = state.uri.queryParameters['currency'];
+
+    return SettleUpRoute(
+      args: SettleUpArgs(
+        groupId: groupId,
+        payerId: payerId,
+        receiverId: receiverId,
+        amount: amount,
+        currency: currency,
+      ),
+    );
+  }
 }
