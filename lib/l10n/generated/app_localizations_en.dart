@@ -385,4 +385,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get owesYou => 'owes you';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get orWithEmail => 'or continue with email';
+
+  @override
+  String get verifyEmailTitle => 'Verify your email';
+
+  @override
+  String verifyEmailSubtitle(String email) {
+    return 'We sent a verification link to $email. Please verify your account to continue.';
+  }
+
+  @override
+  String get checkVerificationButton => 'I\'ve Verified My Email';
+
+  @override
+  String get resendVerificationButton => 'Resend Verification Link';
+
+  @override
+  String resendCooldown(int seconds) {
+    return 'Resend in ${seconds}s';
+  }
+
+  @override
+  String get verificationSentSnackbar =>
+      'Verification email sent. Please check your inbox.';
+
+  @override
+  String get emailNotVerifiedYet =>
+      'Email not verified yet. Please check your inbox and click the verification link.';
 }

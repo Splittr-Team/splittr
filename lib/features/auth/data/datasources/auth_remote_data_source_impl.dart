@@ -6,6 +6,7 @@ import 'package:splittr/features/auth/data/datasources/auth_api_client.dart';
 import 'package:splittr/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:splittr/features/auth/data/models/create_user_payload.dart';
 import 'package:splittr/features/auth/data/models/user_model.dart';
+import 'package:splittr/features/auth/domain/entities/auth_provider_type.dart';
 import 'package:splittr/utils/extensions/firebase_extensions.dart';
 
 @LazySingleton(as: AuthRemoteDataSource)
@@ -58,6 +59,8 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
+      await _firebaseAuth.currentUser?.sendEmailVerification();
+
       return await _authApiClient.createUser(
         CreateUserPayload(name: name, email: email),
       );
@@ -65,6 +68,41 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw e.toServerException();
     }
   }
+
+  @override
+  AuthProviderType get currentAuthProvider {
+    final user = _firebaseAuth.currentUser;
+    if (user == null || user.isAnonymous) return AuthProviderType.anonymous;
+    for (final profile in user.providerData) {
+      return AuthProviderType.fromProviderId(profile.providerId);
+    }
+    return AuthProviderType.emailPassword;
+  }
+
+  @override
+  Future<void> sendEmailVerification() async {
+    try {
+      await _firebaseAuth.currentUser?.sendEmailVerification();
+    } on FirebaseException catch (e) {
+      throw e.toServerException();
+    }
+  }
+
+  @override
+  Future<bool> checkEmailVerified() async {
+    try {
+      await _firebaseAuth.currentUser?.reload();
+      return _firebaseAuth.currentUser?.emailVerified ?? false;
+    } on FirebaseException catch (e) {
+      throw e.toServerException();
+    }
+  }
+
+  @override
+  bool get isEmailVerified => _firebaseAuth.currentUser?.emailVerified ?? false;
+
+  @override
+  String get currentUserEmail => _firebaseAuth.currentUser?.email ?? '';
 
   @override
   Future<UserModel> checkAuthStatus() async {
