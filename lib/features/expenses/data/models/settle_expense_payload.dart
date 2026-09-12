@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'settle_expense_payload.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createFactory: true)
 class SettleExpensePayload {
   const SettleExpensePayload({
     required this.amount,
@@ -11,6 +11,9 @@ class SettleExpensePayload {
     required this.receivedBy,
     this.groupId,
   });
+
+  factory SettleExpensePayload.fromJson(Map<String, dynamic> json) =>
+      _$SettleExpensePayloadFromJson(json);
 
   final num amount;
   final String currency;

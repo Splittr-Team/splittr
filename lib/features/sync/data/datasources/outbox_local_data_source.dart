@@ -8,7 +8,7 @@ abstract interface class OutboxLocalDataSource {
   /// [OutboxActionIsarModel.createdAt].
   Future<List<OutboxActionIsarModel>> getPendingActions();
 
-  /// Mark an action as [OutboxStatus.inFlight].
+  /// Mark an action as in-flight.
   Future<void> markInFlight(String idempotencyKey);
 
   /// Mark success: store [serverId], clear [tempId] reference from payloads
@@ -19,7 +19,7 @@ abstract interface class OutboxLocalDataSource {
     required String? tempId,
   });
 
-  /// Increment retry count and reset to [OutboxStatus.pending].
+  /// Increment retry count and reset to pending status.
   Future<void> markFailed(String idempotencyKey);
 
   /// Replace all occurrences of [tempId] with [serverId] in the
