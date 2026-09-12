@@ -807,6 +807,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'owes you'**
   String get owesYou;
+
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get continueWithGoogle;
+
+  /// No description provided for @orWithEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'or continue with email'**
+  String get orWithEmail;
+
+  /// No description provided for @verifyEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your email'**
+  String get verifyEmailTitle;
+
+  /// No description provided for @verifyEmailSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a verification link to {email}. Please verify your account to continue.'**
+  String verifyEmailSubtitle(String email);
+
+  /// No description provided for @checkVerificationButton.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ve Verified My Email'**
+  String get checkVerificationButton;
+
+  /// No description provided for @resendVerificationButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Verification Link'**
+  String get resendVerificationButton;
+
+  /// No description provided for @resendCooldown.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds}s'**
+  String resendCooldown(int seconds);
+
+  /// No description provided for @verificationSentSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification email sent. Please check your inbox.'**
+  String get verificationSentSnackbar;
+
+  /// No description provided for @emailNotVerifiedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Email not verified yet. Please check your inbox and click the verification link.'**
+  String get emailNotVerifiedYet;
 }
 
 class _AppLocalizationsDelegate

@@ -11,6 +11,7 @@ import 'package:splittr/features/app_config/presentation/ui/maintenance_page.dar
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart';
 import 'package:splittr/features/auth/presentation/pages/login/login_page.dart';
 import 'package:splittr/features/auth/presentation/pages/sign_up/sign_up_page.dart';
+import 'package:splittr/features/auth/presentation/pages/verify_email/verify_email_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/animated_branch_container.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_shell.dart';
@@ -36,6 +37,7 @@ const List<String> _publicRoutes = [
   SplashRoute.pathTemplate,
   LoginRoute.pathTemplate,
   SignUpRoute.pathTemplate,
+  VerifyEmailRoute.pathTemplate,
   ForceUpdateRoute.pathTemplate,
   MaintenanceRoute.pathTemplate,
 ];
@@ -102,6 +104,22 @@ String? _redirect(
   // During initial state (splash screen is resolving), do not redirect.
   if (authState case Loading _) return null;
 
+  // Email verification check
+  if (authState.isEmailVerificationRequired) {
+    if (currentLocation != VerifyEmailRoute.pathTemplate) {
+      return const VerifyEmailRoute().path;
+    }
+    return null;
+  }
+
+  // If user is on verify email page but verification is not required
+  if (currentLocation == VerifyEmailRoute.pathTemplate) {
+    if (authState.isAuthenticated) {
+      return const DashboardRoute().path;
+    }
+    return LoginRoute.pathTemplate;
+  }
+
   final isOnPublicRoute = _publicRoutes.contains(currentLocation);
   final isOnSplash = currentLocation == SplashRoute.pathTemplate;
 
@@ -160,6 +178,10 @@ final List<RouteBase> _routes = [
   GoRoute(
     path: SignUpRoute.pathTemplate,
     builder: (context, state) => const SignUpPage(),
+  ),
+  GoRoute(
+    path: VerifyEmailRoute.pathTemplate,
+    builder: (context, state) => const VerifyEmailPage(),
   ),
   GoRoute(
     path: AddMembersRoute.pathTemplate,

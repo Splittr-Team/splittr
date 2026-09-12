@@ -133,6 +133,29 @@
   "allSettledUp": "All settled up",
   "expenses": "Expenses",
   "owesYou": "owes you",
-  "youOwe": "You owe"
+  "youOwe": "You owe",
+  "continueWithGoogle": "Continue with Google",
+  "orWithEmail": "or continue with email",
+  "verifyEmailTitle": "Verify your email",
+  "verifyEmailSubtitle": "We sent a verification link to {email}. Please verify your account to continue.",
+  "@verifyEmailSubtitle": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "checkVerificationButton": "I've Verified My Email",
+  "resendVerificationButton": "Resend Verification Link",
+  "resendCooldown": "Resend in {seconds}s",
+  "@resendCooldown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "verificationSentSnackbar": "Verification email sent. Please check your inbox.",
+  "emailNotVerifiedYet": "Email not verified yet. Please check your inbox and click the verification link."
 }
 

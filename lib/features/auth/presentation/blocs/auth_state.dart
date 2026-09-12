@@ -10,6 +10,10 @@ sealed class AuthState extends BaseState with _$AuthState {
     required User user,
   }) = OnUserAuthenticated;
 
+  const factory AuthState.unverifiedEmail({
+    required String email,
+  }) = UnverifiedEmail;
+
   const factory AuthState.onUserUnauthenticated() = OnUserUnauthenticated;
 
   const factory AuthState.guest() = Guest;
@@ -33,5 +37,15 @@ sealed class AuthState extends BaseState with _$AuthState {
   User? get user => switch (this) {
     OnUserAuthenticated(:final user) => user,
     _ => null,
+  };
+
+  bool get isEmailVerificationRequired => switch (this) {
+    UnverifiedEmail() => true,
+    _ => false,
+  };
+
+  bool get isAuthenticated => switch (this) {
+    OnUserAuthenticated() || Guest() => true,
+    _ => false,
   };
 }

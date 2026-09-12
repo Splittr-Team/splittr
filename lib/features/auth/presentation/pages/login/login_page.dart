@@ -11,7 +11,6 @@ import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart'
     hide OnFailure;
 import 'package:splittr/features/auth/presentation/blocs/login/login_bloc.dart';
-import 'package:splittr/features/auth/presentation/pages/widgets/apple_sign_in_button.dart';
 import 'package:splittr/features/auth/presentation/pages/widgets/auth_form_card.dart';
 import 'package:splittr/features/auth/presentation/pages/widgets/email_text_field.dart';
 import 'package:splittr/features/auth/presentation/pages/widgets/google_sign_in_button.dart';
