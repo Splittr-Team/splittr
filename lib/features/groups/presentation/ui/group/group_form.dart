@@ -13,78 +13,99 @@ class _GroupForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserId = getBloc<AuthBloc>(context).state.user?.id;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Header Card
-        Padding(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Container(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            decoration: BoxDecoration(
-              color: context.colorScheme.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: context.colorScheme.outlineVariant,
-              ),
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: context.colorScheme.primaryContainer,
-                  child: Icon(
-                    Icons.group_rounded,
-                    color: context.colorScheme.onPrimaryContainer,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        GroupBalanceSummaryHeader(
+          groupId: groupId,
+          group: group,
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Expanded(
+          child: BlocBuilder<ExpensesBloc, ExpensesState>(
+            builder: (context, expensesState) {
+              final expensesBloc = getBloc<ExpensesBloc>(context);
+              final expenses = expensesState.store.expenses;
+              final hasMore = expensesState.store.hasMore;
+              final isExpensesLoading = expensesState.store.loading;
+
+              if (expenses.isEmpty && !isExpensesLoading) {
+                return AppRefreshIndicator(
+                  onRefresh: () async {
+                    getBloc<GroupBloc>(context).started(
+                      GroupParams(groupId: groupId),
+                    );
+                    expensesBloc.started(
+                      ExpensesParams(groupId: groupId),
+                    );
+                  },
+                  child: ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
                     children: [
-                      AppText.headlineSmall(
-                        group.name ?? context.strings.groupDetails,
-                      ),
-                      const SizedBox(height: AppSpacing.xs),
-                      AppText.bodyMedium(
-                        context.strings.membersCount(
-                          group.members.length,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.lg,
+                          vertical: AppSpacing.xxl,
                         ),
-                        color: context.colorScheme.onSurfaceVariant,
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CircleAvatar(
+                                radius: 32,
+                                backgroundColor:
+                                    context.colorScheme.surfaceContainerHigh,
+                                foregroundColor:
+                                    context.colorScheme.onSurfaceVariant,
+                                child: const AppIcon.lg(
+                                  Icons.receipt_long_outlined,
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.md),
+                              AppText.titleMedium(
+                                context.strings.noExpensesYet,
+                                color: context.colorScheme.onSurface,
+                              ),
+                              const SizedBox(height: AppSpacing.xs),
+                              AppText.bodyMedium(
+                                context.strings.noExpensesGroupSubtitle,
+                                color: context.colorScheme.onSurfaceVariant,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
+                );
+              }
 
-        // Expenses list / activity feed placeholder
-        Expanded(
-          child: AppRefreshIndicator(
-            onRefresh: () async {
-              getBloc<GroupBloc>(context).started(
-                GroupParams(groupId: groupId),
+              return ExpensesListView(
+                expenses: expenses,
+                hasMore: hasMore,
+                isLoadingMore: isExpensesLoading && expenses.isNotEmpty,
+                currentUserId: currentUserId,
+                onLoadMore: expensesBloc.fetchNextPage,
+                onRefresh: () async {
+                  getBloc<GroupBloc>(context).started(
+                    GroupParams(groupId: groupId),
+                  );
+                  expensesBloc.started(
+                    ExpensesParams(groupId: groupId),
+                  );
+                },
+                onExpenseTap: (expense) {
+                  unawaited(
+                    ExpenseDetailsRoute(
+                      expenseId: expense.id,
+                    ).push<void>(context),
+                  );
+                },
               );
             },
-            child: ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: [
-                SizedBox(
-                  height: 300,
-                  child: Center(
-                    // TODO(Chaitanya): Add expenses
-                    child: AppText.bodyMedium(
-                      'Expenses will appear here', // Add to app_en.arb later
-                      color: context.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       ],

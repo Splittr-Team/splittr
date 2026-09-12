@@ -18,6 +18,13 @@ class GroupEvent extends BaseEvent with _$GroupEvent {
     required List<String> userIds,
   }) = _AddMembers;
 
+  const factory GroupEvent.updateGroup({
+    required String groupId,
+    String? name,
+    String? description,
+    bool? requireAdminApproval,
+  }) = _UpdateGroup;
+
   const factory GroupEvent.groupUpdated({
     required Group group,
   }) = _GroupUpdated;

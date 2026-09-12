@@ -350,4 +350,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ok => 'OK';
+
+  @override
+  String get editGroup => 'Edit Group';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get addExpense => 'Add Expense';
+
+  @override
+  String get groupUpdatedSuccessfully => 'Group updated successfully!';
+
+  @override
+  String get friendDetails => 'Friend Details';
+
+  @override
+  String get noExpensesYet => 'No expenses yet';
+
+  @override
+  String get noExpensesGroupSubtitle =>
+      'Add an expense to start splitting with your group.';
+
+  @override
+  String get noExpensesFriendSubtitle =>
+      'Add an expense to start splitting with this friend.';
+
+  @override
+  String get allSettledUp => 'All settled up';
+
+  @override
+  String get expenses => 'Expenses';
+
+  @override
+  String get owesYou => 'owes you';
 }

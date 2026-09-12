@@ -121,5 +121,18 @@
   "forgotPassword": "Forgot Password?",
   "forgotPasswordTitle": "Reset Password",
   "forgotPasswordDescription": "Password reset is currently unavailable. Please contact support or check back in a future update.",
-  "ok": "OK"
+  "ok": "OK",
+  "editGroup": "Edit Group",
+  "save": "Save",
+  "addExpense": "Add Expense",
+  "groupUpdatedSuccessfully": "Group updated successfully!",
+  "friendDetails": "Friend Details",
+  "noExpensesYet": "No expenses yet",
+  "noExpensesGroupSubtitle": "Add an expense to start splitting with your group.",
+  "noExpensesFriendSubtitle": "Add an expense to start splitting with this friend.",
+  "allSettledUp": "All settled up",
+  "expenses": "Expenses",
+  "owesYou": "owes you",
+  "youOwe": "You owe"
 }
+
