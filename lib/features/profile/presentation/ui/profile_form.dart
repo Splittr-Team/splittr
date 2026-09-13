@@ -42,6 +42,33 @@ class _ProfileForm extends StatelessWidget {
     );
   }
 
+  void _confirmDeleteAccount(BuildContext context) {
+    unawaited(
+      AppDialog.show<void>(
+        context: context,
+        title: 'Delete Account',
+        description:
+            'Are you sure? This will delete your account and scrub your '
+            'personal information. All past expenses will remain anonymized '
+            'so group balances stay accurate.',
+        actions: [
+          AppButton.text(
+            onPressed: () => RouteHandler.pop<void>(context),
+            text: context.strings.cancel,
+          ),
+          AppButton.text(
+            onPressed: () {
+              RouteHandler.pop<void>(context);
+              getBloc<ProfileBloc>(context).deleteAccountRequested();
+            },
+            text: 'Delete',
+            color: context.colorScheme.error,
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
@@ -234,10 +261,20 @@ class _ProfileForm extends StatelessWidget {
               const SizedBox(height: AppSpacing.sm),
               AppCard.outlined(
                 color: context.colorScheme.surfaceContainer,
-                child: AppListTile(
-                  leadingIcon: Icons.logout_rounded,
-                  title: context.strings.logout,
-                  onTap: () => _confirmLogout(context),
+                child: Column(
+                  children: [
+                    AppListTile(
+                      leadingIcon: Icons.logout_rounded,
+                      title: context.strings.logout,
+                      onTap: () => _confirmLogout(context),
+                    ),
+                    const AppDivider.horizontal(),
+                    AppListTile(
+                      leadingIcon: Icons.delete_forever_rounded,
+                      title: 'Delete Account',
+                      onTap: () => _confirmDeleteAccount(context),
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -17,4 +17,7 @@ class ProfileEvent extends BaseEvent with _$ProfileEvent {
   const factory ProfileEvent.themeModeToggled({
     required bool isDarkMode,
   }) = _ThemeModeToggled;
+
+  const factory ProfileEvent.deleteAccountRequested() =
+      _DeleteAccountRequested;
 }

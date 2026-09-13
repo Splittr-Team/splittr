@@ -30,4 +30,6 @@ abstract interface class AuthRemoteDataSource {
   AuthProviderType get currentAuthProvider;
 
   Future<void> logout();
+
+  Future<void> deleteAccount();
 }

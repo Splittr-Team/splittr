@@ -31,4 +31,7 @@ abstract class AuthApiClient {
   Future<UserSettingsModel> updateSettings(
     @Body() UpdateUserSettingsPayload body,
   );
+
+  @DELETE('/me')
+  Future<void> deleteMe();
 }

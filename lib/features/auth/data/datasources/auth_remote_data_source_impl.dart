@@ -206,4 +206,18 @@ final class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw e.toServerException();
     }
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      await _authApiClient.deleteMe();
+      try {
+        await _firebaseAuth.currentUser?.delete();
+      } on Exception catch (_) {
+        await _firebaseAuth.signOut();
+      }
+    } on FirebaseException catch (e) {
+      throw e.toServerException();
+    }
+  }
 }

@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
+import 'package:splittr/features/auth/domain/usecases/delete_account_usecase.dart';
 import 'package:splittr/features/auth/domain/usecases/watch_auth_state_usecase.dart';
 
 part 'profile_bloc.freezed.dart';
@@ -15,6 +16,7 @@ part 'profile_state.dart';
 final class ProfileBloc extends BaseBloc<ProfileEvent, ProfileState, NoParams> {
   ProfileBloc(
     this._watchAuthStateUseCase,
+    this._deleteAccountUseCase,
   ) : super(
         const ProfileState.initial(
           store: ProfileStateStore(),
@@ -22,6 +24,7 @@ final class ProfileBloc extends BaseBloc<ProfileEvent, ProfileState, NoParams> {
       );
 
   final WatchAuthStateUseCase _watchAuthStateUseCase;
+  final DeleteAccountUseCase _deleteAccountUseCase;
   StreamSubscription<Option<User>>? _userSubscription;
 
   @override
@@ -30,6 +33,7 @@ final class ProfileBloc extends BaseBloc<ProfileEvent, ProfileState, NoParams> {
     on<_UserUpdated>(_onUserUpdated);
     on<_CurrencyChanged>(_onCurrencyChanged);
     on<_ThemeModeToggled>(_onThemeModeToggled);
+    on<_DeleteAccountRequested>(_onDeleteAccountRequested);
   }
 
   FutureOr<void> _onStarted(
@@ -105,6 +109,37 @@ final class ProfileBloc extends BaseBloc<ProfileEvent, ProfileState, NoParams> {
 
   void themeModeToggled({required bool isDarkMode}) {
     add(ProfileEvent.themeModeToggled(isDarkMode: isDarkMode));
+  }
+
+  void deleteAccountRequested() {
+    add(const ProfileEvent.deleteAccountRequested());
+  }
+
+  FutureOr<void> _onDeleteAccountRequested(
+    _DeleteAccountRequested event,
+    Emitter<ProfileState> emit,
+  ) async {
+    changeLoadingState(emit: emit, loading: true);
+    final result = await _deleteAccountUseCase.call(noParams);
+    result.fold(
+      (failure) {
+        changeLoadingState(emit: emit, loading: false);
+        emit(
+          ProfileState.onDeleteAccountFailure(
+            store: state.store.copyWith(loading: false),
+            failure: failure,
+          ),
+        );
+      },
+      (_) {
+        changeLoadingState(emit: emit, loading: false);
+        emit(
+          ProfileState.onAccountDeleted(
+            store: state.store.copyWith(loading: false),
+          ),
+        );
+      },
+    );
   }
 
   @override
