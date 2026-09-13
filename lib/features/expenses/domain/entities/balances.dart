@@ -8,11 +8,14 @@ part 'balances.freezed.dart';
 class Balances with _$Balances {
   const Balances({
     required this.balances,
-    required this.settlements,
+    required this.directSettlements,
+    required this.simplifiedSettlements,
   });
 
   @override
   final List<UserBalance> balances;
   @override
-  final List<Settlement> settlements;
+  final List<Settlement> directSettlements;
+  @override
+  final List<Settlement> simplifiedSettlements;
 }

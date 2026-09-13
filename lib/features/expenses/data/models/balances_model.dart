@@ -8,12 +8,14 @@ part 'balances_model.g.dart';
 class BalancesModel {
   const BalancesModel({
     required this.balances,
-    required this.settlements,
+    this.directSettlements = const [],
+    this.simplifiedSettlements = const [],
   });
 
   factory BalancesModel.fromJson(Map<String, dynamic> json) =>
       _$BalancesModelFromJson(json);
 
   final List<UserBalanceModel> balances;
-  final List<SettlementModel> settlements;
+  final List<SettlementModel> directSettlements;
+  final List<SettlementModel> simplifiedSettlements;
 }
