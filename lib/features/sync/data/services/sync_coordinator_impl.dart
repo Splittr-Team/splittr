@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:splittr/features/sync/domain/services/outbox_worker.dart';
@@ -16,12 +17,15 @@ final class SyncCoordinatorImpl
   SyncCoordinatorImpl(
     this._syncEngine,
     this._outboxWorker,
+    this._connectivity,
   );
 
   final SyncEngine _syncEngine;
   final OutboxWorker _outboxWorker;
+  final Connectivity _connectivity;
 
   Timer? _periodicTimer;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   bool _started = false;
 
   @override
@@ -31,6 +35,7 @@ final class SyncCoordinatorImpl
 
     WidgetsBinding.instance.addObserver(this);
     _startPeriodicSync();
+    _startConnectivityListener();
   }
 
   @override
@@ -41,6 +46,8 @@ final class SyncCoordinatorImpl
     WidgetsBinding.instance.removeObserver(this);
     _periodicTimer?.cancel();
     _periodicTimer = null;
+    unawaited(_connectivitySubscription?.cancel());
+    _connectivitySubscription = null;
   }
 
   @override
@@ -57,7 +64,7 @@ final class SyncCoordinatorImpl
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       // App came to foreground — sync immediately.
-      syncNow().ignore();
+      unawaited(syncNow());
       // Restart periodic timer so interval resets from now.
       _startPeriodicSync();
     } else if (state == AppLifecycleState.paused) {
@@ -73,7 +80,21 @@ final class SyncCoordinatorImpl
   void _startPeriodicSync() {
     _periodicTimer?.cancel();
     _periodicTimer = Timer.periodic(_kSyncInterval, (_) {
-      syncNow().ignore();
+      unawaited(syncNow());
     });
+  }
+
+  void _startConnectivityListener() {
+    unawaited(_connectivitySubscription?.cancel());
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
+      (results) {
+        final isConnected = results.any(
+          (result) => result != ConnectivityResult.none,
+        );
+        if (isConnected) {
+          unawaited(syncNow());
+        }
+      },
+    );
   }
 }
