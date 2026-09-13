@@ -334,4 +334,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dangerZone => 'DANGER ZONE';
+
+  @override
+  String get socialSignInComingSoon => 'Social sign-in is coming soon.';
+
+  @override
+  String get forgotPassword => 'Forgot Password?';
+
+  @override
+  String get forgotPasswordTitle => 'Reset Password';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Password reset is currently unavailable. Please contact support or check back in a future update.';
+
+  @override
+  String get ok => 'OK';
 }

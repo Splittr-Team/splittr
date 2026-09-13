@@ -29,6 +29,13 @@ class _LoginForm extends StatelessWidget {
                 context,
               ).passwordChanged(password: password),
             ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: AppButton.text(
+                text: context.strings.forgotPassword,
+                onPressed: () => _showForgotPasswordDialog(context),
+              ),
+            ),
             BlocSelector<LoginBloc, LoginState, bool>(
               selector: (state) =>
                   (state.store.emailAddress?.isValid() ?? false) &&
@@ -53,8 +60,16 @@ class _LoginForm extends StatelessWidget {
           alignment: .center,
           spacing: AppSpacing.md,
           children: [
-            GoogleSignInButton(onPressed: () {}),
-            AppleSignInButton(onPressed: () {}),
+            GoogleSignInButton(
+              onPressed: () =>
+                  getBloc<LoginBloc>(context).loginWithGoogleClicked(),
+            ),
+            AppleSignInButton(
+              onPressed: () => AppSnackBar.show(
+                context,
+                message: context.strings.socialSignInComingSoon,
+              ),
+            ),
           ],
         ),
         AppButton.outlined(
@@ -63,6 +78,22 @@ class _LoginForm extends StatelessWidget {
           onPressed: () => getBloc<AuthBloc>(context).loginAsGuest(),
         ),
       ],
+    );
+  }
+
+  void _showForgotPasswordDialog(BuildContext context) {
+    unawaited(
+      AppDialog.show<void>(
+        context: context,
+        title: context.strings.forgotPasswordTitle,
+        description: context.strings.forgotPasswordDescription,
+        actions: [
+          AppButton.primary(
+            onPressed: () => RouteHandler.pop<void>(context),
+            text: context.strings.ok,
+          ),
+        ],
+      ),
     );
   }
 }

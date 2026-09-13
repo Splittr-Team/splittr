@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_bloc/sky_bloc.dart';
+import 'package:splittr/features/auth/domain/usecases/login_with_google_usecase.dart';
 import 'package:splittr/features/auth/domain/usecases/sign_up_with_email_usecase.dart';
 
 part 'sign_up_bloc.freezed.dart';
@@ -12,10 +13,11 @@ part 'sign_up_state.dart';
 
 @injectable
 class SignUpBloc extends BaseBloc<SignUpEvent, SignUpState, NoParams> {
-  SignUpBloc(this._signUpWithEmailUseCase)
+  SignUpBloc(this._signUpWithEmailUseCase, this._loginWithGoogleUseCase)
     : super(const SignUpState.initial(store: SignUpStateStore()));
 
   final SignUpWithEmailUseCase _signUpWithEmailUseCase;
+  final LoginWithGoogleUseCase _loginWithGoogleUseCase;
 
   @override
   void handleEvents() {
@@ -25,6 +27,7 @@ class SignUpBloc extends BaseBloc<SignUpEvent, SignUpState, NoParams> {
     on<_PasswordChanged>(_onPasswordChanged);
     on<_ConfirmPasswordChanged>(_onConfirmPasswordChanged);
     on<_SignUpClicked>(_onSignUpClicked);
+    on<_GoogleSignInClicked>(_onGoogleSignInClicked);
   }
 
   FutureOr<void> _onStarted(_Started event, Emitter<SignUpState> emit) {}
@@ -96,6 +99,24 @@ class SignUpBloc extends BaseBloc<SignUpEvent, SignUpState, NoParams> {
     );
   }
 
+  FutureOr<void> _onGoogleSignInClicked(
+    _GoogleSignInClicked event,
+    Emitter<SignUpState> emit,
+  ) async {
+    changeLoadingState(emit: emit, loading: true);
+
+    final result = await _loginWithGoogleUseCase.call(noParams);
+
+    result.fold(
+      (failure) => handleFailure(emit: emit, failure: failure),
+      (user) => emit(
+        SignUpState.onSignUpSuccess(
+          store: state.store.copyWith(loading: false),
+        ),
+      ),
+    );
+  }
+
   @override
   void started(NoParams params) {
     add(const SignUpEvent.started());
@@ -119,5 +140,9 @@ class SignUpBloc extends BaseBloc<SignUpEvent, SignUpState, NoParams> {
 
   void signUpClicked() {
     add(const SignUpEvent.signUpClicked());
+  }
+
+  void signUpWithGoogleClicked() {
+    add(const SignUpEvent.googleSignInClicked());
   }
 }
