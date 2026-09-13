@@ -36,4 +36,16 @@ class AppConfigStore {
   List<CategoryConfig> get categories => _config?.domain?.categories ?? [];
 
   List<CurrencyConfig> get currencies => _config?.domain?.currencies ?? [];
+
+  LimitsConfig get limits => _config?.domain?.limits ?? LimitsConfig.defaults;
+
+  String get defaultCurrency {
+    final defaultCurr = _config?.domain?.currencies
+        .where((c) => c.isDefault)
+        .firstOrNull;
+    return defaultCurr?.code ?? 'USD';
+  }
+
+  String? get userPreferredCurrency =>
+      _config?.userContext?.userPreferredCurrency;
 }

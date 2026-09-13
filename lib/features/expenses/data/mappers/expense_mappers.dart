@@ -322,7 +322,7 @@ extension ExpenseIsarModelX on ExpenseIsarModel {
     id: id ?? '',
     description: description ?? '',
     amount: amount ?? 0,
-    currency: currency ?? 'USD',
+    currency: currency ?? 'INR',
     paidBy: paidBy ?? '',
     createdBy: createdBy ?? '',
     isPayment: isPayment ?? false,

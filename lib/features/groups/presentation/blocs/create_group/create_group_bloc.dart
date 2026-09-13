@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
@@ -22,7 +23,10 @@ final class CreateGroupBloc
   void handleEvents() {
     on<_GroupNameChanged>(_onGroupNameChanged);
     on<_GroupDescriptionChanged>(_onGroupDescriptionChanged);
-    on<_CreateGroupButtonClicked>(_onCreateGroupButtonClicked);
+    on<_CreateGroupButtonClicked>(
+      _onCreateGroupButtonClicked,
+      transformer: droppable(),
+    );
   }
 
   @override
@@ -54,6 +58,7 @@ final class CreateGroupBloc
     _CreateGroupButtonClicked event,
     Emitter<CreateGroupState> emit,
   ) async {
+    if (state.store.loading) return;
     changeLoadingState(emit: emit, loading: true);
 
     final result = await _createGroupUseCase.call(
