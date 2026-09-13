@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:sky_router/sky_router.dart';
 import 'package:splittr/core/app_config/i_app_config.dart';
 import 'package:splittr/features/expenses/domain/entities/expense.dart';
+import 'package:splittr/features/friends/domain/entities/friend.dart';
 
 sealed class AppRoute {
   const AppRoute();
@@ -112,6 +113,37 @@ class FriendsRoute extends AppRoute {
 
   @override
   String get path => pathTemplate;
+}
+
+class FriendDetailsRoute extends AppRoute {
+  const FriendDetailsRoute({
+    required this.friendId,
+    this.friend,
+  });
+
+  final String friendId;
+  final Friend? friend;
+
+  static const String relativePathTemplate = ':friendId';
+  static const String pathTemplate = '/friends/:friendId';
+
+  @override
+  String get path => '${FriendsRoute.pathTemplate}/$friendId';
+
+  @override
+  Object? get extra => friend;
+
+  static FriendDetailsRoute? fromState(GoRouterState state) {
+    final friendId = state.pathParameters['friendId'];
+    if (friendId == null || friendId.isEmpty) {
+      return null;
+    }
+    final friend = state.extra is Friend ? state.extra! as Friend : null;
+    return FriendDetailsRoute(
+      friendId: friendId,
+      friend: friend,
+    );
+  }
 }
 
 class GroupRoute extends AppRoute {

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart' show AppSpacing;
 import 'package:splittr/core/presentation/widgets/paginated_list_view.dart';
+import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/features/friends/domain/entities/friend.dart';
 import 'package:splittr/features/friends/presentation/blocs/friends_bloc.dart';
 import 'package:splittr/features/friends/presentation/ui/widgets/friend_card.dart';
@@ -36,7 +39,12 @@ class FriendsListView extends StatelessWidget {
           email: friend.email ?? '',
           phone: friend.phone,
           onTap: () {
-            // Future tap handling if needed
+            unawaited(
+              FriendDetailsRoute(
+                friendId: friend.id ?? '',
+                friend: friend,
+              ).push<void>(context),
+            );
           },
         );
       },

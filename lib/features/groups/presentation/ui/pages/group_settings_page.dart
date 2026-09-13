@@ -12,6 +12,7 @@ import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart'
 import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/domain/entities/member.dart';
 import 'package:splittr/features/groups/presentation/blocs/group/group_bloc.dart';
+import 'package:splittr/features/groups/presentation/ui/widgets/edit_group_bottom_sheet.dart';
 import 'package:splittr/utils/extensions/extensions.dart';
 
 class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
@@ -32,6 +33,10 @@ class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
 
   void handleState(BuildContext context, GroupState state) {
     return switch (state) {
+      OnGroupUpdated _ => AppSnackBar.show(
+        context,
+        message: context.strings.groupUpdatedSuccessfully,
+      ),
       OnGroupDeleted _ => _popAndShowSnackBar(
         context,
         context.strings.groupDeletedSuccessfully,
@@ -195,7 +200,6 @@ class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
   }
 }
 
-// TODO(Chaitanya): Integrate API for editing
 class _GroupEditSection extends StatelessWidget {
   const _GroupEditSection({required this.group});
 
@@ -209,7 +213,6 @@ class _GroupEditSection extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Row(
           children: [
-            // TODO(Chaitanya): Will remove it later
             CircleAvatar(
               radius: 28,
               backgroundColor: context.colorScheme.primaryContainer,
@@ -241,7 +244,24 @@ class _GroupEditSection extends StatelessWidget {
             ),
             AppIconButton(
               icon: Icons.edit_rounded,
-              onPressed: () {},
+              onPressed: () {
+                unawaited(
+                  AppBottomSheet.show<void>(
+                    context: context,
+                    title: context.strings.editGroup,
+                    child: EditGroupBottomSheet(
+                      group: group,
+                      onSave: (name, description) {
+                        getBloc<GroupBloc>(context).updateGroup(
+                          groupId: group.id ?? '',
+                          name: name,
+                          description: description,
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),

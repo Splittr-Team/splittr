@@ -10,6 +10,7 @@ import 'package:splittr/features/groups/domain/usecases/add_members_to_group_use
 import 'package:splittr/features/groups/domain/usecases/delete_group_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/get_group_by_id_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/leave_group_usecase.dart';
+import 'package:splittr/features/groups/domain/usecases/update_group_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/watch_group_by_id_usecase.dart';
 
 part 'group_bloc.freezed.dart';
@@ -24,6 +25,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
     this._addMembersUseCase,
     this._watchGroupByIdUseCase,
     this._getGroupByIdUseCase,
+    this._updateGroupUseCase,
   ) : super(
         const GroupState.initial(
           store: GroupStateStore(),
@@ -35,6 +37,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
   final AddMembersUseCase _addMembersUseCase;
   final WatchGroupByIdUseCase _watchGroupByIdUseCase;
   final GetGroupByIdUseCase _getGroupByIdUseCase;
+  final UpdateGroupUseCase _updateGroupUseCase;
 
   StreamSubscription<EitherFailure<Group>>? _groupSubscription;
 
@@ -44,6 +47,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
     on<_DeleteGroup>(_onDeleteGroup);
     on<_LeaveOrRemoveGroup>(_onLeaveOrRemoveGroup);
     on<_AddMembers>(_onAddMembers);
+    on<_UpdateGroup>(_onUpdateGroup);
     on<_GroupUpdated>(_onGroupUpdated);
     on<_LoadFailed>(_onLoadFailed);
   }
@@ -174,6 +178,34 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
     );
   }
 
+  FutureOr<void> _onUpdateGroup(
+    _UpdateGroup event,
+    Emitter<GroupState> emit,
+  ) async {
+    changeLoadingState(emit: emit, loading: true);
+
+    final result = await _updateGroupUseCase.call(
+      UpdateGroupParams(
+        groupId: event.groupId,
+        name: event.name,
+        description: event.description,
+        requireAdminApproval: event.requireAdminApproval,
+      ),
+    );
+
+    result.fold(
+      (failure) => handleFailure(emit: emit, failure: failure),
+      (group) => emit(
+        GroupState.onGroupUpdated(
+          store: state.store.copyWith(
+            loading: false,
+            group: group,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void started(GroupParams params) {
     add(GroupEvent.started(groupId: params.groupId));
@@ -189,6 +221,22 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
 
   void addMembers({required List<String> userIds}) {
     add(GroupEvent.addMembers(userIds: userIds));
+  }
+
+  void updateGroup({
+    required String groupId,
+    String? name,
+    String? description,
+    bool? requireAdminApproval,
+  }) {
+    add(
+      GroupEvent.updateGroup(
+        groupId: groupId,
+        name: name,
+        description: description,
+        requireAdminApproval: requireAdminApproval,
+      ),
+    );
   }
 
   void groupUpdated({required Group group}) {
