@@ -14,6 +14,7 @@ class Friend with _$Friend {
     this.updatedAt,
     this.status,
     this.actionUserId,
+    this.isSynced = true,
   });
 
   @override
@@ -34,6 +35,8 @@ class Friend with _$Friend {
   final FriendshipStatus? status;
   @override
   final String? actionUserId;
+  @override
+  final bool isSynced;
 }
 
 enum FriendshipStatus {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:injectable/injectable.dart';
 import 'package:mutex/mutex.dart';
 import 'package:sky_architecture/sky_architecture.dart';
@@ -9,6 +11,7 @@ import 'package:splittr/features/expenses/data/datasources/expenses_local_data_s
 import 'package:splittr/features/expenses/data/datasources/expenses_remote_data_source.dart';
 import 'package:splittr/features/expenses/data/mappers/expense_mappers.dart';
 import 'package:splittr/features/expenses/data/models/create_expense_payload.dart';
+import 'package:splittr/features/expenses/data/models/expense_isar_model.dart';
 import 'package:splittr/features/expenses/data/models/settle_expense_payload.dart';
 import 'package:splittr/features/expenses/data/models/update_expense_payload.dart';
 import 'package:splittr/features/expenses/domain/entities/balances.dart';
@@ -16,6 +19,12 @@ import 'package:splittr/features/expenses/domain/entities/expense.dart';
 import 'package:splittr/features/expenses/domain/entities/input_split.dart';
 import 'package:splittr/features/expenses/domain/entities/split_type.dart';
 import 'package:splittr/features/expenses/domain/repositories/expenses_repository.dart';
+import 'package:splittr/features/groups/data/datasources/groups_local_data_source.dart';
+import 'package:splittr/features/sync/data/datasources/outbox_local_data_source.dart';
+import 'package:splittr/features/sync/data/models/outbox_action_isar_model.dart';
+import 'package:splittr/features/sync/domain/models/outbox_action_types.dart';
+import 'package:splittr/features/sync/domain/services/outbox_worker.dart';
+import 'package:uuid/uuid.dart';
 
 @LazySingleton(as: ExpensesRepository)
 final class ExpensesRepositoryImpl implements ExpensesRepository {
@@ -23,11 +32,17 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     this._apiCallHandler,
     this._expensesRemoteDataSource,
     this._expensesLocalDataSource,
+    this._outboxLocalDataSource,
+    this._outboxWorker,
+    this._groupsLocalDataSource,
   );
 
   final ApiCallHandler _apiCallHandler;
   final ExpensesRemoteDataSource _expensesRemoteDataSource;
   final ExpensesLocalDataSource _expensesLocalDataSource;
+  final OutboxLocalDataSource _outboxLocalDataSource;
+  final OutboxWorker _outboxWorker;
+  final GroupsLocalDataSource _groupsLocalDataSource;
   final Mutex _syncLock = Mutex();
 
   @override
@@ -47,6 +62,24 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     bool? personal,
     String? friendId,
   }) async {
+    if (groupId != null) {
+      final group = await _groupsLocalDataSource.getGroupById(groupId);
+      if (group != null && !group.isSynced) {
+        final localExpenses = await _expensesLocalDataSource.getExpenses(
+          groupId: groupId,
+          personal: personal,
+          friendId: friendId,
+          limit: limit,
+        );
+        return Right(
+          PaginatedList(
+            items: localExpenses.toDomain(),
+            pagination: const Pagination(hasMore: false),
+          ),
+        );
+      }
+    }
+
     return _syncLock.protect(() async {
       var effectiveCursor = cursor;
 
@@ -76,7 +109,23 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
       );
 
       return result.fold(
-        Left.new,
+        (failure) async {
+          final cached = await _expensesLocalDataSource.getExpenses(
+            groupId: groupId,
+            personal: personal,
+            friendId: friendId,
+            limit: limit,
+          );
+          if (cached.isNotEmpty) {
+            return Right(
+              PaginatedList(
+                items: cached.toDomain(),
+                pagination: const Pagination(hasMore: false),
+              ),
+            );
+          }
+          return Left(failure);
+        },
         (response) async {
           final domainExpenses = response.data.toDomain();
           final pagination = response.pagination.toDomain();
@@ -106,39 +155,84 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     String? category,
     String? groupId,
   }) async {
-    final result = await _apiCallHandler.handle(
-      () => _expensesRemoteDataSource.createExpense(
-        CreateExpensePayload(
-          description: description,
-          amount: amount,
-          currency: currency,
-          paidBy: paidBy,
-          splitType: splitType.constantCase,
-          splits: splits.toModel(),
-          category: category,
-          groupId: groupId,
-        ),
-      ),
+    final payload = CreateExpensePayload(
+      description: description,
+      amount: amount,
+      currency: currency,
+      paidBy: paidBy,
+      splitType: splitType.constantCase,
+      splits: splits.toModel(),
+      category: category,
+      groupId: groupId,
     );
 
-    return result.fold(
-      Left.new,
-      (details) async {
-        await _expensesLocalDataSource.saveExpense(details.toIsar());
-        return Right(details.toDomain());
-      },
-    );
+    var shouldCallRemote = true;
+    if (groupId != null) {
+      final group = await _groupsLocalDataSource.getGroupById(groupId);
+      if (group != null && !group.isSynced) {
+        shouldCallRemote = false;
+      }
+    }
+
+    if (shouldCallRemote) {
+      final result = await _apiCallHandler.handle(
+        () => _expensesRemoteDataSource.createExpense(payload),
+      );
+
+      final success = result.fold((failure) => null, (res) => res);
+      if (success != null) {
+        await _expensesLocalDataSource.saveExpense(success.toIsar());
+        return Right(success.toDomain());
+      }
+    }
+
+    final localId = const Uuid().v4();
+    final idempotencyKey = const Uuid().v4();
+    final now = DateTime.now();
+
+    final optimisticModel = ExpenseIsarModel()
+      ..id = localId
+      ..isSynced = false
+      ..description = description
+      ..amount = amount.toDouble()
+      ..currency = currency
+      ..paidBy = paidBy
+      ..createdBy = paidBy
+      ..isPayment = false
+      ..spentAt = now
+      ..category = category
+      ..groupId = groupId
+      ..splitType = splitType.constantCase
+      ..splits = splits.toIsar();
+
+    await _expensesLocalDataSource.saveExpense(optimisticModel);
+
+    final action = OutboxActionIsarModel()
+      ..actionType = OutboxActionTypes.createExpense
+      ..idempotencyKey = idempotencyKey
+      ..tempId = localId
+      ..payloadJson = jsonEncode(payload.toJson())
+      ..createdAt = now;
+
+    await _outboxLocalDataSource.enqueue(action);
+    _outboxWorker.flush().ignore();
+
+    return Right(optimisticModel.toDomain());
   }
 
   @override
   FutureEitherFailure<Expense> getExpenseDetails(String id) async {
+    final cached = await _expensesLocalDataSource.getExpenseById(id);
+    if (cached != null && !cached.isSynced) {
+      return Right(cached.toDomain());
+    }
+
     final result = await _apiCallHandler.handle(
       () => _expensesRemoteDataSource.getExpenseDetails(id),
     );
 
     return result.fold(
-      (failure) async {
-        final cached = await _expensesLocalDataSource.getExpenseById(id);
+      (failure) {
         if (cached != null) {
           return Right(cached.toDomain());
         }
@@ -161,42 +255,100 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     SplitType? splitType,
     List<InputSplit>? splits,
   }) async {
-    final result = await _apiCallHandler.handle(
-      () => _expensesRemoteDataSource.updateExpense(
-        id,
-        UpdateExpensePayload(
-          description: description,
-          amount: amount,
-          currency: currency,
-          category: category,
-          splitType: splitType?.name.constantCase,
-          splits: splits?.toModel(),
-        ),
-      ),
+    final cached = await _expensesLocalDataSource.getExpenseById(id);
+    final isOffline = cached != null && !cached.isSynced;
+
+    final updatePayload = UpdateExpensePayload(
+      description: description,
+      amount: amount,
+      currency: currency,
+      category: category,
+      splitType: splitType?.name.constantCase,
+      splits: splits?.map((s) => s.toModel()).toList(),
     );
 
-    return result.fold(
-      Left.new,
-      (details) async {
-        await _expensesLocalDataSource.saveExpense(details.toIsar());
-        return Right(details.toDomain());
-      },
-    );
+    if (!isOffline) {
+      final result = await _apiCallHandler.handle(
+        () => _expensesRemoteDataSource.updateExpense(id, updatePayload),
+      );
+
+      final success = result.fold((failure) => null, (res) => res);
+      if (success != null) {
+        await _expensesLocalDataSource.saveExpense(success.toIsar());
+        return Right(success.toDomain());
+      }
+    }
+
+    final idempotencyKey = const Uuid().v4();
+    final now = DateTime.now();
+
+    final updatedModel = (cached ?? ExpenseIsarModel())
+      ..id = id
+      ..description = description ?? cached?.description
+      ..amount = amount?.toDouble() ?? cached?.amount
+      ..currency = currency ?? cached?.currency
+      ..category = category ?? cached?.category
+      ..splitType = splitType?.name.constantCase ?? cached?.splitType
+      ..splits = splits?.toIsar() ?? cached?.splits;
+
+    await _expensesLocalDataSource.saveExpense(updatedModel);
+
+    final payloadMap = <String, dynamic>{
+      'id': id,
+      'description': ?description,
+      'amount': ?amount,
+      'currency': ?currency,
+      'category': ?category,
+      if (splitType != null) 'splitType': splitType.name.constantCase,
+      if (splits != null)
+        'splits': splits.map((s) => s.toModel().toJson()).toList(),
+    };
+
+    final action = OutboxActionIsarModel()
+      ..actionType = OutboxActionTypes.updateExpense
+      ..idempotencyKey = idempotencyKey
+      ..tempId = isOffline ? id : null
+      ..payloadJson = jsonEncode(payloadMap)
+      ..createdAt = now;
+
+    await _outboxLocalDataSource.enqueue(action);
+    _outboxWorker.flush().ignore();
+
+    return Right(updatedModel.toDomain());
   }
 
   @override
   FutureEitherFailureUnit deleteExpense(String id) async {
-    final result = await _apiCallHandler.handle(
-      () => _expensesRemoteDataSource.deleteExpense(id),
-    );
+    final cached = await _expensesLocalDataSource.getExpenseById(id);
+    final isOffline = cached != null && !cached.isSynced;
 
-    return result.fold(
-      Left.new,
-      (_) async {
+    if (!isOffline) {
+      final result = await _apiCallHandler.handle(
+        () => _expensesRemoteDataSource.deleteExpense(id),
+      );
+
+      if (result.isRight()) {
         await _expensesLocalDataSource.deleteExpense(id);
         return const Right(unit);
-      },
-    );
+      }
+    }
+
+    final idempotencyKey = const Uuid().v4();
+    final now = DateTime.now();
+
+    await _expensesLocalDataSource.deleteExpense(id);
+
+    final action = OutboxActionIsarModel()
+      ..actionType = OutboxActionTypes.deleteExpense
+      ..idempotencyKey = idempotencyKey
+      ..tempId = isOffline ? id : null
+      ..payloadJson = jsonEncode({'id': id})
+      ..createdAt = now;
+
+    await _outboxLocalDataSource.enqueue(action);
+    _outboxWorker.flush().ignore();
+
+    return const Right(unit);
   }
 
   @override
@@ -207,25 +359,63 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     required String receivedBy,
     String? groupId,
   }) async {
-    final result = await _apiCallHandler.handle(
-      () => _expensesRemoteDataSource.settleExpense(
-        SettleExpensePayload(
-          amount: amount,
-          currency: currency,
-          paidBy: paidBy,
-          receivedBy: receivedBy,
-          groupId: groupId,
-        ),
-      ),
+    final payload = SettleExpensePayload(
+      amount: amount,
+      currency: currency,
+      paidBy: paidBy,
+      receivedBy: receivedBy,
+      groupId: groupId,
     );
 
-    return result.fold(
-      Left.new,
-      (details) async {
-        await _expensesLocalDataSource.saveExpense(details.toIsar());
-        return Right(details.toDomain());
-      },
-    );
+    var shouldCallRemote = true;
+    if (groupId != null) {
+      final group = await _groupsLocalDataSource.getGroupById(groupId);
+      if (group != null && !group.isSynced) {
+        shouldCallRemote = false;
+      }
+    }
+
+    if (shouldCallRemote) {
+      final result = await _apiCallHandler.handle(
+        () => _expensesRemoteDataSource.settleExpense(payload),
+      );
+
+      final success = result.fold((failure) => null, (res) => res);
+      if (success != null) {
+        await _expensesLocalDataSource.saveExpense(success.toIsar());
+        return Right(success.toDomain());
+      }
+    }
+
+    final localId = const Uuid().v4();
+    final idempotencyKey = const Uuid().v4();
+    final now = DateTime.now();
+
+    final optimisticModel = ExpenseIsarModel()
+      ..id = localId
+      ..isSynced = false
+      ..description = 'Settlement'
+      ..amount = amount.toDouble()
+      ..currency = currency
+      ..paidBy = paidBy
+      ..createdBy = paidBy
+      ..isPayment = true
+      ..spentAt = now
+      ..groupId = groupId;
+
+    await _expensesLocalDataSource.saveExpense(optimisticModel);
+
+    final action = OutboxActionIsarModel()
+      ..actionType = OutboxActionTypes.settleExpense
+      ..idempotencyKey = idempotencyKey
+      ..tempId = localId
+      ..payloadJson = jsonEncode(payload.toJson())
+      ..createdAt = now;
+
+    await _outboxLocalDataSource.enqueue(action);
+    _outboxWorker.flush().ignore();
+
+    return Right(optimisticModel.toDomain());
   }
 
   @override
@@ -233,6 +423,21 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     String? groupId,
     bool? simplified,
   }) async {
+    if (groupId != null) {
+      final group = await _groupsLocalDataSource.getGroupById(groupId);
+      if (group != null && !group.isSynced) {
+        return Right(
+          (await _expensesLocalDataSource.getBalances(
+                groupId: groupId,
+              ))?.toDomain() ??
+              const Balances(
+                balances: [],
+                settlements: [],
+              ),
+        );
+      }
+    }
+
     final result = await _apiCallHandler.handle(
       () => _expensesRemoteDataSource.getBalances(
         groupId: groupId,

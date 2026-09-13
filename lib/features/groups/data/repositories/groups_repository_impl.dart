@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:injectable/injectable.dart';
 import 'package:mutex/mutex.dart';
@@ -17,6 +18,11 @@ import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/domain/entities/group_preview.dart';
 import 'package:splittr/features/groups/domain/entities/member.dart';
 import 'package:splittr/features/groups/domain/repositories/groups_repository.dart';
+import 'package:splittr/features/sync/data/datasources/outbox_local_data_source.dart';
+import 'package:splittr/features/sync/data/models/outbox_action_isar_model.dart';
+import 'package:splittr/features/sync/domain/models/outbox_action_types.dart';
+import 'package:splittr/features/sync/domain/services/outbox_worker.dart';
+import 'package:uuid/uuid.dart';
 
 @LazySingleton(as: GroupsRepository)
 final class GroupsRepositoryImpl implements GroupsRepository {
@@ -24,11 +30,15 @@ final class GroupsRepositoryImpl implements GroupsRepository {
     this._apiCallHandler,
     this._groupsRemoteDataSource,
     this._groupsLocalDataSource,
+    this._outboxLocalDataSource,
+    this._outboxWorker,
   );
 
   final ApiCallHandler _apiCallHandler;
   final GroupsRemoteDataSource _groupsRemoteDataSource;
   final GroupsLocalDataSource _groupsLocalDataSource;
+  final OutboxLocalDataSource _outboxLocalDataSource;
+  final OutboxWorker _outboxWorker;
   final Mutex _syncLock = Mutex();
 
   @override
@@ -49,12 +59,22 @@ final class GroupsRepositoryImpl implements GroupsRepository {
 
   @override
   FutureEitherFailure<Group> getGroupById(String id) async {
+    final localGroup = await _groupsLocalDataSource.getGroupById(id);
+    if (localGroup != null && !localGroup.isSynced) {
+      return Right(localGroup.toDomain());
+    }
+
     final result = await _apiCallHandler.handle(
       () => _groupsRemoteDataSource.getGroupById(id),
     );
 
     return result.fold(
-      Left.new,
+      (failure) {
+        if (localGroup != null) {
+          return Right(localGroup.toDomain());
+        }
+        return Left(failure);
+      },
       (groupModel) async {
         await _groupsLocalDataSource.saveGroup(groupModel.toIsar());
         return Right(groupModel.toDomain());
@@ -67,6 +87,11 @@ final class GroupsRepositoryImpl implements GroupsRepository {
     required String groupId,
     MemberStatus? status,
   }) async {
+    final localGroup = await _groupsLocalDataSource.getGroupById(groupId);
+    if (localGroup != null && !localGroup.isSynced) {
+      return Right(localGroup.members?.toDomain() ?? []);
+    }
+
     final result = await _apiCallHandler.handle(
       () => _groupsRemoteDataSource.getMembers(
         groupId,
@@ -108,7 +133,20 @@ final class GroupsRepositoryImpl implements GroupsRepository {
       );
 
       return result.fold(
-        Left.new,
+        (failure) async {
+          final cachedModels = await _groupsLocalDataSource.getGroups(
+            limit: limit,
+          );
+          if (cachedModels.isNotEmpty) {
+            return Right(
+              PaginatedList(
+                items: cachedModels.toDomain(),
+                pagination: const Pagination(hasMore: false),
+              ),
+            );
+          }
+          return Left(failure);
+        },
         (response) async {
           final domainGroups = response.data.toDomain();
           final pagination = response.pagination.toDomain();
@@ -168,10 +206,37 @@ final class GroupsRepositoryImpl implements GroupsRepository {
     );
 
     return result.fold(
-      Left.new,
+      (failure) async {
+        final cached = await _groupsLocalDataSource.getGroupById(groupId);
+        if (cached != null) {
+          if (name != null) cached.name = name;
+          if (description != null) cached.description = description;
+          if (requireAdminApproval != null) {
+            cached.requireAdminApproval = requireAdminApproval;
+          }
+          cached.updatedAt = DateTime.now();
+          await _groupsLocalDataSource.saveGroup(cached);
+
+          final action = OutboxActionIsarModel()
+            ..actionType = OutboxActionTypes.updateGroup
+            ..idempotencyKey = const Uuid().v4()
+            ..payloadJson = jsonEncode({
+              'groupId': groupId,
+              'name': ?name,
+              'description': ?description,
+              'requireAdminApproval': ?requireAdminApproval,
+            })
+            ..createdAt = DateTime.now();
+
+          await _outboxLocalDataSource.enqueue(action);
+          _outboxWorker.flush().ignore();
+
+          return Right(cached.toDomain());
+        }
+        return Left(failure);
+      },
       (groupModel) async {
         await _groupsLocalDataSource.saveGroup(groupModel.toIsar());
-        unawaited(getGroups());
         return Right(groupModel.toDomain());
       },
     );
@@ -211,10 +276,20 @@ final class GroupsRepositoryImpl implements GroupsRepository {
     );
 
     return result.fold(
-      Left.new,
+      (failure) async {
+        await _groupsLocalDataSource.deleteGroup(groupId);
+        final action = OutboxActionIsarModel()
+          ..actionType = OutboxActionTypes.deleteGroup
+          ..idempotencyKey = const Uuid().v4()
+          ..payloadJson = jsonEncode({'groupId': groupId})
+          ..createdAt = DateTime.now();
+
+        await _outboxLocalDataSource.enqueue(action);
+        _outboxWorker.flush().ignore();
+        return const Right(unit);
+      },
       (_) async {
         await _groupsLocalDataSource.deleteGroup(groupId);
-        unawaited(getGroups());
         return const Right(unit);
       },
     );

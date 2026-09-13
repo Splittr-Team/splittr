@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:injectable/injectable.dart';
 import 'package:mutex/mutex.dart';
 import 'package:sky_architecture/sky_architecture.dart';
@@ -9,6 +12,11 @@ import 'package:splittr/features/friends/data/datasources/friends_remote_data_so
 import 'package:splittr/features/friends/data/mappers/friend_mappers.dart';
 import 'package:splittr/features/friends/domain/entities/friend.dart';
 import 'package:splittr/features/friends/domain/repositories/friends_repository.dart';
+import 'package:splittr/features/sync/data/datasources/outbox_local_data_source.dart';
+import 'package:splittr/features/sync/data/models/outbox_action_isar_model.dart';
+import 'package:splittr/features/sync/domain/models/outbox_action_types.dart';
+import 'package:splittr/features/sync/domain/services/outbox_worker.dart';
+import 'package:uuid/uuid.dart';
 
 @LazySingleton(as: FriendsRepository)
 final class FriendsRepositoryImpl implements FriendsRepository {
@@ -16,11 +24,15 @@ final class FriendsRepositoryImpl implements FriendsRepository {
     this._apiCallHandler,
     this._friendsRemoteDataSource,
     this._friendsLocalDataSource,
+    this._outboxLocalDataSource,
+    this._outboxWorker,
   );
 
   final ApiCallHandler _apiCallHandler;
   final FriendsRemoteDataSource _friendsRemoteDataSource;
   final FriendsLocalDataSource _friendsLocalDataSource;
+  final OutboxLocalDataSource _outboxLocalDataSource;
+  final OutboxWorker _outboxWorker;
   final Mutex _syncLock = Mutex();
 
   @override
@@ -61,7 +73,20 @@ final class FriendsRepositoryImpl implements FriendsRepository {
       );
 
       return result.fold(
-        Left.new,
+        (failure) async {
+          final cached = await _friendsLocalDataSource.getFriends(
+            limit: limit,
+          );
+          if (cached.isNotEmpty) {
+            return Right(
+              PaginatedList(
+                items: cached.toDomain(),
+                pagination: const Pagination(hasMore: false),
+              ),
+            );
+          }
+          return Left(failure);
+        },
         (response) async {
           final domainFriends = response.data.toDomain();
           final pagination = response.pagination.toDomain();
@@ -91,11 +116,13 @@ final class FriendsRepositoryImpl implements FriendsRepository {
         friendPhone: friendPhone,
       ),
     );
+
     return result.fold(
       Left.new,
-      (model) async {
-        await _friendsLocalDataSource.saveFriend(model.toIsar());
-        return Right(model.toDomain());
+      (friendModel) async {
+        await _friendsLocalDataSource.saveFriend(friendModel.toIsar());
+        unawaited(getFriends());
+        return Right(friendModel.toDomain());
       },
     );
   }
@@ -116,8 +143,27 @@ final class FriendsRepositoryImpl implements FriendsRepository {
 
   @override
   FutureEitherFailure<Unit> removeFriend(String friendId) async {
-    return _apiCallHandler.handle(
+    final result = await _apiCallHandler.handle(
       () => _friendsRemoteDataSource.removeFriend(friendId),
+    );
+
+    return result.fold(
+      (failure) async {
+        await _friendsLocalDataSource.deleteFriend(friendId);
+        final action = OutboxActionIsarModel()
+          ..actionType = OutboxActionTypes.removeFriend
+          ..idempotencyKey = const Uuid().v4()
+          ..payloadJson = jsonEncode({'friendId': friendId})
+          ..createdAt = DateTime.now();
+
+        await _outboxLocalDataSource.enqueue(action);
+        _outboxWorker.flush().ignore();
+        return const Right(unit);
+      },
+      (_) async {
+        await _friendsLocalDataSource.deleteFriend(friendId);
+        return const Right(unit);
+      },
     );
   }
 }
