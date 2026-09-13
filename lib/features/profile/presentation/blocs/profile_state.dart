@@ -21,6 +21,15 @@ sealed class ProfileState extends BaseState with _$ProfileState {
     required ProfileStateStore store,
   }) = OnProfileLoaded;
 
+  const factory ProfileState.onAccountDeleted({
+    required ProfileStateStore store,
+  }) = OnAccountDeleted;
+
+  const factory ProfileState.onDeleteAccountFailure({
+    required ProfileStateStore store,
+    required Failure failure,
+  }) = OnDeleteAccountFailure;
+
   @override
   BaseState getFailureState({required Failure failure}) =>
       ProfileState.onFailure(

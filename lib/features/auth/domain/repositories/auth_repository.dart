@@ -22,6 +22,8 @@ abstract interface class AuthRepository {
 
   FutureEitherFailure<Unit> logout();
 
+  FutureEitherFailure<Unit> deleteAccount();
+
   FutureEitherFailure<Unit> saveGuestSession();
 
   Future<bool> isGuestUser();

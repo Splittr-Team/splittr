@@ -146,6 +146,25 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  FutureEitherFailure<Unit> deleteAccount() async {
+    try {
+      final result = await _apiCallHandler.handle(
+        _authRemoteDataSource.deleteAccount,
+      );
+      return await result.fold(
+        (failure) async => Left(failure),
+        (_) async {
+          await _isar.writeTxn(() async => _isar.clear());
+          _authStateStreamController.add(const None());
+          return const Right(unit);
+        },
+      );
+    } on Exception catch (e) {
+      return Left(e.toFailure());
+    }
+  }
+
+  @override
   FutureEitherFailure<Unit> saveGuestSession() async {
     final result = await _apiCallHandler.handle(
       _authRemoteDataSource.signInAnonymously,
