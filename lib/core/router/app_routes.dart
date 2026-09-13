@@ -88,6 +88,15 @@ class SignUpRoute extends AppRoute {
   String get path => pathTemplate;
 }
 
+class VerifyEmailRoute extends AppRoute {
+  const VerifyEmailRoute();
+
+  static const String pathTemplate = '/verify-email';
+
+  @override
+  String get path => pathTemplate;
+}
+
 class DashboardRoute extends AppRoute {
   const DashboardRoute();
 

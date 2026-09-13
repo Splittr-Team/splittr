@@ -12,4 +12,10 @@ class AuthEvent extends BaseEvent with _$AuthEvent {
 
   const factory AuthEvent.authStateChanged(Option<User> userOption) =
       _AuthStateChanged;
+
+  const factory AuthEvent.checkEmailVerificationRequested() =
+      _CheckEmailVerificationRequested;
+
+  const factory AuthEvent.resendEmailVerificationRequested() =
+      _ResendEmailVerificationRequested;
 }

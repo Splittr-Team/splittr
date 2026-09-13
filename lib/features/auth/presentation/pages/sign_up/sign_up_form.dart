@@ -18,6 +18,13 @@ class _SignUpForm extends StatelessWidget {
           color: context.colorScheme.onSurfaceVariant,
         ),
         const SizedBox(height: AppSpacing.xl),
+        GoogleSignInButton(
+          onPressed: () =>
+              getBloc<SignUpBloc>(context).signUpWithGoogleClicked(),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        const OrDivider(),
+        const SizedBox(height: AppSpacing.lg),
         AuthFormCard(
           children: [
             NameTextField(
@@ -63,25 +70,6 @@ class _SignUpForm extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.md),
         const _AlreadyHaveAccountSection(),
-        const SizedBox(height: AppSpacing.lg),
-        const OrDivider(),
-        const SizedBox(height: AppSpacing.lg),
-        Wrap(
-          alignment: .center,
-          spacing: AppSpacing.md,
-          children: [
-            GoogleSignInButton(
-              onPressed: () =>
-                  getBloc<SignUpBloc>(context).signUpWithGoogleClicked(),
-            ),
-            AppleSignInButton(
-              onPressed: () => AppSnackBar.show(
-                context,
-                message: context.strings.socialSignInComingSoon,
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }

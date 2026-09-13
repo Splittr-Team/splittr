@@ -18,6 +18,12 @@ class _LoginForm extends StatelessWidget {
           color: context.colorScheme.onSurfaceVariant,
         ),
         const SizedBox(height: AppSpacing.xl),
+        GoogleSignInButton(
+          onPressed: () => getBloc<LoginBloc>(context).loginWithGoogleClicked(),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        const OrDivider(),
+        const SizedBox(height: AppSpacing.lg),
         AuthFormCard(
           children: [
             EmailTextField(
@@ -54,25 +60,7 @@ class _LoginForm extends StatelessWidget {
         const SizedBox(height: AppSpacing.md),
         const _DoNotHaveAccountSection(),
         const SizedBox(height: AppSpacing.lg),
-        const OrDivider(),
-        const SizedBox(height: AppSpacing.lg),
-        Wrap(
-          alignment: .center,
-          spacing: AppSpacing.md,
-          children: [
-            GoogleSignInButton(
-              onPressed: () =>
-                  getBloc<LoginBloc>(context).loginWithGoogleClicked(),
-            ),
-            AppleSignInButton(
-              onPressed: () => AppSnackBar.show(
-                context,
-                message: context.strings.socialSignInComingSoon,
-              ),
-            ),
-          ],
-        ),
-        AppButton.outlined(
+        AppButton.text(
           text: context.strings.guestLogin,
           icon: Icons.person,
           onPressed: () => getBloc<AuthBloc>(context).loginAsGuest(),
