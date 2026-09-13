@@ -14,6 +14,9 @@ import 'package:splittr/features/auth/presentation/pages/sign_up/sign_up_page.da
 import 'package:splittr/features/dashboard/presentation/ui/animated_branch_container.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_page.dart';
 import 'package:splittr/features/dashboard/presentation/ui/dashboard_shell.dart';
+import 'package:splittr/features/expenses/presentation/ui/pages/add_expense_page.dart';
+import 'package:splittr/features/expenses/presentation/ui/pages/expense_details_page.dart';
+import 'package:splittr/features/expenses/presentation/ui/pages/settle_up_page.dart';
 import 'package:splittr/features/friends/presentation/ui/friends_page.dart';
 import 'package:splittr/features/groups/presentation/ui/group/group_page.dart';
 import 'package:splittr/features/groups/presentation/ui/groups_page.dart';
@@ -302,6 +305,31 @@ final List<RouteBase> _routes = [
   GoRoute(
     path: NotificationsRoute.pathTemplate,
     builder: (context, state) => const NotificationsPage(),
+  ),
+  GoRoute(
+    path: AddExpenseRoute.pathTemplate,
+    builder: (context, state) => AddExpensePage(
+      args: AddExpenseRoute.fromState(state)?.args,
+    ),
+  ),
+  GoRoute(
+    path: ExpenseDetailsRoute.pathTemplate,
+    builder: (context, state) {
+      final route = ExpenseDetailsRoute.fromState(state);
+      if (route == null) {
+        throw GoException('Invalid or missing expense identifier.');
+      }
+      return ExpenseDetailsPage(
+        expenseId: route.expenseId,
+        expense: route.expense,
+      );
+    },
+  ),
+  GoRoute(
+    path: SettleUpRoute.pathTemplate,
+    builder: (context, state) => SettleUpPage(
+      args: SettleUpRoute.fromState(state)?.args,
+    ),
   ),
 ];
 
