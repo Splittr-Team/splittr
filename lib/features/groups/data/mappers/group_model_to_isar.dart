@@ -14,6 +14,7 @@ extension GroupModelX on GroupModel {
     ..createdAt = createdAt ?? DateTime.now()
     ..updatedAt = updatedAt
     ..members = members?.toIsar() ?? []
+    ..iconUrl = iconUrl
     ..lastSyncedAt = DateTime.now();
 }
 

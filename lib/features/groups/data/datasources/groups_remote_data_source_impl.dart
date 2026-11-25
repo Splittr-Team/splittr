@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_utils/sky_utils.dart';
@@ -146,5 +148,13 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   @override
   Future<GroupModel> resetInviteCode({required String groupId}) {
     return _groupsApiClient.resetInviteCode(groupId);
+  }
+
+  @override
+  Future<GroupModel> uploadGroupIcon({
+    required String groupId,
+    required File file,
+  }) {
+    return _groupsApiClient.uploadGroupIcon(groupId, file);
   }
 }

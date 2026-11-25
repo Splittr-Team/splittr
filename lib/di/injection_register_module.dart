@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sky_devtools/sky_devtools.dart';
+import 'package:sky_media_kit/sky_media_kit.dart';
 import 'package:sky_router/sky_router.dart';
 import 'package:sky_storage_isar/sky_storage_isar.dart';
 import 'package:sky_telemetry/sky_telemetry.dart';
@@ -50,6 +51,12 @@ abstract class RegisterModule {
 
   @lazySingleton
   FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
+
+  @lazySingleton
+  MediaPickerService get mediaPickerService => MediaPickerServiceImpl();
+
+  @lazySingleton
+  FileStorageService get fileStorageService => const FileStorageServiceImpl();
 
   @lazySingleton
   AppLogger get appLogger {

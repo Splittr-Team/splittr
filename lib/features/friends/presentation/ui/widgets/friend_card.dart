@@ -35,15 +35,16 @@ class FriendCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              AppAvatar(
-                initials: initials,
-                backgroundImage: initials == null
-                    ? const NetworkImage(
-                        'https://www.gravatar.com/avatar/'
-                        '00000000000000000000000000000000?d=mp&f=y',
-                      )
-                    : null,
-              ),
+              if (initials != null)
+                AppAvatar.initials(initials: initials)
+              else
+                const AppAvatar.icon(
+                  icon: Icons.person,
+                  backgroundImage: NetworkImage(
+                    'https://www.gravatar.com/avatar/'
+                    '00000000000000000000000000000000?d=mp&f=y',
+                  ),
+                ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(

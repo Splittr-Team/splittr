@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
@@ -42,6 +44,11 @@ abstract interface class GroupsRemoteDataSource {
   Future<Unit> leaveOrRemoveGroup({
     required String groupId,
     required String userId,
+  });
+
+  Future<GroupModel> uploadGroupIcon({
+    required String groupId,
+    required File file,
   });
 
   Future<MemberModel> updateMemberRole({

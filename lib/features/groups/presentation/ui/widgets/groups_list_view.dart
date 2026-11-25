@@ -21,14 +21,6 @@ class GroupsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groupIcons = [
-      Icons.umbrella_rounded,
-      Icons.home_rounded,
-      Icons.coffee_rounded,
-      Icons.restaurant_rounded,
-      Icons.directions_car_rounded,
-    ];
-
     return PaginatedListView<Group>(
       items: groups,
       hasMore: hasMore,
@@ -39,15 +31,14 @@ class GroupsListView extends StatelessWidget {
         height: AppSpacing.sm + AppSpacing.xs,
       ),
       itemBuilder: (context, group, index) {
-        final icon = groupIcons[index % groupIcons.length];
         final balanceState =
             BalanceState.values[index % BalanceState.values.length];
 
         return GroupBalanceCard(
           key: ValueKey(group),
-          title: group.name!,
-          subtitle: group.description!,
-          icon: icon,
+          title: group.name ?? '',
+          subtitle: group.description ?? '',
+          iconUrl: group.iconUrl,
           balanceState: balanceState,
           amountText: '1000',
           onTap: () async {

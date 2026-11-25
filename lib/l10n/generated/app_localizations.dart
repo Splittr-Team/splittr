@@ -711,6 +711,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'DANGER ZONE'**
   String get dangerZone;
+
+  /// No description provided for @profileUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdatedSuccessfully;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
+
+  /// No description provided for @profileDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Details'**
+  String get profileDetails;
+
+  /// No description provided for @editDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit details'**
+  String get editDetails;
+
+  /// No description provided for @emailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get emailAddress;
+
+  /// No description provided for @defaultCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Currency'**
+  String get defaultCurrency;
+
+  /// No description provided for @enterYourFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your full name'**
+  String get enterYourFullName;
+
+  /// No description provided for @currencyHintText.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. USD, EUR, INR'**
+  String get currencyHintText;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @autoAcceptFriendRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Accept Friend Requests'**
+  String get autoAcceptFriendRequests;
+
+  /// No description provided for @autoAcceptFriendRequestsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically approve incoming friend requests'**
+  String get autoAcceptFriendRequestsSubtitle;
+
+  /// No description provided for @expensesWillAppearHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses will appear here'**
+  String get expensesWillAppearHere;
+
+  /// No description provided for @groupIconUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Group icon updated successfully'**
+  String get groupIconUpdatedSuccessfully;
+
+  /// No description provided for @changeGroupIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Group Icon'**
+  String get changeGroupIcon;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Photo'**
+  String get changePhoto;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get takePhoto;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @mediaPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission denied: {permission} access'**
+  String mediaPermissionDenied(String permission);
+
+  /// No description provided for @mediaPickerError.
+  ///
+  /// In en, this message translates to:
+  /// **'Media picker error: {message}'**
+  String mediaPickerError(String message);
 }
 
 class _AppLocalizationsDelegate

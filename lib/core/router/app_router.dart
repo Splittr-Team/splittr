@@ -4,6 +4,7 @@ import 'package:sky_router/sky_router.dart';
 import 'package:sky_telemetry/sky_telemetry.dart';
 import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/core/router/route_error_page.dart';
+import 'package:splittr/features/activities/presentation/ui/activities_page.dart';
 import 'package:splittr/features/app_config/domain/stores/app_config_store.dart';
 import 'package:splittr/features/app_config/presentation/ui/force_update_page.dart';
 import 'package:splittr/features/app_config/presentation/ui/maintenance_page.dart';
@@ -157,6 +158,10 @@ final List<RouteBase> _routes = [
     builder: (context, state) => const SignUpPage(),
   ),
   GoRoute(
+    path: ProfileRoute.pathTemplate,
+    builder: (context, state) => const ProfilePage(),
+  ),
+  GoRoute(
     path: AddMembersRoute.pathTemplate,
     builder: (context, state) {
       final route = AddMembersRoute.fromState(state);
@@ -265,9 +270,9 @@ final List<RouteBase> _routes = [
       StatefulShellBranch(
         routes: [
           GoRoute(
-            path: ProfileRoute.pathTemplate,
+            path: ActivitiesRoute.pathTemplate,
             builder: (context, state) => const _TabBackRedirectGuard(
-              child: ProfilePage(),
+              child: ActivitiesPage(),
             ),
           ),
         ],

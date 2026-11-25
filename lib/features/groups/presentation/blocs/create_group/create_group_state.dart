@@ -10,6 +10,7 @@ sealed class CreateGroupState extends BaseState with _$CreateGroupState {
 
   const factory CreateGroupState.onCreateGroupSuccess({
     required CreateGroupStateStore store,
+    String? iconUploadErrorMessage,
   }) = OnCreateGroupSuccess;
 
   const factory CreateGroupState.onGroupNameChange({
@@ -19,6 +20,10 @@ sealed class CreateGroupState extends BaseState with _$CreateGroupState {
   const factory CreateGroupState.onGroupDescriptionChange({
     required CreateGroupStateStore store,
   }) = OnGroupDescriptionChange;
+
+  const factory CreateGroupState.onGroupIconChange({
+    required CreateGroupStateStore store,
+  }) = OnGroupIconChange;
 
   const factory CreateGroupState.onFailure({
     required CreateGroupStateStore store,
@@ -49,6 +54,7 @@ class CreateGroupStateStore with _$CreateGroupStateStore {
     this.loading = false,
     this.groupName = '',
     this.groupDescription = '',
+    this.groupIcon,
   });
 
   @override
@@ -61,4 +67,7 @@ class CreateGroupStateStore with _$CreateGroupStateStore {
   // TODO(Chaitanya): use value object
   @override
   final String groupDescription;
+
+  @override
+  final File? groupIcon;
 }

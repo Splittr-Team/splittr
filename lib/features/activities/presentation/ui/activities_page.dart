@@ -21,9 +21,6 @@ class ActivitiesPage extends BasePage<ActivitiesBloc, ActivitiesState> {
   @override
   Widget buildPage(BuildContext context) {
     return const Scaffold(
-      appBar: AppTopBar(
-        title: 'Activity',
-      ),
       body: _ActivitiesForm(),
     );
   }

@@ -16,6 +16,7 @@ class GroupModel {
     this.createdAt,
     this.updatedAt,
     this.members,
+    this.iconUrl,
   });
 
   factory GroupModel.fromJson(Map<String, dynamic> json) =>
@@ -31,4 +32,9 @@ class GroupModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final List<MemberModel>? members;
+  @JsonKey(readValue: _readIconUrl)
+  final String? iconUrl;
+
+  static Object? _readIconUrl(Map<dynamic, dynamic> json, String key) =>
+      json['iconUrl'] ?? json['icon'] ?? json['icon_url'];
 }

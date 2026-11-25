@@ -25,4 +25,8 @@ class GroupEvent extends BaseEvent with _$GroupEvent {
   const factory GroupEvent.loadFailed({
     required Failure failure,
   }) = _LoadFailed;
+
+  const factory GroupEvent.uploadGroupIcon({
+    required File file,
+  }) = _UploadGroupIcon;
 }

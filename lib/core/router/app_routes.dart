@@ -205,6 +205,15 @@ class ProfileRoute extends AppRoute {
   String get path => pathTemplate;
 }
 
+class ActivitiesRoute extends AppRoute {
+  const ActivitiesRoute();
+
+  static const String pathTemplate = '/activities';
+
+  @override
+  String get path => pathTemplate;
+}
+
 class QuickSettleArgs {
   const QuickSettleArgs({
     required this.splitTitle,
