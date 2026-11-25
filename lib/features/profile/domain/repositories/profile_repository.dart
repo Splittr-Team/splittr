@@ -20,5 +20,3 @@ abstract interface class ProfileRepository {
     bool? autoAcceptFriendRequests,
   });
 }
-
-

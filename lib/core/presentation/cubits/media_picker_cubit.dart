@@ -11,7 +11,7 @@ part 'media_picker_state.dart';
 @injectable
 final class MediaPickerCubit extends Cubit<MediaPickerState> {
   MediaPickerCubit(this._mediaPickerService)
-      : super(const MediaPickerState.initial());
+    : super(const MediaPickerState.initial());
 
   final MediaPickerService _mediaPickerService;
 

@@ -29,5 +29,3 @@ class Profile with _$Profile {
   @override
   final DateTime? updatedAt;
 }
-
-

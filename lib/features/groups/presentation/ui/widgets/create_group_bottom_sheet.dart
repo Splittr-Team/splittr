@@ -20,20 +20,20 @@ class CreateGroupBottomSheet extends StatelessWidget {
       child: BlocListener<CreateGroupBloc, CreateGroupState>(
         listener: (context, state) => switch (state) {
           OnCreateGroupSuccess(:final iconUploadErrorMessage) => () {
-              if (iconUploadErrorMessage != null) {
-                AppSnackBar.show(
-                  context,
-                  message: iconUploadErrorMessage,
-                  isError: true,
-                );
-              }
-              RouteHandler.pop<void>(context);
-            }(),
+            if (iconUploadErrorMessage != null) {
+              AppSnackBar.show(
+                context,
+                message: iconUploadErrorMessage,
+                isError: true,
+              );
+            }
+            RouteHandler.pop<void>(context);
+          }(),
           OnFailure(:final failure) => AppSnackBar.show(
-              context,
-              message: failure.message,
-              isError: true,
-            ),
+            context,
+            message: failure.message,
+            isError: true,
+          ),
           _ => () {},
         },
         child: const _BottomSheetBody(),
@@ -71,16 +71,15 @@ class _BottomSheetBody extends StatelessWidget {
                         onTap: showPicker,
                         child: CircleAvatar(
                           radius: AppRadius.xxl,
-                          backgroundColor:
-                              context.colorScheme.primaryContainer,
-                          backgroundImage:
-                              groupIcon != null ? FileImage(groupIcon) : null,
+                          backgroundColor: context.colorScheme.primaryContainer,
+                          backgroundImage: groupIcon != null
+                              ? FileImage(groupIcon)
+                              : null,
                           child: groupIcon == null
                               ? Icon(
                                   Icons.group_outlined,
                                   size: AppSpacing.xxl,
-                                  color:
-                                      context.colorScheme.onPrimaryContainer,
+                                  color: context.colorScheme.onPrimaryContainer,
                                 )
                               : null,
                         ),

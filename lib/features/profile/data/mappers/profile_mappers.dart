@@ -15,7 +15,6 @@ extension ProfileModelX on ProfileModel {
   );
 }
 
-
 extension ProfileModelListX on List<ProfileModel> {
   List<Profile> toDomain() => map((e) => e.toDomain()).toList();
 }

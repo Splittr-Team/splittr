@@ -18,5 +18,3 @@ abstract interface class ProfileRemoteDataSource {
     UpdateUserSettingsPayload payload,
   );
 }
-
-

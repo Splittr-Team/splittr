@@ -74,10 +74,8 @@ class GroupBalanceCard extends StatelessWidget {
                         alpha: 0.08,
                       ),
                 foregroundColor: context.colorScheme.onSurfaceVariant,
-                backgroundImage:
-                    hasNetworkIcon ? NetworkImage(iconUrl!) : null,
-                onBackgroundImageError:
-                    hasNetworkIcon ? (_, _) {} : null,
+                backgroundImage: hasNetworkIcon ? NetworkImage(iconUrl!) : null,
+                onBackgroundImageError: hasNetworkIcon ? (_, _) {} : null,
                 child: !hasNetworkIcon
                     ? AppIcon.md(
                         icon,

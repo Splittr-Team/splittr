@@ -31,8 +31,5 @@ final class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<UserSettingsModel> updateProfileSettings(
     UpdateUserSettingsPayload payload,
-  ) =>
-      _apiClient.updateProfileSettings(payload);
+  ) => _apiClient.updateProfileSettings(payload);
 }
-
-

@@ -67,7 +67,6 @@ final class ProfileRepositoryImpl implements ProfileRepository {
     });
   }
 
-
   @override
   FutureEitherFailure<UserSettings> getProfileSettings() async {
     final cached = _localDataSource.getCachedSettings();
