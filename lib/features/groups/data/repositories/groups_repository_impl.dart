@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:injectable/injectable.dart';
 import 'package:mutex/mutex.dart';
@@ -208,6 +209,28 @@ final class GroupsRepositoryImpl implements GroupsRepository {
         await _groupsLocalDataSource.deleteGroup(groupId);
         unawaited(getGroups());
         return const Right(unit);
+      },
+    );
+  }
+
+  @override
+  FutureEitherFailure<Group> uploadGroupIcon({
+    required String groupId,
+    required File file,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.uploadGroupIcon(
+        groupId: groupId,
+        file: file,
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (groupModel) async {
+        await _groupsLocalDataSource.saveGroup(groupModel.toIsar());
+        unawaited(getGroups());
+        return Right(groupModel.toDomain());
       },
     );
   }

@@ -26,7 +26,7 @@ class NotificationListTile extends StatelessWidget {
         contentPadding: const EdgeInsets.all(AppSpacing.md),
         leading: SizedBox.square(
           dimension: AppSpacing.xl,
-          child: AppAvatar(
+          child: AppAvatar.initials(
             initials: (notification.actorName ?? '?').isNotEmpty
                 ? notification.actorName![0].toUpperCase()
                 : '?',

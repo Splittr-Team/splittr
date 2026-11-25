@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/groups/data/datasources/groups_api_client.dart';
@@ -76,5 +78,13 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   }) async {
     await _groupsApiClient.leaveOrRemoveGroup(groupId, userId);
     return unit;
+  }
+
+  @override
+  Future<GroupModel> uploadGroupIcon({
+    required String groupId,
+    required File file,
+  }) {
+    return _groupsApiClient.uploadGroupIcon(groupId, file);
   }
 }

@@ -59,8 +59,8 @@ class AddMembersPage extends BasePage<GroupBloc, GroupState> {
           return StatefulBuilder(
             builder: (context, setState) {
               return Scaffold(
-                appBar: AppBar(
-                  title: Text(context.strings.addMembers),
+                appBar: AppTopBar(
+                  title: context.strings.addMembers,
                 ),
                 body: BlocBuilder<FriendsBloc, FriendsState>(
                   builder: (context, friendsState) {
@@ -194,8 +194,8 @@ class AddMembersPage extends BasePage<GroupBloc, GroupState> {
                               backgroundColor: context.colorScheme.primary,
                             ),
                             child: const SizedBox(
-                              height: 20,
-                              width: 20,
+                              height: AppSpacing.md + AppSpacing.xs,
+                              width: AppSpacing.md + AppSpacing.xs,
                               child: AppProgressIndicator.circular(),
                             ),
                           )

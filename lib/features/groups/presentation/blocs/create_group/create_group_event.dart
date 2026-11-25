@@ -11,6 +11,10 @@ class CreateGroupEvent extends BaseEvent with _$CreateGroupEvent {
     required String groupDescription,
   }) = _GroupDescriptionChanged;
 
+  const factory CreateGroupEvent.groupIconChanged({
+    required File? groupIcon,
+  }) = _GroupIconChanged;
+
   const factory CreateGroupEvent.createGroupButtonClicked() =
       _CreateGroupButtonClicked;
 }

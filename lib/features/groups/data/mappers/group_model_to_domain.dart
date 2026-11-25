@@ -12,6 +12,7 @@ extension GroupModelX on GroupModel {
     createdAt: createdAt,
     updatedAt: updatedAt,
     members: members?.toDomain() ?? const [],
+    iconUrl: iconUrl,
   );
 }
 

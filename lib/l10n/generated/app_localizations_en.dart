@@ -334,4 +334,66 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dangerZone => 'DANGER ZONE';
+
+  @override
+  String get profileUpdatedSuccessfully => 'Profile updated successfully';
+
+  @override
+  String get user => 'User';
+
+  @override
+  String get profileDetails => 'Profile Details';
+
+  @override
+  String get editDetails => 'Edit details';
+
+  @override
+  String get emailAddress => 'Email Address';
+
+  @override
+  String get defaultCurrency => 'Default Currency';
+
+  @override
+  String get enterYourFullName => 'Enter your full name';
+
+  @override
+  String get currencyHintText => 'e.g. USD, EUR, INR';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get autoAcceptFriendRequests => 'Auto-Accept Friend Requests';
+
+  @override
+  String get autoAcceptFriendRequestsSubtitle =>
+      'Automatically approve incoming friend requests';
+
+  @override
+  String get expensesWillAppearHere => 'Expenses will appear here';
+
+  @override
+  String get groupIconUpdatedSuccessfully => 'Group icon updated successfully';
+
+  @override
+  String get changeGroupIcon => 'Change Group Icon';
+
+  @override
+  String get changePhoto => 'Change Photo';
+
+  @override
+  String get takePhoto => 'Take Photo';
+
+  @override
+  String get chooseFromGallery => 'Choose from Gallery';
+
+  @override
+  String mediaPermissionDenied(String permission) {
+    return 'Permission denied: $permission access';
+  }
+
+  @override
+  String mediaPickerError(String message) {
+    return 'Media picker error: $message';
+  }
 }

@@ -10,6 +10,7 @@ extension GroupModelX on GroupModel {
     inviteCode: inviteCode,
     createdBy: createdBy,
     members: members?.toDomain() ?? const [],
+    iconUrl: iconUrl,
   );
 }
 

@@ -28,6 +28,8 @@ targets:
           - lib/features/*/presentation/blocs/*_cubit.dart
           - lib/features/*/presentation/blocs/*/*_cubit.dart
           - lib/core/network/pagination.dart
+          - lib/core/presentation/cubits/*_cubit.dart
+          - lib/core/presentation/cubits/*/*_cubit.dart
 
       json_serializable:
         enabled: false
@@ -41,6 +43,8 @@ targets:
           - lib/di/injection_register_module.dart
           - lib/core/network/network_module.dart
           - lib/core/firebase/firebase_auth_interceptor.dart
+          - lib/core/presentation/cubits/*_cubit.dart
+          - lib/core/presentation/cubits/*/*_cubit.dart
           - lib/features/*/data/datasources/*_api_client.dart
           - lib/features/*/data/datasources/*_data_source_impl.dart
           - lib/features/*/data/repositories/*_repository_impl.dart

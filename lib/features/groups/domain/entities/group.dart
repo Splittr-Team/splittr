@@ -14,6 +14,7 @@ class Group with _$Group {
     this.createdAt,
     this.updatedAt,
     this.members = const [],
+    this.iconUrl,
   });
 
   @override
@@ -32,4 +33,6 @@ class Group with _$Group {
   final DateTime? updatedAt;
   @override
   final List<Member> members;
+  @override
+  final String? iconUrl;
 }

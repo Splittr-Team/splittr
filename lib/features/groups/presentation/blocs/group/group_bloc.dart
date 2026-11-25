@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -10,6 +11,7 @@ import 'package:splittr/features/groups/domain/usecases/add_members_to_group_use
 import 'package:splittr/features/groups/domain/usecases/delete_group_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/get_group_by_id_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/leave_group_usecase.dart';
+import 'package:splittr/features/groups/domain/usecases/upload_group_icon_usecase.dart';
 import 'package:splittr/features/groups/domain/usecases/watch_group_by_id_usecase.dart';
 
 part 'group_bloc.freezed.dart';
@@ -24,6 +26,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
     this._addMembersUseCase,
     this._watchGroupByIdUseCase,
     this._getGroupByIdUseCase,
+    this._uploadGroupIconUseCase,
   ) : super(
         const GroupState.initial(
           store: GroupStateStore(),
@@ -35,6 +38,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
   final AddMembersUseCase _addMembersUseCase;
   final WatchGroupByIdUseCase _watchGroupByIdUseCase;
   final GetGroupByIdUseCase _getGroupByIdUseCase;
+  final UploadGroupIconUseCase _uploadGroupIconUseCase;
 
   StreamSubscription<EitherFailure<Group>>? _groupSubscription;
 
@@ -44,6 +48,7 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
     on<_DeleteGroup>(_onDeleteGroup);
     on<_LeaveOrRemoveGroup>(_onLeaveOrRemoveGroup);
     on<_AddMembers>(_onAddMembers);
+    on<_UploadGroupIcon>(_onUploadGroupIcon);
     on<_GroupUpdated>(_onGroupUpdated);
     on<_LoadFailed>(_onLoadFailed);
   }
@@ -174,6 +179,35 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
     );
   }
 
+  FutureOr<void> _onUploadGroupIcon(
+    _UploadGroupIcon event,
+    Emitter<GroupState> emit,
+  ) async {
+    final groupId = state.store.group?.id;
+    if (groupId == null) return;
+
+    changeLoadingState(emit: emit, loading: true);
+
+    final result = await _uploadGroupIconUseCase.call(
+      UploadGroupIconParams(
+        groupId: groupId,
+        file: event.file,
+      ),
+    );
+
+    result.fold(
+      (failure) => handleFailure(emit: emit, failure: failure),
+      (group) => emit(
+        GroupState.onGroupIconUpdated(
+          store: state.store.copyWith(
+            loading: false,
+            group: group,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void started(GroupParams params) {
     add(GroupEvent.started(groupId: params.groupId));
@@ -189,6 +223,10 @@ final class GroupBloc extends BaseBloc<GroupEvent, GroupState, GroupParams> {
 
   void addMembers({required List<String> userIds}) {
     add(GroupEvent.addMembers(userIds: userIds));
+  }
+
+  void uploadGroupIcon({required File file}) {
+    add(GroupEvent.uploadGroupIcon(file: file));
   }
 
   void groupUpdated({required Group group}) {

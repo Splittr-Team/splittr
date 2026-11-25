@@ -16,6 +16,18 @@ sealed class ProfileState extends BaseState with _$ProfileState {
     required Failure failure,
   }) = OnFailure;
 
+  const factory ProfileState.onProfileDataLoaded({
+    required ProfileStateStore store,
+  }) = OnProfileDataLoaded;
+
+  const factory ProfileState.onProfileUpdated({
+    required ProfileStateStore store,
+  }) = OnProfileUpdated;
+
+  const factory ProfileState.onDraftChanged({
+    required ProfileStateStore store,
+  }) = OnDraftChanged;
+
   @override
   BaseState getFailureState({required Failure failure}) =>
       ProfileState.onFailure(
@@ -30,8 +42,35 @@ sealed class ProfileState extends BaseState with _$ProfileState {
 
 @freezed
 class ProfileStateStore with _$ProfileStateStore {
-  const ProfileStateStore({this.loading = false});
+  const ProfileStateStore({
+    this.loading = false,
+    this.isEditMode = false,
+    this.profile,
+    this.settings,
+    this.draftName,
+    this.draftCurrency,
+  });
 
   @override
   final bool loading;
+  @override
+  final bool isEditMode;
+  @override
+  final Profile? profile;
+  @override
+  final UserSettings? settings;
+  @override
+  final String? draftName;
+  @override
+  final String? draftCurrency;
+
+  bool get hasChanges =>
+      (draftName?.trim() != (profile?.name ?? '')) ||
+      (draftCurrency?.trim() != (profile?.defaultCurrency ?? 'USD'));
+
+  bool get isFormValid =>
+      (draftName?.trim().isNotEmpty ?? false) &&
+      (draftCurrency?.trim().isNotEmpty ?? false);
+
+  bool get canSave => !loading && isFormValid && hasChanges;
 }

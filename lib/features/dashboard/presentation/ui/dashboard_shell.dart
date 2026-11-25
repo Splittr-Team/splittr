@@ -37,6 +37,7 @@ class DashboardShell extends StatelessWidget {
               color: context.colorScheme.primaryContainer,
             ),
             child: Column(
+              spacing: AppSpacing.md,
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -53,6 +54,12 @@ class DashboardShell extends StatelessWidget {
                   ),
               ],
             ),
+          ),
+          AppListTile(
+            leadingIcon: Icons.person,
+            title: context.strings.profile,
+            onTap: () =>
+                RouteHandler.push<void>(context, ProfileRoute.pathTemplate),
           ),
           AppListTile(
             leadingIcon: Icons.logout_rounded,
@@ -124,11 +131,11 @@ class DashboardShell extends StatelessWidget {
       defaultRoute: const FriendsRoute(),
     ),
     ShellTab(
-      pathPrefix: ProfileRoute.pathTemplate,
+      pathPrefix: ActivitiesRoute.pathTemplate,
       icon: const Icon(Icons.notifications_active_outlined),
       selectedIcon: const Icon(Icons.notifications_active),
       getLabel: (context) => context.strings.activities,
-      defaultRoute: const ProfileRoute(),
+      defaultRoute: const ActivitiesRoute(),
     ),
   ];
 
@@ -146,7 +153,7 @@ class DashboardShell extends StatelessWidget {
       case 2:
         return context.strings.myFriends;
       case 3:
-        return context.strings.profile;
+        return context.strings.activities;
       case 0:
       default:
         return context.strings.dashboard;

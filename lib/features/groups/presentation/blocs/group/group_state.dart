@@ -20,6 +20,10 @@ sealed class GroupState extends BaseState with _$GroupState {
     required GroupStateStore store,
   }) = OnMembersAdded;
 
+  const factory GroupState.onGroupIconUpdated({
+    required GroupStateStore store,
+  }) = OnGroupIconUpdated;
+
   const factory GroupState.onFailure({
     required GroupStateStore store,
     required Failure failure,

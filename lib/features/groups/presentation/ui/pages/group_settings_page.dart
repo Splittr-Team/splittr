@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:sky_bloc/sky_bloc.dart';
 import 'package:sky_design_system/sky_design_system.dart';
 import 'package:sky_router/sky_router.dart';
+import 'package:splittr/core/presentation/widgets/widgets.dart';
 import 'package:splittr/core/router/app_routes.dart';
 import 'package:splittr/di/injection.dart';
 import 'package:splittr/features/auth/presentation/blocs/auth_bloc.dart'
@@ -40,6 +41,10 @@ class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
         context,
         context.strings.groupLeftSuccessfully,
       ),
+      OnGroupIconUpdated _ => AppSnackBar.show(
+        context,
+        message: context.strings.groupIconUpdatedSuccessfully,
+      ),
       OnFailure(:final failure) => AppSnackBar.show(
         context,
         message: failure.message,
@@ -59,45 +64,45 @@ class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
             return const SizedBox.shrink();
           }
 
-          return Scaffold(
+          return AppScaffold(
+            backgroundColor: context.colorScheme.surfaceContainerLowest,
             appBar: AppTopBar(
               title: context.strings.groupDetails,
             ),
             body: AppScrollView(
-              padding: const EdgeInsets.all(AppSpacing.md),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.md,
+              ),
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _GroupEditSection(group: currentGroup),
-                    const SizedBox(height: AppSpacing.md),
-                    _MemberSection(
-                      members: currentGroup.members,
-                      onAddMembers: () {
-                        unawaited(
-                          AddMembersRoute(
-                            groupId: groupId,
-                          ).push<void>(context),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    if (currentGroup.inviteCode != null) ...[
-                      _InviteCodeCard(
-                        inviteCode: currentGroup.inviteCode!,
-                        onShare: () => _showInviteLinkDialog(
-                          context,
-                          currentGroup.inviteCode!,
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                    ],
-                    _DangerZone(
-                      onLeaveOrRemoveGroup: () => _confirmLeave(context),
-                      onDeleteGroup: () => _confirmDelete(context),
-                    ),
-                  ],
+                _GroupHeader(group: currentGroup),
+                const SizedBox(height: AppSpacing.xl),
+                _MemberSection(
+                  members: currentGroup.members,
+                  onAddMembers: () {
+                    unawaited(
+                      AddMembersRoute(
+                        groupId: groupId,
+                      ).push<void>(context),
+                    );
+                  },
                 ),
+                if (currentGroup.inviteCode != null) ...[
+                  const SizedBox(height: AppSpacing.xl),
+                  _InviteCodeSection(
+                    inviteCode: currentGroup.inviteCode!,
+                    onShare: () => _showInviteLinkDialog(
+                      context,
+                      currentGroup.inviteCode!,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: AppSpacing.xl),
+                _DangerZone(
+                  onLeaveOrRemoveGroup: () => _confirmLeave(context),
+                  onDeleteGroup: () => _confirmDelete(context),
+                ),
+                const SizedBox(height: AppSpacing.xxl),
               ],
             ),
           );
@@ -121,7 +126,6 @@ class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
           ),
           AppButton.primary(
             onPressed: () async {
-              // TODO(Chaitanya): Move to Utils
               await Clipboard.setData(ClipboardData(text: inviteLink));
               if (context.mounted) {
                 AppSnackBar.show(
@@ -195,97 +199,101 @@ class GroupSettingsPage extends BasePage<GroupBloc, GroupState> {
   }
 }
 
-// TODO(Chaitanya): Integrate API for editing
-class _GroupEditSection extends StatelessWidget {
-  const _GroupEditSection({required this.group});
+class _GroupHeader extends StatelessWidget {
+  const _GroupHeader({required this.group});
 
   final Group group;
 
   @override
   Widget build(BuildContext context) {
-    return AppCard.outlined(
-      color: context.colorScheme.surfaceContainerHigh,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Row(
+    return MediaPickerWidget(
+      maxSizeBytes: 2 * 1024 * 1024,
+      sheetTitle: context.strings.changeGroupIcon,
+      onImagePicked: (file) {
+        getBloc<GroupBloc>(context).uploadGroupIcon(file: file);
+      },
+      builder: (context, showPicker) {
+        return Column(
           children: [
-            // TODO(Chaitanya): Will remove it later
-            CircleAvatar(
-              radius: 28,
-              backgroundColor: context.colorScheme.primaryContainer,
-              child: Icon(
-                Icons.group_rounded,
-                color: context.colorScheme.onPrimaryContainer,
-                size: 28,
+            _EditableAvatar(
+              imageUrl: group.iconUrl,
+              onTap: showPicker,
+            ),
+            const SizedBox(height: AppSpacing.md),
+            AppText.headlineSmall(
+              group.name ?? context.strings.groupDetails,
+              color: context.colorScheme.onSurface,
+              textAlign: TextAlign.center,
+            ),
+            if (group.description != null && group.description!.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.xs),
+              AppText.bodyMedium(
+                group.description!,
+                color: context.colorScheme.onSurfaceVariant,
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                spacing: AppSpacing.xs,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText.headlineSmall(
-                    group.name ?? context.strings.groupDetails,
-                    color: context.colorScheme.onSurface,
-                  ),
-                  if (group.description != null &&
-                      group.description!.isNotEmpty) ...[
-                    AppText.bodyMedium(
-                      group.description!,
-                      color: context.colorScheme.onSurfaceVariant,
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            AppIconButton(
-              icon: Icons.edit_rounded,
-              onPressed: () {},
-            ),
+            ],
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }
 
-class _InviteCodeCard extends StatelessWidget {
-  const _InviteCodeCard({
-    required this.inviteCode,
-    required this.onShare,
+class _EditableAvatar extends StatelessWidget {
+  const _EditableAvatar({
+    required this.onTap,
+    this.imageUrl,
   });
 
-  final String inviteCode;
-  final VoidCallback onShare;
+  static const double _radius = AppRadius.xxl;
+  static const double _diameter = _radius * 2;
+
+  final VoidCallback onTap;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
-    return AppCard.outlined(
-      color: context.colorScheme.surfaceContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Row(
+    final imageProvider = switch (imageUrl) {
+      final url? when url.isNotEmpty => NetworkImage(url),
+      _ => null,
+    };
+
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox.square(
+        dimension: _diameter,
+        child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText.labelMedium(
-                    context.strings.inviteCode.toUpperCase(),
-                    color: context.colorScheme.primary,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  AppText.titleLarge(
-                    inviteCode,
-                    color: context.colorScheme.onSurface,
-                  ),
-                ],
+            Positioned.fill(
+              child: AppAvatar.icon(
+                icon: Icons.group_rounded,
+                radius: _radius,
+                backgroundImage: imageProvider,
+                onBackgroundImageError: imageProvider != null
+                    ? (_, _) {}
+                    : null,
               ),
             ),
-            AppIconButton.outlined(
-              icon: Icons.share_rounded,
-              onPressed: onShare,
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                padding: const EdgeInsets.all(AppSpacing.xs),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.primary,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: context.colorScheme.surfaceContainerLowest,
+                    width: 2,
+                  ),
+                ),
+                child: Icon(
+                  Icons.add_a_photo,
+                  size: 14,
+                  color: context.colorScheme.onPrimary,
+                ),
+              ),
             ),
           ],
         ),
@@ -311,9 +319,9 @@ class _MemberSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AppText.labelLarge(
-              context.strings.membersCount(members.length).toUpperCase(),
-              color: context.colorScheme.primary,
+            AppText.titleMedium(
+              context.strings.membersCount(members.length),
+              color: context.colorScheme.onSurface,
             ),
             AppButton.text(
               text: context.strings.addMembers,
@@ -323,32 +331,29 @@ class _MemberSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
-        if (members.isEmpty)
-          AppCard.outlined(
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Center(
-                child: AppText.bodyMedium(
-                  context.strings.noMembersFound,
-                  color: context.colorScheme.onSurfaceVariant,
+        Material(
+          color: context.colorScheme.surfaceContainer,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          clipBehavior: Clip.antiAlias,
+          child: members.isEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  child: Center(
+                    child: AppText.bodyMedium(
+                      context.strings.noMembersFound,
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                )
+              : Column(
+                  children: [
+                    for (var i = 0; i < members.length; i++) ...[
+                      if (i > 0) const AppDivider.horizontal(),
+                      _MemberTile(member: members[i]),
+                    ],
+                  ],
                 ),
-              ),
-            ),
-          )
-        else
-          ListView.separated(
-            // TODO(Chaitanya): Dont use shrinkwrap
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: members.length,
-            separatorBuilder: (context, index) => const SizedBox(
-              height: AppSpacing.sm,
-            ),
-            itemBuilder: (context, index) {
-              final member = members[index];
-              return _MemberTile(member: member);
-            },
-          ),
+        ),
       ],
     );
   }
@@ -368,77 +373,91 @@ class _MemberTile extends StatelessWidget {
 
     final roleText = member.role?.name ?? '';
 
-    return AppCard.outlined(
-      color: context.colorScheme.surfaceContainer,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
-        child: Row(
-          children: [
-            AppAvatar(
+    return AppListTile(
+      title: name,
+      subtitle: member.email?.isNotEmpty == true
+          ? member.email
+          : (member.phone?.isNotEmpty == true ? member.phone : null),
+      leadingWidget: initials != null
+          ? AppAvatar.initials(
+              radius: AppRadius.md,
               initials: initials,
-              backgroundImage: initials == null
-                  ? const NetworkImage(
-                      'https://www.gravatar.com/avatar/'
-                      '00000000000000000000000000000000?d=mp&f=y',
-                    )
-                  : null,
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppText.titleMedium(
-                    name,
-                    color: context.colorScheme.onSurface,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (member.email != null && member.email!.isNotEmpty) ...[
-                    const SizedBox(height: AppSpacing.xs),
-                    AppText.bodyMedium(
-                      member.email!,
-                      color: context.colorScheme.onSurfaceVariant,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                  if (member.phone != null && member.phone!.isNotEmpty) ...[
-                    const SizedBox(height: AppSpacing.xs),
-                    AppText.bodyMedium(
-                      member.phone!,
-                      color: context.colorScheme.onSurfaceVariant,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ],
+            )
+          : const AppAvatar.icon(
+              icon: Icons.person,
+              radius: AppRadius.md,
+              backgroundImage: NetworkImage(
+                'https://www.gravatar.com/avatar/'
+                '00000000000000000000000000000000?d=mp&f=y',
               ),
             ),
-            const SizedBox(width: AppSpacing.sm),
-            if (roleText.isNotEmpty)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm,
-                  vertical: AppSpacing.xs,
-                ),
-                decoration: BoxDecoration(
-                  color: member.role == Role.admin
-                      ? context.colorScheme.primaryContainer
-                      : context.colorScheme.surfaceContainerHigh,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: AppText.labelSmall(
-                  roleText,
-                  color: member.role == Role.admin
-                      ? context.colorScheme.onPrimaryContainer
-                      : context.colorScheme.onSurfaceVariant,
-                ),
+      trailingWidget: roleText.isNotEmpty
+          ? Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
               ),
-          ],
+              decoration: BoxDecoration(
+                color: member.role == Role.admin
+                    ? context.colorScheme.primaryContainer
+                    : context.colorScheme.surfaceContainerHigh,
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+              child: AppText.labelSmall(
+                roleText,
+                color: member.role == Role.admin
+                    ? context.colorScheme.onPrimaryContainer
+                    : context.colorScheme.onSurfaceVariant,
+              ),
+            )
+          : null,
+    );
+  }
+}
+
+class _InviteCodeSection extends StatelessWidget {
+  const _InviteCodeSection({
+    required this.inviteCode,
+    required this.onShare,
+  });
+
+  final String inviteCode;
+  final VoidCallback onShare;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AppText.titleMedium(
+          context.strings.inviteCode,
+          color: context.colorScheme.onSurface,
         ),
-      ),
+        const SizedBox(height: AppSpacing.sm),
+        Material(
+          color: context.colorScheme.surfaceContainer,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          clipBehavior: Clip.antiAlias,
+          child: AppListTile(
+            leadingIcon: Icons.share_rounded,
+            title: context.strings.shareInviteLink,
+            subtitle: inviteCode,
+            trailingWidget: AppIconButton(
+              icon: Icons.copy_rounded,
+              onPressed: () async {
+                unawaited(Clipboard.setData(ClipboardData(text: inviteCode)));
+                if (context.mounted) {
+                  AppSnackBar.show(
+                    context,
+                    message: context.strings.inviteLinkCopied,
+                  );
+                }
+              },
+            ),
+            onTap: onShare,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -454,33 +473,29 @@ class _DangerZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        AppText.labelLarge(
-          context.strings.dangerZone,
-          color: context.colorScheme.error,
+    return Material(
+      color: context.colorScheme.surfaceContainer,
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      clipBehavior: Clip.antiAlias,
+      child: ListTileTheme(
+        textColor: context.colorScheme.error,
+        iconColor: context.colorScheme.error,
+        child: Column(
+          children: [
+            AppListTile(
+              title: context.strings.leaveOrRemoveGroup,
+              leadingIcon: Icons.exit_to_app_rounded,
+              onTap: onLeaveOrRemoveGroup,
+            ),
+            const AppDivider.horizontal(),
+            AppListTile(
+              title: context.strings.deleteGroup,
+              leadingIcon: Icons.delete_forever_rounded,
+              onTap: onDeleteGroup,
+            ),
+          ],
         ),
-        const SizedBox(height: AppSpacing.sm),
-        AppCard.outlined(
-          color: context.colorScheme.errorContainer.withValues(alpha: 0.05),
-          child: Column(
-            children: [
-              AppListTile(
-                title: context.strings.leaveOrRemoveGroup,
-                leadingIcon: Icons.exit_to_app_rounded,
-                onTap: onLeaveOrRemoveGroup,
-              ),
-              const AppDivider.horizontal(),
-              AppListTile(
-                title: context.strings.deleteGroup,
-                leadingIcon: Icons.delete_forever_rounded,
-                onTap: onDeleteGroup,
-              ),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

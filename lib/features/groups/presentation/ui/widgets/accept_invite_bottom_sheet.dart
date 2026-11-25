@@ -45,7 +45,7 @@ class AcceptInviteBottomSheet extends StatelessWidget {
           builder: (context, state) {
             return switch (state) {
               JoinGroupPreviewLoading() => const SizedBox(
-                height: 200,
+                height: AppSpacing.xxl * 4,
                 child: Center(
                   child: AppProgressIndicator.circular(),
                 ),
@@ -111,7 +111,7 @@ class AcceptInviteBottomSheet extends StatelessWidget {
                 ),
               ),
               JoinGroupLoading() => const SizedBox(
-                height: 200,
+                height: AppSpacing.xxl * 4,
                 child: Center(
                   child: AppProgressIndicator.circular(),
                 ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:sky_network/sky_network.dart';
@@ -49,5 +51,12 @@ abstract class GroupsApiClient {
   Future<void> leaveOrRemoveGroup(
     @Path('id') String id,
     @Path('userId') String userId,
+  );
+
+  @POST('/{id}/icon')
+  @MultiPart()
+  Future<GroupModel> uploadGroupIcon(
+    @Path('id') String id,
+    @Part(name: 'file') File file,
   );
 }

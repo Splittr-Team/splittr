@@ -17,6 +17,7 @@ class GroupIsarModel with IsarCacheable {
   DateTime? createdAt;
   DateTime? updatedAt;
   List<MemberIsarModel>? members;
+  String? iconUrl;
 }
 
 @embedded

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:sky_architecture/sky_architecture.dart' hide Group;
 import 'package:splittr/core/network/pagination.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
@@ -40,5 +42,10 @@ abstract interface class GroupsRepository {
   FutureEitherFailureUnit leaveOrRemoveGroup({
     required String groupId,
     required String userId,
+  });
+
+  FutureEitherFailure<Group> uploadGroupIcon({
+    required String groupId,
+    required File file,
   });
 }

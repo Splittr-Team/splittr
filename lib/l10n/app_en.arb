@@ -116,5 +116,39 @@
   "noNotificationsYet": "No notifications yet!",
   "retry": "Retry",
   "noMembersFound": "No members found",
-  "dangerZone": "DANGER ZONE"
+  "dangerZone": "DANGER ZONE",
+  "profileUpdatedSuccessfully": "Profile updated successfully",
+  "user": "User",
+  "profileDetails": "Profile Details",
+  "editDetails": "Edit details",
+  "emailAddress": "Email Address",
+  "defaultCurrency": "Default Currency",
+  "enterYourFullName": "Enter your full name",
+  "currencyHintText": "e.g. USD, EUR, INR",
+  "saveChanges": "Save Changes",
+  "autoAcceptFriendRequests": "Auto-Accept Friend Requests",
+  "autoAcceptFriendRequestsSubtitle": "Automatically approve incoming friend requests",
+  "expensesWillAppearHere": "Expenses will appear here",
+  "groupIconUpdatedSuccessfully": "Group icon updated successfully",
+  "changeGroupIcon": "Change Group Icon",
+  "changePhoto": "Change Photo",
+  "takePhoto": "Take Photo",
+  "chooseFromGallery": "Choose from Gallery",
+  "mediaPermissionDenied": "Permission denied: {permission} access",
+  "@mediaPermissionDenied": {
+    "placeholders": {
+      "permission": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaPickerError": "Media picker error: {message}",
+  "@mediaPickerError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  }
 }
+

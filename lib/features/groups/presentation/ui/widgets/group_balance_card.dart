@@ -10,9 +10,10 @@ class GroupBalanceCard extends StatelessWidget {
   const GroupBalanceCard({
     required this.title,
     required this.subtitle,
-    required this.icon,
     required this.balanceState,
     required this.amountText,
+    this.icon = Icons.group_outlined,
+    this.iconUrl,
     this.onTap,
     super.key,
   });
@@ -20,6 +21,7 @@ class GroupBalanceCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
+  final String? iconUrl;
   final BalanceState balanceState;
   final String amountText;
   final VoidCallback? onTap;
@@ -27,6 +29,7 @@ class GroupBalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = context.colorScheme.brightness == Brightness.dark;
+    final hasNetworkIcon = iconUrl != null && iconUrl!.isNotEmpty;
 
     Color statusColor;
     String statusText;
@@ -62,16 +65,24 @@ class GroupBalanceCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // Left section: Circular avatar with icon
+              // Left section: Circular avatar with icon or network image
               CircleAvatar(
                 radius: 22,
-                backgroundColor: context.colorScheme.onSurface.withValues(
-                  alpha: 0.08,
-                ),
+                backgroundColor: hasNetworkIcon
+                    ? context.colorScheme.primaryContainer
+                    : context.colorScheme.onSurface.withValues(
+                        alpha: 0.08,
+                      ),
                 foregroundColor: context.colorScheme.onSurfaceVariant,
-                child: AppIcon.md(
-                  icon,
-                ),
+                backgroundImage:
+                    hasNetworkIcon ? NetworkImage(iconUrl!) : null,
+                onBackgroundImageError:
+                    hasNetworkIcon ? (_, _) {} : null,
+                child: !hasNetworkIcon
+                    ? AppIcon.md(
+                        icon,
+                      )
+                    : null,
               ),
               const SizedBox(width: AppSpacing.md),
               // Middle section: Title and Subtitle
