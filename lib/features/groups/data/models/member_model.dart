@@ -8,6 +8,7 @@ class MemberModel {
     this.groupId,
     this.userId,
     this.role,
+    this.status,
     this.joinedAt,
     this.name,
     this.email,
@@ -20,6 +21,7 @@ class MemberModel {
   final String? groupId;
   final String? userId;
   final String? role;
+  final String? status;
   final String? joinedAt;
   final String? name;
   final String? email;

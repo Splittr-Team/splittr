@@ -7,6 +7,7 @@ extension MemberModelX on MemberModel {
     groupId: groupId,
     userId: userId,
     role: Role.values.byNameOrNull(role),
+    status: MemberStatus.values.byNameOrNull(status),
     joinedAt: joinedAt,
     name: name,
     email: email,

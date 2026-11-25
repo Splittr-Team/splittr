@@ -8,6 +8,8 @@ extension GroupModelX on GroupModel {
     ..name = name
     ..description = description
     ..inviteCode = inviteCode
+    ..inviteCodeExpiresAt = inviteCodeExpiresAt
+    ..requireAdminApproval = requireAdminApproval
     ..createdBy = createdBy
     ..createdAt = createdAt ?? DateTime.now()
     ..updatedAt = updatedAt
@@ -21,6 +23,7 @@ extension MemberModelX on MemberModel {
     ..groupId = groupId
     ..userId = userId
     ..role = role
+    ..status = status
     ..joinedAt = joinedAt
     ..name = name
     ..email = email

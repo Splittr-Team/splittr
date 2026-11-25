@@ -9,6 +9,7 @@ class UserModel {
     this.name,
     this.email,
     this.phone,
+    this.defaultCurrency,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -18,4 +19,5 @@ class UserModel {
   final String? name;
   final String? email;
   final String? phone;
+  final String? defaultCurrency;
 }

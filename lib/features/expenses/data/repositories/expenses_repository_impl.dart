@@ -10,6 +10,7 @@ import 'package:splittr/features/expenses/data/datasources/expenses_remote_data_
 import 'package:splittr/features/expenses/data/mappers/expense_mappers.dart';
 import 'package:splittr/features/expenses/data/models/create_expense_payload.dart';
 import 'package:splittr/features/expenses/data/models/settle_expense_payload.dart';
+import 'package:splittr/features/expenses/data/models/update_expense_payload.dart';
 import 'package:splittr/features/expenses/domain/entities/balances.dart';
 import 'package:splittr/features/expenses/domain/entities/expense.dart';
 import 'package:splittr/features/expenses/domain/entities/input_split.dart';
@@ -119,7 +120,14 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
         ),
       ),
     );
-    return result.map((details) => details.toDomain());
+
+    return result.fold(
+      Left.new,
+      (details) async {
+        await _expensesLocalDataSource.saveExpense(details.toIsar());
+        return Right(details.toDomain());
+      },
+    );
   }
 
   @override
@@ -127,7 +135,53 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
     final result = await _apiCallHandler.handle(
       () => _expensesRemoteDataSource.getExpenseDetails(id),
     );
-    return result.map((details) => details.toDomain());
+
+    return result.fold(
+      (failure) async {
+        final cached = await _expensesLocalDataSource.getExpenseById(id);
+        if (cached != null) {
+          return Right(cached.toDomain());
+        }
+        return Left(failure);
+      },
+      (details) async {
+        await _expensesLocalDataSource.saveExpense(details.toIsar());
+        return Right(details.toDomain());
+      },
+    );
+  }
+
+  @override
+  FutureEitherFailure<Expense> updateExpense({
+    required String id,
+    String? description,
+    num? amount,
+    String? currency,
+    String? category,
+    SplitType? splitType,
+    List<InputSplit>? splits,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _expensesRemoteDataSource.updateExpense(
+        id,
+        UpdateExpensePayload(
+          description: description,
+          amount: amount,
+          currency: currency,
+          category: category,
+          splitType: splitType?.name.constantCase,
+          splits: splits?.toModel(),
+        ),
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (details) async {
+        await _expensesLocalDataSource.saveExpense(details.toIsar());
+        return Right(details.toDomain());
+      },
+    );
   }
 
   @override
@@ -164,7 +218,14 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
         ),
       ),
     );
-    return result.map((details) => details.toDomain());
+
+    return result.fold(
+      Left.new,
+      (details) async {
+        await _expensesLocalDataSource.saveExpense(details.toIsar());
+        return Right(details.toDomain());
+      },
+    );
   }
 
   @override
@@ -178,6 +239,23 @@ final class ExpensesRepositoryImpl implements ExpensesRepository {
         simplified: simplified,
       ),
     );
-    return result.map((balancesModel) => balancesModel.toDomain());
+
+    return result.fold(
+      (failure) async {
+        final cached = await _expensesLocalDataSource.getBalances(
+          groupId: groupId,
+        );
+        if (cached != null) {
+          return Right(cached.toDomain());
+        }
+        return Left(failure);
+      },
+      (balancesModel) async {
+        await _expensesLocalDataSource.saveBalances(
+          balancesModel.toIsar(groupId),
+        );
+        return Right(balancesModel.toDomain());
+      },
+    );
   }
 }

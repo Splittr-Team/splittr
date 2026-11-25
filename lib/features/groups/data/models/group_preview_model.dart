@@ -9,16 +9,15 @@ class GroupPreviewModel {
     required this.memberCount,
     required this.creatorName,
     required this.description,
+    this.requireAdminApproval,
   });
 
   factory GroupPreviewModel.fromJson(Map<String, dynamic> json) =>
       _$GroupPreviewModelFromJson(json);
 
   final String name;
-
   final String description;
-
   final int memberCount;
-
   final String creatorName;
+  final bool? requireAdminApproval;
 }

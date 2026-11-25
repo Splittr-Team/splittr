@@ -6,6 +6,7 @@ import 'package:splittr/features/expenses/data/models/create_expense_payload.dar
 import 'package:splittr/features/expenses/data/models/expense_details_model.dart';
 import 'package:splittr/features/expenses/data/models/expenses_response_model.dart';
 import 'package:splittr/features/expenses/data/models/settle_expense_payload.dart';
+import 'package:splittr/features/expenses/data/models/update_expense_payload.dart';
 
 @LazySingleton(as: ExpensesRemoteDataSource)
 final class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
@@ -38,6 +39,14 @@ final class ExpensesRemoteDataSourceImpl implements ExpensesRemoteDataSource {
   @override
   Future<ExpenseDetailsModel> getExpenseDetails(String id) {
     return _apiClient.getExpenseDetails(id);
+  }
+
+  @override
+  Future<ExpenseDetailsModel> updateExpense(
+    String id,
+    UpdateExpensePayload payload,
+  ) {
+    return _apiClient.updateExpense(id, payload);
   }
 
   @override

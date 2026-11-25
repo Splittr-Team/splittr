@@ -33,6 +33,16 @@ abstract interface class ExpensesRepository {
 
   FutureEitherFailure<Expense> getExpenseDetails(String id);
 
+  FutureEitherFailure<Expense> updateExpense({
+    required String id,
+    String? description,
+    num? amount,
+    String? currency,
+    String? category,
+    SplitType? splitType,
+    List<InputSplit>? splits,
+  });
+
   FutureEitherFailureUnit deleteExpense(String id);
 
   FutureEitherFailure<Expense> settleExpense({

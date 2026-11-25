@@ -6,6 +6,7 @@ import 'package:splittr/features/expenses/data/models/create_expense_payload.dar
 import 'package:splittr/features/expenses/data/models/expense_details_model.dart';
 import 'package:splittr/features/expenses/data/models/expenses_response_model.dart';
 import 'package:splittr/features/expenses/data/models/settle_expense_payload.dart';
+import 'package:splittr/features/expenses/data/models/update_expense_payload.dart';
 
 part 'expenses_api_client.g.dart';
 
@@ -32,6 +33,12 @@ abstract class ExpensesApiClient {
   @GET('/expenses/{id}')
   Future<ExpenseDetailsModel> getExpenseDetails(
     @Path('id') String id,
+  );
+
+  @PATCH('/expenses/{id}')
+  Future<ExpenseDetailsModel> updateExpense(
+    @Path('id') String id,
+    @Body() UpdateExpensePayload body,
   );
 
   @DELETE('/expenses/{id}')

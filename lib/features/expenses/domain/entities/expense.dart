@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:splittr/features/expenses/domain/entities/split.dart';
+import 'package:splittr/features/expenses/domain/entities/split_type.dart';
 
 part 'expense.freezed.dart';
 
@@ -17,6 +18,7 @@ class Expense with _$Expense {
     required this.splits,
     this.category,
     this.groupId,
+    this.splitType,
   });
 
   @override
@@ -41,4 +43,6 @@ class Expense with _$Expense {
   final String? category;
   @override
   final String? groupId;
+  @override
+  final SplitType? splitType;
 }

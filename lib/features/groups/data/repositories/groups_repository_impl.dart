@@ -13,8 +13,10 @@ import 'package:splittr/features/groups/data/mappers/group_isar_to_domain.dart';
 import 'package:splittr/features/groups/data/mappers/group_model_to_domain.dart';
 import 'package:splittr/features/groups/data/mappers/group_model_to_isar.dart';
 import 'package:splittr/features/groups/data/mappers/group_preview.dart';
+import 'package:splittr/features/groups/data/mappers/member.dart';
 import 'package:splittr/features/groups/domain/entities/group.dart';
 import 'package:splittr/features/groups/domain/entities/group_preview.dart';
+import 'package:splittr/features/groups/domain/entities/member.dart';
 import 'package:splittr/features/groups/domain/repositories/groups_repository.dart';
 
 @LazySingleton(as: GroupsRepository)
@@ -59,6 +61,21 @@ final class GroupsRepositoryImpl implements GroupsRepository {
         return Right(groupModel.toDomain());
       },
     );
+  }
+
+  @override
+  FutureEitherFailure<List<Member>> getMembers({
+    required String groupId,
+    MemberStatus? status,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.getMembers(
+        groupId,
+        status: status,
+      ),
+    );
+
+    return result.map((members) => members.toDomain());
   }
 
   @override
@@ -115,11 +132,39 @@ final class GroupsRepositoryImpl implements GroupsRepository {
   FutureEitherFailure<Group> createGroup({
     required String name,
     required String description,
+    bool? requireAdminApproval,
   }) async {
     final result = await _apiCallHandler.handle(
       () => _groupsRemoteDataSource.createGroup(
         name: name,
         description: description,
+        requireAdminApproval: requireAdminApproval,
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (groupModel) async {
+        await _groupsLocalDataSource.saveGroup(groupModel.toIsar());
+        unawaited(getGroups());
+        return Right(groupModel.toDomain());
+      },
+    );
+  }
+
+  @override
+  FutureEitherFailure<Group> updateGroup({
+    required String groupId,
+    String? name,
+    String? description,
+    bool? requireAdminApproval,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.updateGroup(
+        groupId: groupId,
+        name: name,
+        description: description,
+        requireAdminApproval: requireAdminApproval,
       ),
     );
 
@@ -209,6 +254,77 @@ final class GroupsRepositoryImpl implements GroupsRepository {
         await _groupsLocalDataSource.deleteGroup(groupId);
         unawaited(getGroups());
         return const Right(unit);
+      },
+    );
+  }
+
+  @override
+  FutureEitherFailure<Member> updateMemberRole({
+    required String groupId,
+    required String userId,
+    required Role role,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.updateMemberRole(
+        groupId: groupId,
+        userId: userId,
+        role: role,
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (memberModel) async {
+        await _groupsLocalDataSource.updateMember(
+          groupId: groupId,
+          member: memberModel.toIsar(),
+        );
+        return Right(memberModel.toDomain());
+      },
+    );
+  }
+
+  @override
+  FutureEitherFailure<Member> decideJoinRequest({
+    required String groupId,
+    required String userId,
+    required JoinRequestDecision decision,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.decideJoinRequest(
+        groupId: groupId,
+        userId: userId,
+        decision: decision,
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (memberModel) async {
+        await _groupsLocalDataSource.updateMember(
+          groupId: groupId,
+          member: memberModel.toIsar(),
+        );
+        return Right(memberModel.toDomain());
+      },
+    );
+  }
+
+  @override
+  FutureEitherFailure<Group> resetInviteCode({
+    required String groupId,
+  }) async {
+    final result = await _apiCallHandler.handle(
+      () => _groupsRemoteDataSource.resetInviteCode(
+        groupId: groupId,
+      ),
+    );
+
+    return result.fold(
+      Left.new,
+      (groupModel) async {
+        await _groupsLocalDataSource.saveGroup(groupModel.toIsar());
+        return Right(groupModel.toDomain());
       },
     );
   }

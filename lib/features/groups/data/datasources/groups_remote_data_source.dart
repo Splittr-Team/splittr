@@ -4,11 +4,18 @@ import 'package:sky_architecture/sky_architecture.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
+import 'package:splittr/features/groups/data/models/member_model.dart';
+import 'package:splittr/features/groups/domain/entities/member.dart';
 
 abstract interface class GroupsRemoteDataSource {
   Future<GroupsResponseModel> getGroups({String? cursor, int? limit});
 
   Future<GroupModel> getGroupById(String id);
+
+  Future<List<MemberModel>> getMembers(
+    String id, {
+    MemberStatus? status,
+  });
 
   Future<GroupModel> joinGroup({required String inviteCode});
 
@@ -17,6 +24,14 @@ abstract interface class GroupsRemoteDataSource {
   Future<GroupModel> createGroup({
     required String name,
     required String description,
+    bool? requireAdminApproval,
+  });
+
+  Future<GroupModel> updateGroup({
+    required String groupId,
+    String? name,
+    String? description,
+    bool? requireAdminApproval,
   });
 
   Future<Unit> deleteGroup({required String groupId});
@@ -35,4 +50,18 @@ abstract interface class GroupsRemoteDataSource {
     required String groupId,
     required File file,
   });
+
+  Future<MemberModel> updateMemberRole({
+    required String groupId,
+    required String userId,
+    required Role role,
+  });
+
+  Future<MemberModel> decideJoinRequest({
+    required String groupId,
+    required String userId,
+    required JoinRequestDecision decision,
+  });
+
+  Future<GroupModel> resetInviteCode({required String groupId});
 }

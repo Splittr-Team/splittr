@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_storage_isar/sky_storage_isar.dart';
 import 'package:splittr/core/storage/models/pagination_metadata_isar_model.dart';
 import 'package:splittr/features/expenses/data/datasources/expenses_local_data_source.dart';
+import 'package:splittr/features/expenses/data/models/balances_isar_model.dart';
 import 'package:splittr/features/expenses/data/models/expense_isar_model.dart';
 
 @LazySingleton(as: ExpensesLocalDataSource)
@@ -70,6 +71,20 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
   }
 
   @override
+  Future<ExpenseIsarModel?> getExpenseById(String id) {
+    return _isar.expenseIsarModels.filter().idEqualTo(id).findFirst();
+  }
+
+  @override
+  Stream<ExpenseIsarModel?> watchExpenseById(String id) {
+    return _isar.expenseIsarModels
+        .filter()
+        .idEqualTo(id)
+        .watch(fireImmediately: true)
+        .map((list) => list.firstOrNull);
+  }
+
+  @override
   Future<void> saveExpense(ExpenseIsarModel expense) async {
     await _isar.writeTxn(() async {
       await _isar.expenseIsarModels.put(expense);
@@ -92,6 +107,23 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
         ..lastSyncedAt = DateTime.now();
 
       await _isar.paginationMetadataIsarModels.put(meta);
+    });
+  }
+
+  @override
+  Future<BalancesIsarModel?> getBalances({String? groupId}) {
+    final key = groupId ?? '';
+    return _isar.balancesIsarModels.filter().groupIdEqualTo(key).findFirst();
+  }
+
+  @override
+  Future<void> saveBalances(BalancesIsarModel balances) async {
+    await _isar.writeTxn(() async {
+      await _isar.balancesIsarModels
+          .filter()
+          .groupIdEqualTo(balances.groupId)
+          .deleteAll();
+      await _isar.balancesIsarModels.put(balances);
     });
   }
 

@@ -3,6 +3,7 @@ import 'package:splittr/features/expenses/data/models/create_expense_payload.dar
 import 'package:splittr/features/expenses/data/models/expense_details_model.dart';
 import 'package:splittr/features/expenses/data/models/expenses_response_model.dart';
 import 'package:splittr/features/expenses/data/models/settle_expense_payload.dart';
+import 'package:splittr/features/expenses/data/models/update_expense_payload.dart';
 
 abstract interface class ExpensesRemoteDataSource {
   Future<ExpensesResponseModel> getExpenses({
@@ -16,6 +17,11 @@ abstract interface class ExpensesRemoteDataSource {
   Future<ExpenseDetailsModel> createExpense(CreateExpensePayload payload);
 
   Future<ExpenseDetailsModel> getExpenseDetails(String id);
+
+  Future<ExpenseDetailsModel> updateExpense(
+    String id,
+    UpdateExpensePayload payload,
+  );
 
   Future<ExpenseDetailsModel> settleExpense(SettleExpensePayload payload);
 

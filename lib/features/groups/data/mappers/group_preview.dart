@@ -7,5 +7,6 @@ extension GroupPreviewModelX on GroupPreviewModel {
     description: description,
     memberCount: memberCount,
     creatorName: creatorName,
+    requireAdminApproval: requireAdminApproval ?? false,
   );
 }

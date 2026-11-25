@@ -2,14 +2,20 @@ import 'dart:io';
 
 import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
+import 'package:sky_utils/sky_utils.dart';
 import 'package:splittr/features/groups/data/datasources/groups_api_client.dart';
 import 'package:splittr/features/groups/data/datasources/groups_remote_data_source.dart';
 import 'package:splittr/features/groups/data/models/add_members_payload.dart';
 import 'package:splittr/features/groups/data/models/create_group_payload.dart';
+import 'package:splittr/features/groups/data/models/decide_join_request_payload.dart';
 import 'package:splittr/features/groups/data/models/group_model.dart';
 import 'package:splittr/features/groups/data/models/group_preview_model.dart';
 import 'package:splittr/features/groups/data/models/groups_response_model.dart';
 import 'package:splittr/features/groups/data/models/join_group_payload.dart';
+import 'package:splittr/features/groups/data/models/member_model.dart';
+import 'package:splittr/features/groups/data/models/update_group_payload.dart';
+import 'package:splittr/features/groups/data/models/update_member_role_payload.dart';
+import 'package:splittr/features/groups/domain/entities/member.dart';
 
 @LazySingleton(as: GroupsRemoteDataSource)
 final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
@@ -31,12 +37,45 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   }
 
   @override
+  Future<List<MemberModel>> getMembers(
+    String id, {
+    MemberStatus? status,
+  }) {
+    return _groupsApiClient.getMembers(
+      id,
+      status: status?.constantCase,
+    );
+  }
+
+  @override
   Future<GroupModel> createGroup({
     required String name,
     required String description,
+    bool? requireAdminApproval,
   }) {
     return _groupsApiClient.createGroup(
-      CreateGroupPayload(description: description, name: name),
+      CreateGroupPayload(
+        description: description,
+        name: name,
+        requireAdminApproval: requireAdminApproval,
+      ),
+    );
+  }
+
+  @override
+  Future<GroupModel> updateGroup({
+    required String groupId,
+    String? name,
+    String? description,
+    bool? requireAdminApproval,
+  }) {
+    return _groupsApiClient.updateGroup(
+      groupId,
+      UpdateGroupPayload(
+        name: name,
+        description: description,
+        requireAdminApproval: requireAdminApproval,
+      ),
     );
   }
 
@@ -78,6 +117,37 @@ final class GroupsRemoteDataSourceImpl implements GroupsRemoteDataSource {
   }) async {
     await _groupsApiClient.leaveOrRemoveGroup(groupId, userId);
     return unit;
+  }
+
+  @override
+  Future<MemberModel> updateMemberRole({
+    required String groupId,
+    required String userId,
+    required Role role,
+  }) {
+    return _groupsApiClient.updateMemberRole(
+      groupId,
+      userId,
+      UpdateMemberRolePayload(role: role.constantCase),
+    );
+  }
+
+  @override
+  Future<MemberModel> decideJoinRequest({
+    required String groupId,
+    required String userId,
+    required JoinRequestDecision decision,
+  }) {
+    return _groupsApiClient.decideJoinRequest(
+      groupId,
+      userId,
+      DecideJoinRequestPayload(action: decision.constantCase),
+    );
+  }
+
+  @override
+  Future<GroupModel> resetInviteCode({required String groupId}) {
+    return _groupsApiClient.resetInviteCode(groupId);
   }
 
   @override

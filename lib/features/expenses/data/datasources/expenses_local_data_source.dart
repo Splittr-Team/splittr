@@ -1,4 +1,5 @@
 import 'package:splittr/core/storage/models/pagination_metadata_isar_model.dart';
+import 'package:splittr/features/expenses/data/models/balances_isar_model.dart';
 import 'package:splittr/features/expenses/data/models/expense_isar_model.dart';
 
 abstract interface class ExpensesLocalDataSource {
@@ -15,6 +16,10 @@ abstract interface class ExpensesLocalDataSource {
     int? limit,
   });
 
+  Future<ExpenseIsarModel?> getExpenseById(String id);
+
+  Stream<ExpenseIsarModel?> watchExpenseById(String id);
+
   Future<void> saveExpense(ExpenseIsarModel expense);
 
   Future<void> saveExpenses({
@@ -22,6 +27,10 @@ abstract interface class ExpensesLocalDataSource {
     required String? nextCursor,
     required bool hasMore,
   });
+
+  Future<BalancesIsarModel?> getBalances({String? groupId});
+
+  Future<void> saveBalances(BalancesIsarModel balances);
 
   Future<PaginationMetadataIsarModel?> getPaginationMetadata(
     FeatureCacheKey featureKey,

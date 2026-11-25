@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:sky_network/sky_network.dart';
 import 'package:splittr/features/notifications/data/models/notifications_response_model.dart';
+import 'package:splittr/features/notifications/data/models/update_notification_payload.dart';
 
 part 'notifications_api_client.g.dart';
 
@@ -17,9 +18,14 @@ abstract class NotificationsApiClient {
     @Query('limit') int? limit,
   });
 
-  @POST('/read-all')
-  Future<void> readAllNotifications();
+  @PATCH('/')
+  Future<void> readAllNotifications(
+    @Body() UpdateNotificationPayload body,
+  );
 
-  @POST('/{id}/read')
-  Future<void> readNotification(@Path('id') String id);
+  @PATCH('/{id}')
+  Future<void> readNotification(
+    @Path('id') String id,
+    @Body() UpdateNotificationPayload body,
+  );
 }

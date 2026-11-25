@@ -9,6 +9,7 @@ class GroupPreview with _$GroupPreview {
     required this.memberCount,
     required this.creatorName,
     required this.description,
+    this.requireAdminApproval = false,
   });
 
   @override
@@ -19,4 +20,6 @@ class GroupPreview with _$GroupPreview {
   final int memberCount;
   @override
   final String creatorName;
+  @override
+  final bool requireAdminApproval;
 }

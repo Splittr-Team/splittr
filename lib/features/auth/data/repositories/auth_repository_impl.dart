@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sky_architecture/sky_architecture.dart';
 import 'package:sky_network/sky_network.dart';
 import 'package:sky_storage_isar/sky_storage_isar.dart';
+import 'package:splittr/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:splittr/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:splittr/features/auth/data/mappers/user.dart';
 import 'package:splittr/features/auth/domain/entities/user.dart';
@@ -14,11 +15,13 @@ import 'package:splittr/features/auth/domain/repositories/auth_repository.dart';
 final class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(
     this._authRemoteDataSource,
+    this._authLocalDataSource,
     this._apiCallHandler,
     this._isar,
   );
 
   final AuthRemoteDataSource _authRemoteDataSource;
+  final AuthLocalDataSource _authLocalDataSource;
   final ApiCallHandler _apiCallHandler;
   final Isar _isar;
 
@@ -39,9 +42,14 @@ final class AuthRepositoryImpl implements AuthRepository {
         password: password,
       ),
     );
-    return result.map((userModel) => userModel.toDomain())..fold(
-      (_) {},
-      (user) => _authStateStreamController.add(Some(user)),
+    return result.fold(
+      Left.new,
+      (userModel) async {
+        await _authLocalDataSource.saveUser(userModel.toIsar());
+        final domainUser = userModel.toDomain();
+        _authStateStreamController.add(Some(domainUser));
+        return Right(domainUser);
+      },
     );
   }
 
@@ -58,9 +66,14 @@ final class AuthRepositoryImpl implements AuthRepository {
         name: name,
       ),
     );
-    return result.map((userModel) => userModel.toDomain())..fold(
-      (_) {},
-      (user) => _authStateStreamController.add(Some(user)),
+    return result.fold(
+      Left.new,
+      (userModel) async {
+        await _authLocalDataSource.saveUser(userModel.toIsar());
+        final domainUser = userModel.toDomain();
+        _authStateStreamController.add(Some(domainUser));
+        return Right(domainUser);
+      },
     );
   }
 
@@ -77,13 +90,29 @@ final class AuthRepositoryImpl implements AuthRepository {
       return Left(e.toFailure());
     }
 
+    final cachedUser = await _authLocalDataSource.getUser();
+    if (cachedUser != null) {
+      _authStateStreamController.add(Some(cachedUser.toDomain()));
+    }
+
     final result = await _apiCallHandler.handle(
       _authRemoteDataSource.checkAuthStatus,
     );
 
-    return result.map((userModel) => userModel.toDomain())..fold(
-      (failure) => _authStateStreamController.add(const None()),
-      (user) => _authStateStreamController.add(Some(user)),
+    return result.fold(
+      (failure) {
+        if (cachedUser != null && FirebaseAuth.instance.currentUser != null) {
+          return Right(cachedUser.toDomain());
+        }
+        _authStateStreamController.add(const None());
+        return Left(failure);
+      },
+      (userModel) async {
+        await _authLocalDataSource.saveUser(userModel.toIsar());
+        final domainUser = userModel.toDomain();
+        _authStateStreamController.add(Some(domainUser));
+        return Right(domainUser);
+      },
     );
   }
 

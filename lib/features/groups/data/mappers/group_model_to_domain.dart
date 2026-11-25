@@ -8,6 +8,8 @@ extension GroupModelX on GroupModel {
     name: name,
     description: description,
     inviteCode: inviteCode,
+    inviteCodeExpiresAt: inviteCodeExpiresAt,
+    requireAdminApproval: requireAdminApproval ?? false,
     createdBy: createdBy,
     createdAt: createdAt,
     updatedAt: updatedAt,
